@@ -286,9 +286,6 @@ dengan air putih atau jus jeruk!
     function kirimKeGoogleSheets(t1, t2, t3, streak) {
         const identity = localStorage.getItem('studentIdentity') || 'Tanpa Nama';
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyLFrT6LypIz8mVc1jOG_AXFjap0h8LtV_BzQUwfxozmekgxc8H8tFtjDbrg7knM2a_/exec"; 
-        
-        if (WEB_APP_URL === "https://script.google.com/macros/s/AKfycbyLFrT6LypIz8mVc1jOG_AXFjap0h8LtV_BzQUwfxozmekgxc8H8tFtjDbrg7knM2a_/exec") 
-return;
 
         fetch(WEB_APP_URL, {
             method: "POST",
