@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jurnal Rematri Sehat - Bebas Anemia</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#ff6b8b">
     <style>
@@ -104,22 +105,9 @@
             font-size: 28px;
             font-weight: bold;
         }
-        .btn-notif {
-            width: 100%;
-            background: #2d3436;
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 14px;
-            margin-top: 15px;
-            transition: 0.2s;
-        }
         .btn-submit {
             width: 100%;
-            background: #2ecc71; /* Warna hijau */
+            background: #2ecc71;
             color: white;
             border: none;
             padding: 12px;
@@ -133,6 +121,19 @@
         .btn-submit:disabled {
             background: #95a5a6;
             cursor: not-allowed;
+        }
+        .btn-notif {
+            width: 100%;
+            background: #2d3436;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 15px;
+            transition: 0.2s;
         }
     </style>
 </head>
@@ -149,8 +150,7 @@
 
     <div class="card-tips">
         <strong>💡 Tips Hari Ini:</strong><br>
-        Jangan minum TTD bersama kopi, teh, atau susu ya! Zat di dalamnya mengikat zat besi. Lebih baik minum 
-dengan air putih atau jus jeruk!
+        Jangan minum TTD bersama kopi, teh, atau susu ya! Zat di dalamnya mengikat zat besi. Lebih baik minum dengan air putih atau jus jeruk!
     </div>
 
     <div class="journal-box">
@@ -174,7 +174,6 @@ dengan air putih atau jus jeruk!
         <div>Hari Berhasil Patuh Minggu Ini</div>
     </div>
 
-    <!-- Tambahkan Tombol Kirim Ini -->
     <button id="submitBtn" class="btn-submit" onclick="submitJurnal()">
         🚀 Kirim Laporan Hari Ini
     </button>
@@ -214,6 +213,12 @@ dengan air putih atau jus jeruk!
             localStorage.setItem('task2', 'false');
             localStorage.setItem('task3', 'false');
             localStorage.setItem('isFullDay', 'false');
+            
+            // Reset tombol submit untuk hari baru
+            const btn = document.getElementById('submitBtn');
+            btn.innerText = "🚀 Kirim Laporan Hari Ini";
+            btn.disabled = false;
+            btn.style.background = "#2ecc71";
         } else {
             document.getElementById('task1').checked = localStorage.getItem('task1') === 'true';
             document.getElementById('task2').checked = localStorage.getItem('task2') === 'true';
@@ -257,7 +262,6 @@ dengan air putih atau jus jeruk!
     function submitJurnal() {
         const identity = document.getElementById('studentName').value.trim();
         
-        // Wajib isi identitas sebelum kirim
         if(!identity) {
             alert("Mohon isi Nama & Kelas terlebih dahulu ya!");
             document.getElementById('studentName').focus();
@@ -273,13 +277,11 @@ dengan air putih atau jus jeruk!
         btn.innerText = "⏳ Mengirim...";
         btn.disabled = true;
 
-        // Panggil fungsi kirim ke sheet (pastikan fungsi kirimKeGoogleSheets Anda sudah memakai mode "text/plain;charset=utf-8")
         kirimKeGoogleSheets(t1, t2, t3, streak);
         
-        // Beri jeda visual lalu tandai berhasil
         setTimeout(() => {
             btn.innerText = "✅ Jurnal Berhasil Terkirim!";
-            btn.style.background = "#27ae60"; // Hijau lebih gelap
+            btn.style.background = "#27ae60";
         }, 1500);
     }
 
@@ -298,6 +300,8 @@ dengan air putih atau jus jeruk!
                 buahVitC: t3 ? "Ya" : "Tidak",
                 totalStreak: streak
             })
+        }).then(() => {
+            console.log("Perintah fetch berhasil dieksekusi");
         }).catch(err => console.log("Gagal kirim cloud:", err));
     }
 
