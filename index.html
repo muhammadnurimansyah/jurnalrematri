@@ -117,6 +117,23 @@
             margin-top: 15px;
             transition: 0.2s;
         }
+        .btn-submit {
+            width: 100%;
+            background: #2ecc71; /* Warna hijau */
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 20px;
+            transition: 0.2s;
+        }
+        .btn-submit:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
@@ -156,6 +173,11 @@ dengan air putih atau jus jeruk!
         <div class="stats-count" id="streakCount">0</div>
         <div>Hari Berhasil Patuh Minggu Ini</div>
     </div>
+
+    <!-- Tambahkan Tombol Kirim Ini -->
+    <button id="submitBtn" class="btn-submit" onclick="submitJurnal()">
+        🚀 Kirim Laporan Hari Ini
+    </button>
 
     <button id="notiBtn" class="btn-notif" onclick="requestNotification()">
         🔔 Ingatkan Aku Setiap Jam 19.00
@@ -222,11 +244,9 @@ dengan air putih atau jus jeruk!
         if (isFullNow && (!wasFullBefore || savedDate !== today)) {
             streak += 1;
             localStorage.setItem('isFullDay', 'true');
-            kirimKeGoogleSheets(t1, t2, t3, streak);
         } else if (!isFullNow && wasFullBefore && savedDate === today) {
             streak = Math.max(0, streak - 1);
             localStorage.setItem('isFullDay', 'false');
-            kirimKeGoogleSheets(t1, t2, t3, streak);
         }
 
         localStorage.setItem('lastSavedDate', today);
@@ -234,19 +254,46 @@ dengan air putih atau jus jeruk!
         document.getElementById('streakCount').innerText = streak;
     }
 
+    function submitJurnal() {
+        const identity = document.getElementById('studentName').value.trim();
+        
+        // Wajib isi identitas sebelum kirim
+        if(!identity) {
+            alert("Mohon isi Nama & Kelas terlebih dahulu ya!");
+            document.getElementById('studentName').focus();
+            return;
+        }
+
+        const t1 = document.getElementById('task1').checked;
+        const t2 = document.getElementById('task2').checked;
+        const t3 = document.getElementById('task3').checked;
+        const streak = parseInt(localStorage.getItem('streakCount')) || 0;
+
+        const btn = document.getElementById('submitBtn');
+        btn.innerText = "⏳ Mengirim...";
+        btn.disabled = true;
+
+        // Panggil fungsi kirim ke sheet (pastikan fungsi kirimKeGoogleSheets Anda sudah memakai mode "text/plain;charset=utf-8")
+        kirimKeGoogleSheets(t1, t2, t3, streak);
+        
+        // Beri jeda visual lalu tandai berhasil
+        setTimeout(() => {
+            btn.innerText = "✅ Jurnal Berhasil Terkirim!";
+            btn.style.background = "#27ae60"; // Hijau lebih gelap
+        }, 1500);
+    }
+
     function kirimKeGoogleSheets(t1, t2, t3, streak) {
         const identity = localStorage.getItem('studentIdentity') || 'Tanpa Nama';
-        const WEB_APP_URL = 
-"https://script.google.com/macros/s/AKfycbyLFrT6LypIz8mVc1jOG_AXFjap0h8LtV_BzQUwfxozmekgxc8H8tFtjDbrg7knM2a_/exec"; 
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyLFrT6LypIz8mVc1jOG_AXFjap0h8LtV_BzQUwfxozmekgxc8H8tFtjDbrg7knM2a_/exec"; 
         
-        if (WEB_APP_URL === 
-"https://script.google.com/macros/s/AKfycbyLFrT6LypIz8mVc1jOG_AXFjap0h8LtV_BzQUwfxozmekgxc8H8tFtjDbrg7knM2a_/exec") 
+        if (WEB_APP_URL === "https://script.google.com/macros/s/AKfycbyLFrT6LypIz8mVc1jOG_AXFjap0h8LtV_BzQUwfxozmekgxc8H8tFtjDbrg7knM2a_/exec") 
 return;
 
         fetch(WEB_APP_URL, {
             method: "POST",
             mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
             body: JSON.stringify({
                 identitas: identity,
                 minumTTD: t1 ? "Ya" : "Tidak",
