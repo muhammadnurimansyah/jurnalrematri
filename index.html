@@ -6,6 +6,13 @@
     <title>Jurnal Rematri Sehat - Bebas Anemia</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="manifest" href="manifest.json">
+    
+    <!-- Dukungan Khusus Apple / iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="RematriSehat">
+    <link rel="apple-touch-icon" href="favicon.ico">
+
     <meta name="theme-color" content="#ff6b8b">
     <style>
         :root {
@@ -65,6 +72,42 @@
             box-sizing: border-box;
             font-size: 14px;
             background-color: #ffffff;
+        }
+        /* Style Banner Instalasi */
+        .install-banner {
+            display: none;
+            background: #ffeaa7;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            line-height: 1.5;
+            border: 1px solid #fdcb6e;
+        }
+        .install-banner-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .btn-install-app {
+            background: #0984e3;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+        }
+        .btn-close-banner {
+            background: transparent;
+            color: #2d3436;
+            border: 1px solid #2d3436;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
         }
         .card-tips {
             background: #ffe0e6;
@@ -143,6 +186,15 @@
     <h1>🌸 Rematri Sehat</h1>
     <div class="subtitle">Jurnal Kebiasaan Makan Cegah Anemia</div>
 
+    <!-- Banner Instalasi PWA -->
+    <div class="install-banner" id="installBanner">
+        <span id="installText"></span>
+        <div class="install-banner-actions">
+            <button class="btn-install-app" id="installBtn" onclick="triggerInstall()">Instal</button>
+            <button class="btn-close-banner" onclick="closeInstallBanner()">Tutup</button>
+        </div>
+    </div>
+
     <div class="setup-box" id="setupBox">
         <label for="studentName">Masukkan Nama Lengkap & Kelas:</label>
         <input type="text" id="studentName" placeholder="Contoh: Rina - Kelas 10A" oninput="saveIdentity()">
@@ -184,12 +236,62 @@
 </div>
 
 <script>
+    // 1. Inisialisasi Service Worker
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('sw.js')
         .then(() => console.log('Service Worker Berhasil'))
         .catch(err => console.error('SW Error:', err));
     }
 
+    // 2. Logika Penawaran Add To Home Screen (A2HS)
+    const installBanner = document.getElementById('installBanner');
+    const installBtn = document.getElementById('installBtn');
+    const installText = document.getElementById('installText');
+    let deferredPrompt;
+
+    // Deteksi jika pengguna sudah membuka via ikon aplikasi
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+    // Deteksi perangkat iOS
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+    if (!isStandalone) {
+        if (isIOS) {
+            // Instruksi Khusus Safari iOS
+            installText.innerHTML = "🍎 <strong>Khusus iPhone:</strong> Ketuk ikon <strong>Share (Bagikan)</strong> di bawah layar, lalu pilih <strong>Add to Home Screen</strong>.";
+            installBtn.style.display = 'none'; // Sembunyikan tombol eksekusi karena iOS butuh manual
+            installBanner.style.display = 'block';
+        } else {
+            // Chrome Android (Menangkap event instalasi)
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                installText.innerHTML = "🤖 <strong>Instal Aplikasi:</strong> Tambahkan ke Home Screen untuk akses cepat dan notifikasi stabil!";
+                installBanner.style.display = 'block';
+            });
+            // Untuk Firefox, fallback akan ditangani saat tombol ditekan
+        }
+    }
+
+    function triggerInstall() {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    installBanner.style.display = 'none';
+                }
+                deferredPrompt = null;
+            });
+        } else {
+             // Fallback untuk browser (seperti Firefox Android) yang tidak melempar event prompt
+             alert("Gunakan menu browser (Titik Tiga di sudut layar) lalu pilih opsi 'Instal Aplikasi' atau 'Tambahkan ke Layar Utama'.");
+        }
+    }
+
+    function closeInstallBanner() {
+        installBanner.style.display = 'none';
+    }
+
+    // 3. Logika Utama Jurnal
     function saveIdentity() {
         const name = document.getElementById('studentName').value;
         localStorage.setItem('studentIdentity', name);
@@ -214,7 +316,6 @@
             localStorage.setItem('task3', 'false');
             localStorage.setItem('isFullDay', 'false');
             
-            // Reset tombol submit untuk hari baru
             const btn = document.getElementById('submitBtn');
             btn.innerText = "🚀 Kirim Laporan Hari Ini";
             btn.disabled = false;
@@ -305,6 +406,7 @@
         }).catch(err => console.log("Gagal kirim cloud:", err));
     }
 
+    // 4. Logika Notifikasi
     function requestNotification() {
         if (!('Notification' in window)) {
             alert('Browser tidak mendukung notifikasi.');
