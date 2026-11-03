@@ -1,0 +1,16 @@
+{
+  "name": "Jurnal Rematri Sehat",
+  "short_name": "RematriSehat",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#fff0f3",
+  "theme-color": "#ff6b8b",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

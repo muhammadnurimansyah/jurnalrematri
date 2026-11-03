@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jurnal Rematri Sehat - Bebas Anemia</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ff6b8b">
+    <style>
+        :root {
+            --pink-primary: #ff6b8b;
+            --pink-light: #fff0f3;
+            --text-dark: #2d3436;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--pink-light);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 400px;
+            width: 100%;
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            box-sizing: border-box;
+        }
+        h1 {
+            color: var(--pink-primary);
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 5px;
+            margin-top: 5px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 13px;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+        .setup-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px dashed var(--pink-primary);
+        }
+        .setup-box label {
+            display: block;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        .setup-box input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 14px;
+            background-color: #ffffff;
+        }
+        .card-tips {
+            background: #ffe0e6;
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 5px solid var(--pink-primary);
+            font-size: 13px;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+        .todo-item {
+            display: flex;
+            align-items: center;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .todo-item input {
+            margin-right: 15px;
+            transform: scale(1.3);
+            accent-color: var(--pink-primary);
+        }
+        .todo-item span {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .stats-box {
+            text-align: center;
+            background: var(--pink-primary);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+        .stats-count {
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .btn-notif {
+            width: 100%;
+            background: #2d3436;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 15px;
+            transition: 0.2s;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🌸 Rematri Sehat</h1>
+    <div class="subtitle">Jurnal Kebiasaan Makan Cegah Anemia</div>
+
+    <div class="setup-box" id="setupBox">
+        <label for="studentName">Masukkan Nama Lengkap & Kelas:</label>
+        <input type="text" id="studentName" placeholder="Contoh: Rina - Kelas 10A" oninput="saveIdentity()">
+    </div>
+
+    <div class="card-tips">
+        <strong>💡 Tips Hari Ini:</strong><br>
+        Jangan minum TTD bersama kopi, teh, atau susu ya! Zat di dalamnya mengikat zat besi. Lebih baik minum 
+dengan air putih atau jus jeruk!
+    </div>
+
+    <div class="journal-box">
+        <h3 style="margin-bottom: 10px; font-size: 16px;">Ceklis Hari Ini:</h3>
+        <label class="todo-item">
+            <input type="checkbox" id="task1" onchange="updateProgress()">
+            <span>Minum 1 Tablet Tambah Darah (TTD)</span>
+        </label>
+        <label class="todo-item">
+            <input type="checkbox" id="task2" onchange="updateProgress()">
+            <span>Makan Lauk Hewani (Ayam/Ikan/Telur/Daging)</span>
+        </label>
+        <label class="todo-item">
+            <input type="checkbox" id="task3" onchange="updateProgress()">
+            <span>Makan Buah Kaya Vitamin C (Jeruk/Pepaya/Jambu)</span>
+        </label>
+    </div>
+
+    <div class="stats-box">
+        <div class="stats-count" id="streakCount">0</div>
+        <div>Hari Berhasil Patuh Minggu Ini</div>
+    </div>
+
+    <button id="notiBtn" class="btn-notif" onclick="requestNotification()">
+        🔔 Ingatkan Aku Setiap Jam 19.00
+    </button>
+</div>
+
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js')
+        .then(() => console.log('Service Worker Berhasil'))
+        .catch(err => console.error('SW Error:', err));
+    }
+
+    function saveIdentity() {
+        const name = document.getElementById('studentName').value;
+        localStorage.setItem('studentIdentity', name);
+    }
+
+    function loadSavedData() {
+        const today = new Date().toDateString();
+        const savedDate = localStorage.getItem('lastSavedDate');
+        const streak = parseInt(localStorage.getItem('streakCount')) || 0;
+        
+        const savedIdentity = localStorage.getItem('studentIdentity');
+        if (savedIdentity) {
+            document.getElementById('studentName').value = savedIdentity;
+        }
+
+        if (savedDate !== today) {
+            document.getElementById('task1').checked = false;
+            document.getElementById('task2').checked = false;
+            document.getElementById('task3').checked = false;
+            localStorage.setItem('task1', 'false');
+            localStorage.setItem('task2', 'false');
+            localStorage.setItem('task3', 'false');
+            localStorage.setItem('isFullDay', 'false');
+        } else {
+            document.getElementById('task1').checked = localStorage.getItem('task1') === 'true';
+            document.getElementById('task2').checked = localStorage.getItem('task2') === 'true';
+            document.getElementById('task3').checked = localStorage.getItem('task3') === 'true';
+        }
+        document.getElementById('streakCount').innerText = streak;
+
+        if (localStorage.getItem('notifSubscribed') === 'true') {
+            setNotifButtonActive();
+        }
+    }
+
+    function updateProgress() {
+        const today = new Date().toDateString();
+        const t1 = document.getElementById('task1').checked;
+        const t2 = document.getElementById('task2').checked;
+        const t3 = document.getElementById('task3').checked;
+
+        localStorage.setItem('task1', t1);
+        localStorage.setItem('task2', t2);
+        localStorage.setItem('task3', t3);
+
+        const wasFullBefore = localStorage.getItem('isFullDay') === 'true';
+        const isFullNow = t1 && t2 && t3;
+        let streak = parseInt(localStorage.getItem('streakCount')) || 0;
+        const savedDate = localStorage.getItem('lastSavedDate');
+
+        if (isFullNow && (!wasFullBefore || savedDate !== today)) {
+            streak += 1;
+            localStorage.setItem('isFullDay', 'true');
+            kirimKeGoogleSheets(t1, t2, t3, streak);
+        } else if (!isFullNow && wasFullBefore && savedDate === today) {
+            streak = Math.max(0, streak - 1);
+            localStorage.setItem('isFullDay', 'false');
+            kirimKeGoogleSheets(t1, t2, t3, streak);
+        }
+
+        localStorage.setItem('lastSavedDate', today);
+        localStorage.setItem('streakCount', streak);
+        document.getElementById('streakCount').innerText = streak;
+    }
+
+    function kirimKeGoogleSheets(t1, t2, t3, streak) {
+        const identity = localStorage.getItem('studentIdentity') || 'Tanpa Nama';
+        const WEB_APP_URL = 
+"https://script.google.com/macros/s/AKfycbyLFrT6LypIz8mVc1jOG_AXFjap0h8LtV_BzQUwfxozmekgxc8H8tFtjDbrg7knM2a_/exec"; 
+        
+        if (WEB_APP_URL === 
+"https://script.google.com/macros/s/AKfycbyLFrT6LypIz8mVc1jOG_AXFjap0h8LtV_BzQUwfxozmekgxc8H8tFtjDbrg7knM2a_/exec") 
+return;
+
+        fetch(WEB_APP_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                identitas: identity,
+                minumTTD: t1 ? "Ya" : "Tidak",
+                laukHewani: t2 ? "Ya" : "Tidak",
+                buahVitC: t3 ? "Ya" : "Tidak",
+                totalStreak: streak
+            })
+        }).catch(err => console.log("Gagal kirim cloud:", err));
+    }
+
+    function requestNotification() {
+        if (!('Notification' in window)) {
+            alert('Browser tidak mendukung notifikasi.');
+            return;
+        }
+
+        Notification.requestPermission().then(permission => {
+            if (permission === 'granted') {
+                localStorage.setItem('notifSubscribed', 'true');
+                setNotifButtonActive();
+                if (navigator.serviceWorker.controller) {
+                    navigator.serviceWorker.controller.postMessage({ action: 'startReminder' });
+                }
+            } else {
+                alert('Akses ditolak.');
+            }
+        });
+    }
+
+    function setNotifButtonActive() {
+        const btn = document.getElementById('notiBtn');
+        btn.innerText = "✅ Pengingat Aktif Jam 19.00";
+        btn.style.background = "#2ecc71";
+        btn.disabled = true;
+    }
+
+    window.onload = loadSavedData;
+</script>
+</body>
+</html>
