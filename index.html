@@ -316,49 +316,57 @@
 </div>
 
 <script>
+    // 1. TANGKAP SINYAL INSTALL SECEPAT MUNGKIN (Taruh Paling Atas)
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        
+        // Tampilkan banner hanya jika belum diinstal
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+        if (!isStandalone) {
+            document.getElementById('installText').innerHTML = "🤖 <strong>Instal Aplikasi:</strong> Tambahkan ke Home Screen untuk akses cepat!";
+            document.getElementById('installBanner').style.display = 'block';
+        }
+    });
+
+    // 2. INISIALISASI SERVICE WORKER
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('sw.js')
         .then(() => console.log('SW Ready'))
         .catch(err => console.error('SW Error:', err));
     }
 
-    const installBanner = document.getElementById('installBanner');
-    const installBtn = document.getElementById('installBtn');
-    const installText = document.getElementById('installText');
-    let deferredPrompt;
-
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+    // 3. DETEKSI KHUSUS iOS SAFARI
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-
-    if (!isStandalone) {
-        if (isIOS) {
-            installText.innerHTML = "🍎 <strong>Khusus iPhone:</strong> Ketuk ikon <strong>Share (Bagikan)</strong> di bawah layar, lalu pilih <strong>Add to Home Screen</strong>.";
-            installBtn.style.display = 'none';
-            installBanner.style.display = 'block';
-        } else {
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                deferredPrompt = e;
-                installText.innerHTML = "🤖 <strong>Instal Aplikasi:</strong> Tambahkan ke Home Screen untuk akses cepat!";
-                installBanner.style.display = 'block';
-            });
-        }
+    const isNowStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+    
+    if (isIOS && !isNowStandalone) {
+        document.getElementById('installText').innerHTML = "🍎 <strong>Khusus iPhone:</strong> Ketuk ikon <strong>Share (Bagikan)</strong>, lalu <strong>Add to Home Screen</strong>.";
+        document.getElementById('installBtn').style.display = 'none';
+        document.getElementById('installBanner').style.display = 'block';
     }
 
+    // 4. FUNGSI KLIK TOMBOL INSTALL
     function triggerInstall() {
         if (deferredPrompt) {
             deferredPrompt.prompt();
             deferredPrompt.userChoice.then((choiceResult) => {
-                if (choiceResult.outcome === 'accepted') installBanner.style.display = 'none';
+                if (choiceResult.outcome === 'accepted') {
+                    document.getElementById('installBanner').style.display = 'none';
+                }
                 deferredPrompt = null;
             });
         } else {
-             alert("Gunakan menu browser lalu pilih 'Tambahkan ke Layar Utama'.");
+             alert("Gunakan menu browser (Titik Tiga) lalu pilih 'Tambahkan ke Layar Utama'.");
         }
     }
 
-    function closeInstallBanner() { installBanner.style.display = 'none'; }
+    function closeInstallBanner() { 
+        document.getElementById('installBanner').style.display = 'none'; 
+    }
 
+    // --- LOGIKA APLIKASI (Tidak Dirubah) ---
     function saveIdentity() {
         localStorage.setItem('studentIdentity', document.getElementById('studentName').value);
         localStorage.setItem('studentSchool', document.getElementById('schoolName').value);
@@ -369,12 +377,8 @@
         const savedDate = localStorage.getItem('lastSavedDate');
         const streak = parseInt(localStorage.getItem('streakCount')) || 0;
         
-        if (localStorage.getItem('studentIdentity')) {
-            document.getElementById('studentName').value = localStorage.getItem('studentIdentity');
-        }
-        if (localStorage.getItem('studentSchool')) {
-            document.getElementById('schoolName').value = localStorage.getItem('studentSchool');
-        }
+        if (localStorage.getItem('studentIdentity')) document.getElementById('studentName').value = localStorage.getItem('studentIdentity');
+        if (localStorage.getItem('studentSchool')) document.getElementById('schoolName').value = localStorage.getItem('studentSchool');
 
         if (savedDate !== today) {
             document.getElementById('task1').checked = false;
@@ -396,9 +400,7 @@
         }
         document.getElementById('streakCount').innerText = streak;
 
-        if (localStorage.getItem('notifSubscribed') === 'true') {
-            setNotifButtonActive();
-        }
+        if (localStorage.getItem('notifSubscribed') === 'true') setNotifButtonActive();
     }
 
     function updateProgress() {
@@ -442,7 +444,6 @@
         const t2 = document.getElementById('task2').checked;
         const t3 = document.getElementById('task3').checked;
         const streak = parseInt(localStorage.getItem('streakCount')) || 0;
-
         const isFullStrike = t1 && t2 && t3;
 
         const btn = document.getElementById('submitBtn');
@@ -514,7 +515,7 @@
                 buahVitC: t3 ? "Ya" : "Tidak",
                 totalStreak: streak
             })
-        }).then(() => console.log("Terkirim")).catch(err => console.log("Gagal:", err));
+        }).catch(err => console.log("Gagal:", err));
     }
 
     function requestNotification() {
@@ -545,5 +546,6 @@
 
     window.onload = loadSavedData;
 </script>
+
 </body>
 </html>
