@@ -63,8 +63,9 @@
             font-weight: 600;
             font-size: 14px;
             margin-bottom: 8px;
+            margin-top: 10px;
         }
-        .setup-box input {
+        .setup-box input, .setup-box select {
             width: 100%;
             padding: 12px;
             border: 1px solid #ddd;
@@ -72,8 +73,8 @@
             box-sizing: border-box;
             font-size: 14px;
             background-color: #ffffff;
+            font-family: inherit;
         }
-        /* Style Banner Instalasi */
         .install-banner {
             display: none;
             background: #ffeaa7;
@@ -89,26 +90,16 @@
             gap: 10px;
             margin-top: 10px;
         }
-        .btn-install-app {
-            background: #0984e3;
-            color: white;
+        .btn-install-app, .btn-close-banner {
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
             border: none;
-            padding: 8px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 12px;
         }
-        .btn-close-banner {
-            background: transparent;
-            color: #2d3436;
-            border: 1px solid #2d3436;
-            padding: 8px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 12px;
-        }
+        .btn-install-app { background: #0984e3; color: white; }
+        .btn-close-banner { background: transparent; color: #2d3436; border: 1px solid #2d3436; }
         .card-tips {
             background: #ffe0e6;
             padding: 15px;
@@ -145,7 +136,7 @@
             margin-top: 20px;
         }
         .stats-count {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: bold;
         }
         .btn-submit {
@@ -161,10 +152,7 @@
             margin-top: 20px;
             transition: 0.2s;
         }
-        .btn-submit:disabled {
-            background: #95a5a6;
-            cursor: not-allowed;
-        }
+        .btn-submit:disabled { background: #95a5a6; cursor: not-allowed; }
         .btn-notif {
             width: 100%;
             background: #2d3436;
@@ -178,6 +166,19 @@
             margin-top: 15px;
             transition: 0.2s;
         }
+        /* Style untuk area Credit */
+        .credits {
+            text-align: center;
+            font-size: 11px;
+            color: #b2bec3;
+            margin-top: 25px;
+            line-height: 1.6;
+            border-top: 1px dashed #dfe6e9;
+            padding-top: 15px;
+        }
+        .credits b {
+            color: #636e72;
+        }
     </style>
 </head>
 <body>
@@ -186,7 +187,6 @@
     <h1>🌸 Rematri Sehat</h1>
     <div class="subtitle">Jurnal Kebiasaan Makan Cegah Anemia</div>
 
-    <!-- Banner Instalasi PWA -->
     <div class="install-banner" id="installBanner">
         <span id="installText"></span>
         <div class="install-banner-actions">
@@ -196,8 +196,27 @@
     </div>
 
     <div class="setup-box" id="setupBox">
-        <label for="studentName">Masukkan Nama Lengkap & Kelas:</label>
-        <input type="text" id="studentName" placeholder="Contoh: Rina - Kelas 10A" oninput="saveIdentity()">
+        <label for="studentName" style="margin-top: 0;">Masukkan Nama Lengkap:</label>
+        <input type="text" id="studentName" placeholder="Contoh: Rina Putri" oninput="saveIdentity()">
+        
+        <label for="schoolName">Pilih Asal Sekolah:</label>
+        <select id="schoolName" onchange="saveIdentity()">
+            <option value="" disabled selected>-- Pilih Sekolah --</option>
+            <optgroup label="SMP">
+                <option value="SMPN 1 Sewon">SMPN 1 Sewon</option>
+                <option value="SMPN 3 Sewon">SMPN 3 Sewon</option>
+                <option value="SMP Al-Ma'arif">SMP Al-Ma'arif</option>
+                <option value="SMP Muhammadiyah Sewon">SMP Muhammadiyah Sewon</option>
+                <option value="MTS Al-Ma'had An-Nur">MTS Al-Ma'had An-Nur</option>
+            </optgroup>
+            <optgroup label="SMA">
+                <option value="SMKN 1 Sewon">SMKN 1 Sewon</option>
+                <option value="SMKN 2 Sewon">SMKN 2 Sewon</option>
+                <option value="SMK Nurul Iman">SMK Nurul Iman</option>
+                <option value="SMK Teknologi">SMK Teknologi</option>
+                <option value="MA Al-Ma'had An-Nur">MA Al-Ma'had An-Nur</option>
+            </optgroup>
+        </select>
     </div>
 
     <div class="card-tips">
@@ -213,7 +232,7 @@
         </label>
         <label class="todo-item">
             <input type="checkbox" id="task2" onchange="updateProgress()">
-            <span>Makan Lauk Hewani (Ayam/Ikan/Telur/Daging)</span>
+            <span>Konsumsi Protein Hewani/Nabati (Ayam/Telur/Daging/Ikan/Tahu/Tempe/Kacang)</span>
         </label>
         <label class="todo-item">
             <input type="checkbox" id="task3" onchange="updateProgress()">
@@ -222,8 +241,8 @@
     </div>
 
     <div class="stats-box">
-        <div class="stats-count" id="streakCount">0</div>
-        <div>Hari Berhasil Patuh Minggu Ini</div>
+        <div class="stats-count">Total Strike : <span id="streakCount">0</span> 🔥</div>
+        <div style="font-size: 13px; margin-top: 5px;">Pertahankan Strike 4/4 selama 1 bulan!</div>
     </div>
 
     <button id="submitBtn" class="btn-submit" onclick="submitJurnal()">
@@ -231,44 +250,43 @@
     </button>
 
     <button id="notiBtn" class="btn-notif" onclick="requestNotification()">
-        🔔 Ingatkan Aku Setiap Jam 19.00
+        🔔 Ingatkan Aku Setiap Senin Jam 19.00
     </button>
+
+    <!-- AREA CREDIT -->
+    <div class="credits">
+        <b>Main Developer :</b> Nur Annisa Sholikhah Akhmad, S. Gz<br>
+        <b>Code Maintainer :</b> dr. Muhammad Nur Imansyah
+    </div>
 </div>
 
 <script>
-    // 1. Inisialisasi Service Worker
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('sw.js')
-        .then(() => console.log('Service Worker Berhasil'))
+        .then(() => console.log('SW Ready'))
         .catch(err => console.error('SW Error:', err));
     }
 
-    // 2. Logika Penawaran Add To Home Screen (A2HS)
     const installBanner = document.getElementById('installBanner');
     const installBtn = document.getElementById('installBtn');
     const installText = document.getElementById('installText');
     let deferredPrompt;
 
-    // Deteksi jika pengguna sudah membuka via ikon aplikasi
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-    // Deteksi perangkat iOS
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
     if (!isStandalone) {
         if (isIOS) {
-            // Instruksi Khusus Safari iOS
             installText.innerHTML = "🍎 <strong>Khusus iPhone:</strong> Ketuk ikon <strong>Share (Bagikan)</strong> di bawah layar, lalu pilih <strong>Add to Home Screen</strong>.";
-            installBtn.style.display = 'none'; // Sembunyikan tombol eksekusi karena iOS butuh manual
+            installBtn.style.display = 'none';
             installBanner.style.display = 'block';
         } else {
-            // Chrome Android (Menangkap event instalasi)
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
                 deferredPrompt = e;
-                installText.innerHTML = "🤖 <strong>Instal Aplikasi:</strong> Tambahkan ke Home Screen untuk akses cepat dan notifikasi stabil!";
+                installText.innerHTML = "🤖 <strong>Instal Aplikasi:</strong> Tambahkan ke Home Screen untuk akses cepat!";
                 installBanner.style.display = 'block';
             });
-            // Untuk Firefox, fallback akan ditangani saat tombol ditekan
         }
     }
 
@@ -276,25 +294,19 @@
         if (deferredPrompt) {
             deferredPrompt.prompt();
             deferredPrompt.userChoice.then((choiceResult) => {
-                if (choiceResult.outcome === 'accepted') {
-                    installBanner.style.display = 'none';
-                }
+                if (choiceResult.outcome === 'accepted') installBanner.style.display = 'none';
                 deferredPrompt = null;
             });
         } else {
-             // Fallback untuk browser (seperti Firefox Android) yang tidak melempar event prompt
-             alert("Gunakan menu browser (Titik Tiga di sudut layar) lalu pilih opsi 'Instal Aplikasi' atau 'Tambahkan ke Layar Utama'.");
+             alert("Gunakan menu browser lalu pilih 'Tambahkan ke Layar Utama'.");
         }
     }
 
-    function closeInstallBanner() {
-        installBanner.style.display = 'none';
-    }
+    function closeInstallBanner() { installBanner.style.display = 'none'; }
 
-    // 3. Logika Utama Jurnal
     function saveIdentity() {
-        const name = document.getElementById('studentName').value;
-        localStorage.setItem('studentIdentity', name);
+        localStorage.setItem('studentIdentity', document.getElementById('studentName').value);
+        localStorage.setItem('studentSchool', document.getElementById('schoolName').value);
     }
 
     function loadSavedData() {
@@ -302,9 +314,11 @@
         const savedDate = localStorage.getItem('lastSavedDate');
         const streak = parseInt(localStorage.getItem('streakCount')) || 0;
         
-        const savedIdentity = localStorage.getItem('studentIdentity');
-        if (savedIdentity) {
-            document.getElementById('studentName').value = savedIdentity;
+        if (localStorage.getItem('studentIdentity')) {
+            document.getElementById('studentName').value = localStorage.getItem('studentIdentity');
+        }
+        if (localStorage.getItem('studentSchool')) {
+            document.getElementById('schoolName').value = localStorage.getItem('studentSchool');
         }
 
         if (savedDate !== today) {
@@ -362,10 +376,10 @@
 
     function submitJurnal() {
         const identity = document.getElementById('studentName').value.trim();
+        const school = document.getElementById('schoolName').value;
         
-        if(!identity) {
-            alert("Mohon isi Nama & Kelas terlebih dahulu ya!");
-            document.getElementById('studentName').focus();
+        if(!identity || !school) {
+            alert("Mohon isi Nama Lengkap & Asal Sekolah terlebih dahulu ya!");
             return;
         }
 
@@ -378,7 +392,7 @@
         btn.innerText = "⏳ Mengirim...";
         btn.disabled = true;
 
-        kirimKeGoogleSheets(t1, t2, t3, streak);
+        kirimKeGoogleSheets(t1, t2, t3, streak, school);
         
         setTimeout(() => {
             btn.innerText = "✅ Jurnal Berhasil Terkirim!";
@@ -386,7 +400,7 @@
         }, 1500);
     }
 
-    function kirimKeGoogleSheets(t1, t2, t3, streak) {
+    function kirimKeGoogleSheets(t1, t2, t3, streak, school) {
         const identity = localStorage.getItem('studentIdentity') || 'Tanpa Nama';
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyLFrT6LypIz8mVc1jOG_AXFjap0h8LtV_BzQUwfxozmekgxc8H8tFtjDbrg7knM2a_/exec"; 
 
@@ -396,17 +410,15 @@
             headers: { "Content-Type": "text/plain;charset=utf-8" },
             body: JSON.stringify({
                 identitas: identity,
+                asalSekolah: school,
                 minumTTD: t1 ? "Ya" : "Tidak",
                 laukHewani: t2 ? "Ya" : "Tidak",
                 buahVitC: t3 ? "Ya" : "Tidak",
                 totalStreak: streak
             })
-        }).then(() => {
-            console.log("Perintah fetch berhasil dieksekusi");
-        }).catch(err => console.log("Gagal kirim cloud:", err));
+        }).then(() => console.log("Terkirim")).catch(err => console.log("Gagal:", err));
     }
 
-    // 4. Logika Notifikasi
     function requestNotification() {
         if (!('Notification' in window)) {
             alert('Browser tidak mendukung notifikasi.');
@@ -428,7 +440,7 @@
 
     function setNotifButtonActive() {
         const btn = document.getElementById('notiBtn');
-        btn.innerText = "✅ Pengingat Aktif Jam 19.00";
+        btn.innerText = "✅ Pengingat Aktif (Senin Jam 19.00)";
         btn.style.background = "#2ecc71";
         btn.disabled = true;
     }
