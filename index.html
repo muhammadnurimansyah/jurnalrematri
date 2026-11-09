@@ -182,6 +182,8 @@
         .credits b {
             color: #636e72;
         }
+        
+        /* POPUP MASKOT */
         .popup-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -206,15 +208,18 @@
             from { transform: scale(0.8); opacity: 0; }
             to { transform: scale(1); opacity: 1; }
         }
+        
+        /* Ukuran Maskot Diperbesar menjadi 160px */
         .popup-mascot-img {
-            width: 120px;
-            height: 120px;
+            width: 160px;
+            height: 160px;
             object-fit: cover;
             border-radius: 50%;
             margin-bottom: 15px;
-            border: 4px solid var(--pink-light);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border: 5px solid var(--pink-light);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
         }
+        
         .popup-content h3 {
             margin: 0 0 10px 0;
             font-size: 20px;
@@ -484,19 +489,15 @@
         document.getElementById('customPopup').style.display = "none";
     }
 
-    // FUNGSI DI BAWAH INI TELAH DIREVISI AGAR NAMA DAN SEKOLAH TIDAK DIHAPUS
     function resetFormMingguan() {
-        // Hanya hapus centangan kotak
         document.getElementById('task1').checked = false;
         document.getElementById('task2').checked = false;
         document.getElementById('task3').checked = false;
 
-        // Hanya hapus penyimpanan centangan agar besok menjadi "kosong" lagi
         localStorage.setItem('task1', 'false');
         localStorage.setItem('task2', 'false');
         localStorage.setItem('task3', 'false');
         
-        // Reset validasi harian untuk Strike
         localStorage.setItem('isFullDay', 'false');
         localStorage.setItem('lastSavedDate', ''); 
     }
