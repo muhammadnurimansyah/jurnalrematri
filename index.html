@@ -170,7 +170,6 @@
             margin-top: 15px;
             transition: 0.2s;
         }
-        /* Style untuk area Credit */
         .credits {
             text-align: center;
             font-size: 11px;
@@ -183,9 +182,61 @@
         .credits b {
             color: #636e72;
         }
+        .popup-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+        }
+        .popup-content {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 320px;
+            width: 90%;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes popIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .popup-mascot-img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 15px;
+            border: 4px solid var(--pink-light);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .popup-content h3 {
+            margin: 0 0 10px 0;
+            font-size: 20px;
+        }
+        .popup-content p {
+            margin: 0;
+            font-size: 13px;
+            color: #636e72;
+            line-height: 1.5;
+        }
     </style>
 </head>
 <body>
+
+<div id="customPopup" class="popup-overlay">
+    <div class="popup-content">
+        <img id="popupMascot" src="mascot_happy.jpg" alt="Maskot" class="popup-mascot-img">
+        <h3 id="popupTitle"></h3>
+        <p id="popupMessage"></p>
+        <button onclick="closePopup()" class="btn-submit" style="margin-top: 20px;">Siap, Tutup!</button>
+    </div>
+</div>
 
 <div class="container">
     <h1>🌸 Rematri Sehat</h1>
@@ -257,7 +308,6 @@
         🔔 Ingatkan Aku Setiap Senin Jam 19.00
     </button>
 
-    <!-- AREA CREDIT -->
     <div class="credits">
         <b>Main Developer :</b> Nur Annisa Sholikhah Akhmad, S. Gz<br>
         <b>Code Maintainer :</b> dr. Muhammad Nur Imansyah
@@ -392,6 +442,8 @@
         const t3 = document.getElementById('task3').checked;
         const streak = parseInt(localStorage.getItem('streakCount')) || 0;
 
+        const isFullStrike = t1 && t2 && t3;
+
         const btn = document.getElementById('submitBtn');
         btn.innerText = "⏳ Mengirim...";
         btn.disabled = true;
@@ -399,9 +451,54 @@
         kirimKeGoogleSheets(t1, t2, t3, streak, school);
         
         setTimeout(() => {
-            btn.innerText = "✅ Jurnal Berhasil Terkirim!";
-            btn.style.background = "#27ae60";
-        }, 1500);
+            btn.innerText = "🚀 Kirim Laporan Hari Ini";
+            btn.disabled = false;
+            
+            tampilkanPopup(isFullStrike);
+            resetFormMingguan();
+        }, 1200);
+    }
+
+    function tampilkanPopup(isFullStrike) {
+        const popup = document.getElementById('customPopup');
+        const mascotImg = document.getElementById('popupMascot');
+        const title = document.getElementById('popupTitle');
+        const message = document.getElementById('popupMessage');
+
+        if (isFullStrike) {
+            mascotImg.src = "mascot_happy.jpg";
+            title.innerText = "Yeay! Hebat! 🎉";
+            title.style.color = "#27ae60";
+            message.innerText = "Luar biasa! Kamu berhasil melengkapi semua target minggu ini. Pertahankan terus Strike apimu ya! 🔥";
+        } else {
+            mascotImg.src = "mascot_sad.jpg";
+            title.innerText = "Yahh... Sayang Sekali";
+            title.style.color = "#e74c3c";
+            message.innerText = "Masih ada target yang belum terpenuhi. Jangan menyerah, minggu depan harus lebih disiplin dan lengkap ya! 💪";
+        }
+
+        popup.style.display = "flex";
+    }
+
+    function closePopup() {
+        document.getElementById('customPopup').style.display = "none";
+    }
+
+    // FUNGSI DI BAWAH INI TELAH DIREVISI AGAR NAMA DAN SEKOLAH TIDAK DIHAPUS
+    function resetFormMingguan() {
+        // Hanya hapus centangan kotak
+        document.getElementById('task1').checked = false;
+        document.getElementById('task2').checked = false;
+        document.getElementById('task3').checked = false;
+
+        // Hanya hapus penyimpanan centangan agar besok menjadi "kosong" lagi
+        localStorage.setItem('task1', 'false');
+        localStorage.setItem('task2', 'false');
+        localStorage.setItem('task3', 'false');
+        
+        // Reset validasi harian untuk Strike
+        localStorage.setItem('isFullDay', 'false');
+        localStorage.setItem('lastSavedDate', ''); 
     }
 
     function kirimKeGoogleSheets(t1, t2, t3, streak, school) {
