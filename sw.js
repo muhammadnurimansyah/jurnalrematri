@@ -1,4 +1,4 @@
-const CACHE_NAME = 'rematri-sehat-v1';
+const CACHE_NAME = 'rematri-sehat-v2'; // Cache dinaikkan versinya
 
 self.addEventListener('install', event => {
     self.skipWaiting();
@@ -16,18 +16,22 @@ self.addEventListener('fetch', event => {
     );
 });
 
+// Mengecek waktu secara reguler (Selama SW dalam status Awake)
 setInterval(() => {
     const sekarang = new Date();
-    if (sekarang.getHours() === 19 && sekarang.getMinutes() === 0) {
+    
+    // getDay(): 0=Minggu, 1=Senin, 2=Selasa, 3=Rabu, 4=Kamis, 5=Jumat, 6=Sabtu
+    // Logika di bawah akan mengingatkan pengguna HANYA di hari JUMAT jam 19.00
+    if (sekarang.getDay() === 1 && sekarang.getHours() === 19 && sekarang.getMinutes() === 0) {
         tampilkanNotifikasi();
     }
 }, 60000); 
 
 function tampilkanNotifikasi() {
-    self.registration.showNotification("🌸 Evaluasi Harian Rematri Sehat", {
-        body: "Sudah jam 7 malam nih! Jangan lupa ceklis jurnal sehatmu hari ini ya, pastikan TTD-mu sudah diminum!",
+    self.registration.showNotification("🌸 Evaluasi Mingguan Rematri Sehat", {
+        body: "Waktunya isi jurnal mingguanmu! Pastikan Strike apimu terus menyala ya 🔥",
         icon: "favicon.ico",
         vibrate: [200, 100, 200],
-        tag: "rematri-reminder"
+        tag: "rematri-reminder-weekly"
     });
 }
