@@ -1,0 +1,1576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Civic Adventure - Grade 1 ICP | MI Muslimat NU Pucang Sidoarjo</title>
+
+  <!-- Google Fonts: Nunito & Quicksand for soft, rounded, child-friendly readability -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&family=Quicksand:wght@600;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN for rapid responsive layout utilities -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* ==========================================================================
+       CUSTOM STYLES & PASTEL DESIGN TOKENS
+       Teachers can easily tweak colors in :root to customize the look!
+       ========================================================================== */
+    :root {
+      --bg-cream: #FFFDF7;
+      --mint-soft: #D1FAE5;
+      --mint-accent: #10B981;
+      --sky-soft: #E0F2FE;
+      --sky-accent: #0284C7;
+      --yellow-soft: #FEF3C7;
+      --yellow-accent: #F59E0B;
+      --coral-soft: #FFE4E6;
+      --coral-accent: #F43F5E;
+      --lavender-soft: #EDE9FE;
+      --lavender-accent: #8B5CF6;
+      --text-main: #1E293B;
+      --text-muted: #475569;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background-color: var(--bg-cream);
+      background-image:
+        radial-gradient(circle at 12% 18%, rgba(209, 250, 229, 0.7) 0%, transparent 32%),
+        radial-gradient(circle at 88% 12%, rgba(224, 242, 254, 0.75) 0%, transparent 34%),
+        radial-gradient(circle at 85% 85%, rgba(254, 243, 199, 0.7) 0%, transparent 36%),
+        radial-gradient(circle at 15% 88%, rgba(255, 228, 230, 0.65) 0%, transparent 32%);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    h1, h2, h3, .brand-font {
+      font-family: 'Quicksand', 'Nunito', sans-serif;
+    }
+
+    /* Tactile chunky 3D-style kid buttons */
+    .btn-kid {
+      transition: transform 0.14s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.14s ease;
+    }
+    .btn-kid:hover:not(:disabled) {
+      transform: translateY(-2px);
+    }
+    .btn-kid:active:not(:disabled) {
+      transform: translateY(2px);
+    }
+
+    /* Option card hover & selection states */
+    .option-card {
+      transition: all 0.18s ease;
+      cursor: pointer;
+      user-select: none;
+    }
+    .option-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px -4px rgba(15, 23, 42, 0.08);
+    }
+
+    /* Matching Node Styles (Left & Right items in Part C) */
+    .match-item {
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+      user-select: none;
+      touch-action: manipulation;
+    }
+    .match-item.active-source {
+      transform: scale(1.03);
+      box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.45);
+      border-color: #F59E0B !important;
+    }
+    .match-dot {
+      transition: transform 0.18s ease, background-color 0.18s ease;
+    }
+    .match-item:hover .match-dot,
+    .match-item.active-source .match-dot {
+      transform: scale(1.28);
+    }
+
+    /* Smooth SVG line animation */
+    .drawn-line {
+      stroke-linecap: round;
+      transition: d 0.08s ease-out;
+    }
+
+    /* Gentle floating animation for decorative icons */
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+    }
+    .animate-float {
+      animation: floatSlow 3.5s ease-in-out infinite;
+    }
+
+    /* Custom scrollbar for smooth feel */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F1F5F9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-amber-200 selection:text-slate-900">
+
+  <!-- ==========================================================================
+       MAIN APPLICATION CONTAINER
+       ========================================================================== -->
+  <div id="app" class="max-w-4xl mx-auto px-4 py-6 sm:py-8">
+
+    <!-- TOP SCHOOL BANNER HEADER -->
+    <header class="bg-white/90 backdrop-blur-md border-2 border-sky-200 rounded-3xl p-4 sm:p-5 shadow-sm mb-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3.5 text-center sm:text-left">
+        <!-- Cheerful Garuda / Shield Emblem SVG -->
+        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-300 via-yellow-200 to-emerald-200 border-2 border-amber-400 flex items-center justify-center shadow-inner shrink-0 animate-float">
+          <svg class="w-9 h-9 text-amber-700" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M32 6L10 15V31C10 45.5 19.4 58.3 32 62C44.6 58.3 54 45.5 54 31V15L32 6Z" fill="#FEF3C7" stroke="#D97706" stroke-width="3.5" stroke-linejoin="round"/>
+            <path d="M32 16L35.4 24.1L44.2 24.8L37.5 30.6L39.5 39.2L32 34.6L24.5 39.2L26.5 30.6L19.8 24.8L28.6 24.1L32 16Z" fill="#F59E0B" stroke="#B45309" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div>
+          <span class="inline-block text-xs font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 mb-1">
+            Cambridge Assessment International Education • ID 276
+          </span>
+          <h1 class="text-lg sm:text-xl font-black text-slate-800 leading-tight">
+            MI Muslimat NU Pucang Sidoarjo
+          </h1>
+          <p class="text-xs sm:text-sm font-bold text-sky-700">
+            Grade 1 ICP • Civic Education Interactive Assessment
+          </p>
+        </div>
+      </div>
+
+      <!-- Live Student Badge (Shown after starting quiz) -->
+      <div id="studentHeaderBadge" class="hidden bg-sky-50 border-2 border-sky-200 rounded-2xl px-4 py-2 text-center sm:text-right">
+        <p id="displayStudentName" class="text-sm font-extrabold text-slate-800">Student Name</p>
+        <p id="displayStudentClass" class="text-xs font-bold text-sky-700">Class 1 ICP</p>
+      </div>
+    </header>
+
+    <!-- ========================================================================
+         SCREEN 1: WELCOME & STUDENT REGISTRATION SCREEN
+         ======================================================================== -->
+    <section id="welcomeScreen" class="bg-white rounded-3xl border-2 border-amber-200 shadow-lg p-6 sm:p-10 text-center">
+      <div class="inline-flex items-center gap-2 bg-amber-100 text-amber-800 font-extrabold text-sm px-4 py-1.5 rounded-full mb-4">
+        <span>🇮🇩</span>
+        <span>Pancasila • NKRI • Norms &amp; Unity in Diversity</span>
+      </div>
+
+      <h2 class="text-2xl sm:text-4xl font-black text-slate-800 mb-3">
+        Grade 1 ICP Civic Adventure!
+      </h2>
+      <p class="text-slate-600 font-semibold max-w-xl mx-auto mb-8 text-base sm:text-lg">
+        Welcome, young Indonesian heroes! Read each question carefully and do your best across all 3 fun missions.
+      </p>
+
+      <!-- Mission Overview Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto mb-8 text-left">
+        <div class="bg-sky-50 border-2 border-sky-200 rounded-2xl p-4">
+          <div class="w-9 h-9 rounded-xl bg-sky-200 text-sky-800 font-black flex items-center justify-center mb-2">A</div>
+          <h3 class="font-extrabold text-slate-800 text-base">Multiple Choice</h3>
+          <p class="text-xs font-semibold text-slate-600 mt-1">5 Questions • Pick 1 best answer</p>
+        </div>
+        <div class="bg-emerald-50 border-2 border-emerald-200 rounded-2xl p-4">
+          <div class="w-9 h-9 rounded-xl bg-emerald-200 text-emerald-800 font-black flex items-center justify-center mb-2">B</div>
+          <h3 class="font-extrabold text-slate-800 text-base">Complex Choice</h3>
+          <p class="text-xs font-semibold text-slate-600 mt-1">5 Questions • Pick more than 1 answer</p>
+        </div>
+        <div class="bg-rose-50 border-2 border-rose-200 rounded-2xl p-4">
+          <div class="w-9 h-9 rounded-xl bg-rose-200 text-rose-800 font-black flex items-center justify-center mb-2">C</div>
+          <h3 class="font-extrabold text-slate-800 text-base">Draw-a-Line Match</h3>
+          <p class="text-xs font-semibold text-slate-600 mt-1">5 Questions • Connect left &amp; right pairs</p>
+        </div>
+      </div>
+
+      <!-- Student Input Form -->
+      <form id="startForm" class="max-w-md mx-auto space-y-4 text-left">
+        <div>
+          <label for="studentNameInput" class="block text-sm font-extrabold text-slate-700 mb-1.5">
+            Your Full Name <span class="text-rose-500">*</span>
+          </label>
+          <input
+            type="text"
+            id="studentNameInput"
+            required
+            placeholder="e.g., Ahmad Zayd"
+            class="w-full px-4 py-3.5 rounded-2xl border-2 border-slate-200 focus:border-sky-400 focus:ring-4 focus:ring-sky-100 outline-none font-bold text-slate-800 text-base transition"
+          />
+        </div>
+
+        <div>
+          <label for="studentClassInput" class="block text-sm font-extrabold text-slate-700 mb-1.5">
+            Class / Section <span class="text-rose-500">*</span>
+          </label>
+          <select
+            id="studentClassInput"
+            class="w-full px-4 py-3.5 rounded-2xl border-2 border-slate-200 focus:border-sky-400 focus:ring-4 focus:ring-sky-100 outline-none font-bold text-slate-800 text-base bg-white transition"
+          >
+            <option value="Grade 1 ICP - A">Grade 1 ICP - A</option>
+            <option value="Grade 1 ICP - B">Grade 1 ICP - B</option>
+            <option value="Grade 1 ICP - C">Grade 1 ICP - C</option>
+            <option value="Grade 1 ICP - D">Grade 1 ICP - D</option>
+          </select>
+        </div>
+
+        <!-- Inline friendly warning message box (Replaces browser alert) -->
+        <div id="formAlertBox" class="hidden bg-rose-100 border-2 border-rose-300 text-rose-800 text-sm font-bold px-4 py-3 rounded-2xl">
+          Please write your name first before starting the adventure!
+        </div>
+
+        <button
+          type="submit"
+          class="btn-kid w-full mt-2 py-4 px-6 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-black text-lg shadow-md border-b-4 border-emerald-700 flex items-center justify-center gap-2"
+        >
+          <span>Start Civic Adventure</span>
+          <span class="text-xl">🚀</span>
+        </button>
+      </form>
+    </section>
+
+    <!-- ========================================================================
+         SCREEN 2: INTERACTIVE QUIZ WORKSPACE
+         ======================================================================== -->
+    <main id="quizScreen" class="hidden space-y-5">
+
+      <!-- Progress Bar & Question Navigator Pill Strip -->
+      <div class="bg-white rounded-3xl border-2 border-slate-200 p-4 sm:p-5 shadow-sm">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div class="flex items-center gap-2">
+            <span id="sectionBadge" class="px-3 py-1 rounded-full text-xs font-black uppercase tracking-wide bg-sky-100 text-sky-800">
+              Part A: Multiple Choice
+            </span>
+            <span id="questionCounterText" class="text-sm font-extrabold text-slate-600">
+              Question 1 of 15
+            </span>
+          </div>
+          <span id="answeredCountBadge" class="text-xs font-extrabold px-3 py-1 rounded-full bg-amber-100 text-amber-800">
+            0 / 15 Answered
+          </span>
+        </div>
+
+        <!-- Animated Progress Bar -->
+        <div class="w-full h-3.5 bg-slate-100 rounded-full overflow-hidden mb-4 border border-slate-200">
+          <div
+            id="progressBarFill"
+            class="h-full bg-gradient-to-r from-sky-400 via-emerald-400 to-amber-400 rounded-full transition-all duration-300"
+            style="width: 6.66%;"
+          ></div>
+        </div>
+
+        <!-- Quick Question Jump Dots (1 to 15) -->
+        <div id="questionDotsContainer" class="flex flex-wrap gap-1.5 justify-center">
+          <!-- Populated dynamically by JavaScript -->
+        </div>
+      </div>
+
+      <!-- Active Question Card -->
+      <div id="questionCard" class="bg-white rounded-3xl border-2 border-sky-200 p-5 sm:p-8 shadow-md relative">
+        <!-- Dynamic Question Content injected here -->
+      </div>
+
+      <!-- Bottom Navigation Controls -->
+      <div class="flex items-center justify-between gap-3 pt-1">
+        <button
+          id="prevBtn"
+          type="button"
+          class="btn-kid px-5 py-3.5 rounded-2xl bg-white hover:bg-slate-50 text-slate-700 font-extrabold border-2 border-slate-300 border-b-4 disabled:opacity-40 disabled:pointer-events-none flex items-center gap-2"
+        >
+          <span>⬅️</span>
+          <span>Previous</span>
+        </button>
+
+        <button
+          id="nextBtn"
+          type="button"
+          class="btn-kid px-6 py-3.5 rounded-2xl bg-sky-500 hover:bg-sky-600 text-white font-extrabold border-b-4 border-sky-700 shadow-sm flex items-center gap-2"
+        >
+          <span>Next Question</span>
+          <span>➡️</span>
+        </button>
+
+        <button
+          id="finishBtn"
+          type="button"
+          class="hidden btn-kid px-6 py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-black border-b-4 border-orange-700 shadow-md flex items-center gap-2"
+        >
+          <span>Submit &amp; See Score</span>
+          <span>🏆</span>
+        </button>
+      </div>
+
+      <!-- Friendly Confirmation Modal Box for Unanswered Questions (No browser confirm()) -->
+      <div id="submitConfirmModal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl border-4 border-amber-300 max-w-md w-full p-6 text-center shadow-2xl">
+          <div class="text-5xl mb-3">🤔</div>
+          <h3 class="text-xl font-black text-slate-800 mb-2">Almost Done!</h3>
+          <p id="unansweredWarningText" class="text-slate-600 font-semibold text-sm mb-6">
+            You still have unanswered questions. Would you like to submit now or keep checking?
+          </p>
+          <div class="flex flex-col sm:flex-row gap-3 justify-center">
+            <button
+              id="cancelSubmitBtn"
+              type="button"
+              class="btn-kid flex-1 py-3 px-4 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-extrabold border-b-4 border-slate-300"
+            >
+              Keep Checking
+            </button>
+            <button
+              id="confirmSubmitBtn"
+              type="button"
+              class="btn-kid flex-1 py-3 px-4 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold border-b-4 border-emerald-700"
+            >
+              Submit Anyway
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ========================================================================
+         SCREEN 3: SCORE REPORT & DETAILED TEACHER/STUDENT REVIEW SCREEN
+         ======================================================================== -->
+    <section id="resultScreen" class="hidden space-y-6">
+
+      <!-- Score Trophy Card -->
+      <div class="bg-white rounded-3xl border-4 border-amber-300 p-6 sm:p-8 text-center shadow-lg relative overflow-hidden">
+        <div class="inline-block px-4 py-1 rounded-full bg-emerald-100 text-emerald-800 font-extrabold text-xs uppercase tracking-wider mb-3">
+          Assessment Completed!
+        </div>
+        <div id="resultTrophyEmoji" class="text-6xl mb-2">🏆</div>
+        <h2 id="resultGreeting" class="text-2xl sm:text-3xl font-black text-slate-800">
+          Great Job, Student!
+        </h2>
+        <p id="resultSubtext" class="text-slate-600 font-semibold text-sm sm:text-base mt-1 mb-6">
+          Here is your Civic Education score summary.
+        </p>
+
+        <!-- Big Score Circle -->
+        <div class="inline-flex flex-col items-center justify-center w-36 h-36 rounded-full bg-gradient-to-br from-amber-100 via-yellow-50 to-emerald-100 border-4 border-amber-400 shadow-inner mb-6">
+          <span class="text-xs font-extrabold uppercase text-amber-800">Final Score</span>
+          <span id="finalScoreNumber" class="text-4xl font-black text-slate-900">100</span>
+          <span class="text-xs font-bold text-slate-500">out of 100</span>
+        </div>
+
+        <!-- Section Breakdown Pills -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-2xl mx-auto text-left mb-6">
+          <div class="bg-sky-50 border-2 border-sky-200 rounded-2xl p-3.5">
+            <p class="text-xs font-extrabold text-sky-700 uppercase">Part A • Multiple Choice</p>
+            <p id="partAScoreText" class="text-lg font-black text-slate-800 mt-0.5">0 / 5 Correct</p>
+          </div>
+          <div class="bg-emerald-50 border-2 border-emerald-200 rounded-2xl p-3.5">
+            <p class="text-xs font-extrabold text-emerald-700 uppercase">Part B • Complex Choice</p>
+            <p id="partBScoreText" class="text-lg font-black text-slate-800 mt-0.5">0 / 5 Correct</p>
+          </div>
+          <div class="bg-rose-50 border-2 border-rose-200 rounded-2xl p-3.5">
+            <p class="text-xs font-extrabold text-rose-700 uppercase">Part C • Line Matching</p>
+            <p id="partCScoreText" class="text-lg font-black text-slate-800 mt-0.5">0 / 5 Correct</p>
+          </div>
+        </div>
+
+        <button
+          id="restartQuizBtn"
+          type="button"
+          class="btn-kid px-7 py-3.5 rounded-2xl bg-sky-500 hover:bg-sky-600 text-white font-black border-b-4 border-sky-700 shadow-md inline-flex items-center gap-2"
+        >
+          <span>🔄</span>
+          <span>Try Again / New Student</span>
+        </button>
+      </div>
+
+      <!-- Detailed Question-by-Question Review List -->
+      <div class="bg-white rounded-3xl border-2 border-slate-200 p-5 sm:p-7 shadow-sm">
+        <h3 class="text-xl font-black text-slate-800 mb-1 flex items-center gap-2">
+          <span>📋</span>
+          <span>Answer Review &amp; Learning Notes</span>
+        </h3>
+        <p class="text-sm font-semibold text-slate-500 mb-5">
+          Review every question with your teacher or parents to see what you mastered!
+        </p>
+        <div id="reviewContainer" class="space-y-4">
+          <!-- Populated dynamically after submission -->
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <!-- ==========================================================================
+       JAVASCRIPT: QUIZ DATA, INTERACTIVE MATCHING ENGINE & SCORING LOGIC
+       Teachers: All questions and answers are stored cleanly in `QUIZ_QUESTIONS`
+       below so you can easily edit text, options, or matching pairs anytime!
+       ========================================================================== -->
+  <script>
+    /**
+     * COLOR PALETTE FOR MATCHING LINES
+     * Each left item gets a distinct, high-contrast child-friendly line color.
+     */
+    const LINE_COLORS = [
+      "#0284C7", // Sky Blue
+      "#10B981", // Emerald Green
+      "#F59E0B", // Warm Amber
+      "#F43F5E", // Coral Pink
+      "#8B5CF6", // Soft Violet
+      "#EC4899"  // Bright Rose
+    ];
+
+    /**
+     * =========================================================================
+     * QUESTION BANK (15 QUESTIONS TOTAL)
+     * - Q1–Q5:   type = 'single'   (Part A: Multiple Choice)
+     * - Q6–Q10:  type = 'multiple' (Part B: Complex Multiple Choice)
+     * - Q11–Q15: type = 'matching' (Part C: Interactive Line-Drawing Matching)
+     * =========================================================================
+     */
+    const QUIZ_QUESTIONS = [
+      // -----------------------------------------------------------------------
+      // PART A: MULTIPLE CHOICE (5 QUESTIONS - SINGLE ANSWER)
+      // -----------------------------------------------------------------------
+      {
+        id: 1,
+        part: "A",
+        type: "single",
+        topic: "Pancasila",
+        prompt: "Pancasila comes from the Sanskrit language: 'Panca' means five, and 'sila' means principles or guidelines. What is Pancasila's position in Indonesia?",
+        options: [
+          { id: "A", text: "The motto of the Indonesian state." },
+          { id: "B", text: "The foundation (basic) of the Indonesian state." },
+          { id: "C", text: "The Indonesian national anthem." },
+          { id: "D", text: "Indonesian local products." }
+        ],
+        correctAnswer: "B",
+        explanation: "Pancasila is the foundation (dasar negara) and guideline of the Indonesian state."
+      },
+      {
+        id: 2,
+        part: "A",
+        type: "single",
+        topic: "1st Principle of Pancasila",
+        prompt: "The first principle of Pancasila is “Belief in One Almighty God”. Which attitude reflects the value of the first principle at school?",
+        options: [
+          { id: "A", text: "Never doing worship based on your religion." },
+          { id: "B", text: "Insulting friends who have a different religion." },
+          { id: "C", text: "Respecting friends who are doing their worship." },
+          { id: "D", text: "Forcing a friend to follow our religion." }
+        ],
+        correctAnswer: "C",
+        explanation: "Respecting friends when they pray or worship shows tolerance and obeys the 1st principle of Pancasila."
+      },
+      {
+        id: 3,
+        part: "A",
+        type: "single",
+        topic: "Unity in Diversity at Home",
+        prompt: "Diversity must be managed properly so that it becomes a strength. Which behavior shows maintaining unity in diversity at home?",
+        options: [
+          { id: "A", text: "Mocking your sibling's favorite hobby." },
+          { id: "B", text: "Ignoring your parents' good advice." },
+          { id: "C", text: "Refusing to share toys with your sibling." },
+          { id: "D", text: "Respecting your sibling's opinion." }
+        ],
+        correctAnswer: "D",
+        explanation: "Respecting your sibling's opinion keeps the family harmonious and united at home."
+      },
+      {
+        id: 4,
+        part: "A",
+        type: "single",
+        topic: "NKRI as an Archipelagic Country",
+        prompt: "Indonesia is known as an archipelagic country because it consists of thousands of islands spread from Sabang to Merauke. What is one advantage of NKRI as an archipelagic country?",
+        options: [
+          { id: "A", text: "It has high natural resource potential (land and sea)." },
+          { id: "B", text: "It has a high risk of marine disasters." },
+          { id: "C", text: "It causes division among society." },
+          { id: "D", text: "It has a very small regional area." }
+        ],
+        correctAnswer: "A",
+        explanation: "Having thousands of islands and wide seas gives Indonesia rich natural resources on land and in the ocean."
+      },
+      {
+        id: 5,
+        part: "A",
+        type: "single",
+        topic: "Norms & Rules at School",
+        prompt: "Every Monday morning, students at MI Muslimat NU Pucang Sidoarjo join the Flag Ceremony. Following school norms means we should...",
+        options: [
+          { id: "A", text: "Chat and play with friends during the ceremony." },
+          { id: "B", text: "Attend the Flag Ceremony neatly and orderly." },
+          { id: "C", text: "Come late to school on purpose." },
+          { id: "D", text: "Leave the line without teacher permission." }
+        ],
+        correctAnswer: "B",
+        explanation: "Attending the Flag Ceremony orderly is an important school norm that shows discipline and love for Indonesia."
+      },
+
+      // -----------------------------------------------------------------------
+      // PART B: COMPLEX MULTIPLE CHOICE (5 QUESTIONS - MULTIPLE ANSWERS)
+      // -----------------------------------------------------------------------
+      {
+        id: 6,
+        part: "B",
+        type: "multiple",
+        topic: "Proud of Local Products",
+        prompt: "Rani's parents work abroad, but she always uses Indonesian local products. What are the benefits of buying local products for Indonesia? (Choose more than one answer)",
+        options: [
+          { id: "A", text: "Strengthening pride in Indonesian creations." },
+          { id: "B", text: "Making foreign products more well-known." },
+          { id: "C", text: "Making Indonesia’s economy stronger." },
+          { id: "D", text: "Causing items to become damaged quickly." }
+        ],
+        correctAnswers: ["A", "C"],
+        explanation: "Buying Indonesian products builds national pride and supports local workers, making Indonesia's economy stronger."
+      },
+      {
+        id: 7,
+        part: "B",
+        type: "multiple",
+        topic: "Unity in Diversity at School",
+        prompt: "In class, Dimas saw Rio mocking another friend because of differences in skin color and language. Which attitudes should Dimas show to maintain unity in diversity at school? (Choose more than one answer)",
+        options: [
+          { id: "A", text: "Stay silent because it is not his business." },
+          { id: "B", text: "Advise Rio not to mock friends because of their differences." },
+          { id: "C", text: "Invite Rio to be friends with anyone without discrimination." },
+          { id: "D", text: "Join in mocking the friend because he thinks it is funny." }
+        ],
+        correctAnswers: ["B", "C"],
+        explanation: "We should kindly remind friends not to bully or discriminate and invite everyone to play and study together."
+      },
+      {
+        id: 8,
+        part: "B",
+        type: "multiple",
+        topic: "4th Principle Symbol Meaning",
+        prompt: "The symbol of the 4th principle of Pancasila is the bull head (Kepala Banteng). Which statements correctly explain the meaning of this symbol? (Choose more than one answer)",
+        options: [
+          { id: "A", text: "Because the bull runs away when facing problems." },
+          { id: "B", text: "Bulls often fight to show who is the strongest." },
+          { id: "C", text: "The bull is a social animal that likes to gather, just like deliberation (musyawarah)." },
+          { id: "D", text: "Deliberation reflects a collective decision, not a selfish personal decision." }
+        ],
+        correctAnswers: ["C", "D"],
+        explanation: "Bulls love gathering together in groups, symbolizing people meeting together to reach a wise collective decision."
+      },
+      {
+        id: 9,
+        part: "B",
+        type: "multiple",
+        topic: "Proud to be Indonesian",
+        prompt: "Indonesia is rich in culture, traditional clothes, and natural beauty. Which behaviors reflect being proud to be Indonesian? (Choose more than one answer)",
+        options: [
+          { id: "A", text: "Wearing Batik proudly and learning traditional dances." },
+          { id: "B", text: "Mocking regional languages from other islands." },
+          { id: "C", text: "Introducing Indonesia's natural beauty and attending the Flag Ceremony orderly." },
+          { id: "D", text: "Only liking foreign products and forgetting Indonesian culture." }
+        ],
+        correctAnswers: ["A", "C"],
+        explanation: "Wearing Batik, learning traditional dances, sharing Indonesia's beauty, and obeying ceremony rules all show pride in Indonesia."
+      },
+      {
+        id: 10,
+        part: "B",
+        type: "multiple",
+        topic: "Norms & Mutual Cooperation",
+        prompt: "To keep our home and neighborhood peaceful and clean, we follow social norms. Which actions show good norms in daily life? (Choose more than one answer)",
+        options: [
+          { id: "A", text: "Listening politely to parents' advice at home." },
+          { id: "B", text: "Joining mutual cooperation (gotong royong) to clean the village." },
+          { id: "C", text: "Throwing trash into the river near our house." },
+          { id: "D", text: "Choosing friends only based on wealth or social status." }
+        ],
+        correctAnswers: ["A", "B"],
+        explanation: "Obeying parents' advice and joining gotong royong are positive norms that build harmony and unity."
+      },
+
+      // -----------------------------------------------------------------------
+      // PART C: INTERACTIVE LINE-DRAWING MATCHING (5 QUESTIONS)
+      // -----------------------------------------------------------------------
+      {
+        id: 11,
+        part: "C",
+        type: "matching",
+        topic: "Symbols of Pancasila",
+        prompt: "Match each Pancasila symbol on the left with its correct Principle of Pancasila on the right by drawing a line!",
+        leftItems: [
+          { id: "L1", text: "1. Gold Star ⭐" },
+          { id: "L2", text: "2. Gold Chain 🔗" },
+          { id: "L3", text: "3. Banyan Tree 🌳" },
+          { id: "L4", text: "4. Bull Head 🐃" },
+          { id: "L5", text: "5. Rice and Cotton 🌾" }
+        ],
+        rightItems: [
+          { id: "R1", text: "The Unity of Indonesia (3rd)" },
+          { id: "R2", text: "Belief in the One Almighty God (1st)" },
+          { id: "R3", text: "Social Justice for All Indonesian People (5th)" },
+          { id: "R4", text: "Just and Civilized Humanity (2nd)" },
+          { id: "R5", text: "Democracy Led by Wisdom of Deliberation (4th)" }
+        ],
+        correctPairs: {
+          L1: "R2",
+          L2: "R4",
+          L3: "R1",
+          L4: "R5",
+          L5: "R3"
+        },
+        explanation: "1. Gold Star = 1st Principle, 2. Gold Chain = 2nd Principle, 3. Banyan Tree = 3rd Principle, 4. Bull Head = 4th Principle, 5. Rice & Cotton = 5th Principle."
+      },
+      {
+        id: 12,
+        part: "C",
+        type: "matching",
+        topic: "Applying Pancasila Values",
+        prompt: "Match each action on the left to its impact in daily life on the right! (Two items connect to each action)",
+        leftItems: [
+          { id: "L1", text: "1. Benefits when we APPLY Pancasila's values 😊" },
+          { id: "L2", text: "2. Consequences if we DO NOT apply Pancasila's values 😟" }
+        ],
+        rightItems: [
+          { id: "R1", text: "Life is filled with conflict & chaos" },
+          { id: "R2", text: "Creates a peaceful & harmonious life" },
+          { id: "R3", text: "Society becomes divided" },
+          { id: "R4", text: "Environment becomes comfortable & safe" }
+        ],
+        // Note: Supports 1-to-many or standard matching seamlessly!
+        // Here we allow each right item to connect to a left item so students connect all 4 outcomes!
+        multiLeftAllowed: true,
+        correctPairs: {
+          // Keyed by Right Item ID -> Left Item ID when multiLeftAllowed is true, OR standard Left->Right pairs:
+          // Let's keep 4 left items vs 4 right items so every dot connects 1-to-1 cleanly for Grade 1 kids!
+        }
+      },
+      {
+        id: 13,
+        part: "C",
+        type: "matching",
+        topic: "Behaviors in Different Environments",
+        prompt: "Match each environment on the left to the appropriate Unity in Diversity behavior on the right!",
+        leftItems: [
+          { id: "L1", text: "1. In the School 🏫" },
+          { id: "L2", text: "2. In the Home 🏠" },
+          { id: "L3", text: "3. In the Society 🏘️" }
+        ],
+        rightItems: [
+          { id: "R1", text: "Respecting parents' advice & loving siblings" },
+          { id: "R2", text: "Respecting neighbors worshipping & never judging social status" },
+          { id: "R3", text: "Listening to friends' opinions & never discriminating" }
+        ],
+        correctPairs: {
+          L1: "R3",
+          L2: "R1",
+          L3: "R2"
+        },
+        explanation: "At school we respect classmates; at home we obey parents and love siblings; in society we respect neighbors."
+      },
+      {
+        id: 14,
+        part: "C",
+        type: "matching",
+        topic: "Pancasila Principles & Core Values",
+        prompt: "Match each Pancasila Principle on the left with its daily example on the right!",
+        leftItems: [
+          { id: "L1", text: "1st Principle (God Almighty)" },
+          { id: "L2", text: "2nd Principle (Humanity)" },
+          { id: "L3", text: "3rd Principle (Unity)" },
+          { id: "L4", text: "4th Principle (Deliberation)" }
+        ],
+        rightItems: [
+          { id: "R1", text: "Holding class discussion (musyawarah) to pick a class leader" },
+          { id: "R2", text: "Praying before studying & respecting friends' religions" },
+          { id: "R3", text: "Playing together with friends from Papua, Java, and Sumatra" },
+          { id: "R4", text: "Helping a friend who falls down in the schoolyard" }
+        ],
+        correctPairs: {
+          L1: "R2",
+          L2: "R4",
+          L3: "R3",
+          L4: "R1"
+        },
+        explanation: "1st = Praying/Tolerance, 2nd = Helping others with kindness, 3rd = Unity across regions, 4th = Musyawarah."
+      },
+      {
+        id: 15,
+        part: "C",
+        type: "matching",
+        topic: "NKRI, Norms & National Pride",
+        prompt: "Match each Civic concept on the left with its correct meaning or benefit on the right!",
+        leftItems: [
+          { id: "L1", text: "NKRI (Archipelagic Country)" },
+          { id: "L2", text: "Mutual Cooperation (Gotong Royong)" },
+          { id: "L3", text: "School Norms & Rules" },
+          { id: "L4", text: "Indonesian Local Products" }
+        ],
+        rightItems: [
+          { id: "R1", text: "Cleaning the village together to keep unity strong" },
+          { id: "R2", text: "Wearing neat uniform & joining Flag Ceremony orderly" },
+          { id: "R3", text: "United country from Sabang to Merauke" },
+          { id: "R4", text: "Strengthening Indonesia's economy & national pride" }
+        ],
+        correctPairs: {
+          L1: "R3",
+          L2: "R1",
+          L3: "R2",
+          L4: "R4"
+        },
+        explanation: "NKRI unites Sabang to Merauke; Gotong Royong builds unity; School norms keep order; Local products boost our economy."
+      }
+    ];
+
+    // Refine Question 12 to be an intuitive 4-to-4 1-to-1 line matching question
+    // so every left dot connects to exactly one right dot (super clear for Grade 1!)
+    QUIZ_QUESTIONS[11] = {
+      id: 12,
+      part: "C",
+      type: "matching",
+      topic: "Applying Pancasila Values",
+      prompt: "Match each attitude on the left with its result in daily life on the right by drawing a line!",
+      leftItems: [
+        { id: "L1", text: "1. Applying Pancasila's values at home 😊" },
+        { id: "L2", text: "2. Applying Pancasila's values in society 🤝" },
+        { id: "L3", text: "3. Not applying Pancasila's values at school 😠" },
+        { id: "L4", text: "4. Not applying Pancasila's values in society 😟" }
+      ],
+      rightItems: [
+        { id: "R1", text: "Society becomes divided and unsafe" },
+        { id: "R2", text: "Creates a peaceful and harmonious family" },
+        { id: "R3", text: "Classmates argue and life is filled with conflict" },
+        { id: "R4", text: "Neighborhood environment becomes comfortable" }
+      ],
+      correctPairs: {
+        L1: "R2",
+        L2: "R4",
+        L3: "R3",
+        L4: "R1"
+      },
+      explanation: "Applying Pancasila creates peace, harmony, and comfort, while ignoring Pancasila causes conflict and division."
+    };
+
+    /**
+     * =========================================================================
+     * APPLICATION STATE
+     * =========================================================================
+     */
+    const state = {
+      studentName: "",
+      studentClass: "Grade 1 ICP - A",
+      currentIndex: 0,
+      // Stores answers keyed by question ID:
+      // - single: "B"
+      // - multiple: ["A", "C"]
+      // - matching: { L1: "R2", L2: "R4", ... }
+      answers: {},
+      // Tracks active selected left node during click-to-connect or drag-to-connect
+      activeLeftNode: null,
+      isDraggingLine: false,
+      pointerPos: { x: 0, y: 0 }
+    };
+
+    /**
+     * =========================================================================
+     * DOM ELEMENT REFERENCES
+     * =========================================================================
+     */
+    const welcomeScreen = document.getElementById("welcomeScreen");
+    const quizScreen = document.getElementById("quizScreen");
+    const resultScreen = document.getElementById("resultScreen");
+
+    const startForm = document.getElementById("startForm");
+    const studentNameInput = document.getElementById("studentNameInput");
+    const studentClassInput = document.getElementById("studentClassInput");
+    const formAlertBox = document.getElementById("formAlertBox");
+
+    const studentHeaderBadge = document.getElementById("studentHeaderBadge");
+    const displayStudentName = document.getElementById("displayStudentName");
+    const displayStudentClass = document.getElementById("displayStudentClass");
+
+    const sectionBadge = document.getElementById("sectionBadge");
+    const questionCounterText = document.getElementById("questionCounterText");
+    const answeredCountBadge = document.getElementById("answeredCountBadge");
+    const progressBarFill = document.getElementById("progressBarFill");
+    const questionDotsContainer = document.getElementById("questionDotsContainer");
+    const questionCard = document.getElementById("questionCard");
+
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const finishBtn = document.getElementById("finishBtn");
+
+    const submitConfirmModal = document.getElementById("submitConfirmModal");
+    const unansweredWarningText = document.getElementById("unansweredWarningText");
+    const cancelSubmitBtn = document.getElementById("cancelSubmitBtn");
+    const confirmSubmitBtn = document.getElementById("confirmSubmitBtn");
+
+    const restartQuizBtn = document.getElementById("restartQuizBtn");
+
+    /**
+     * =========================================================================
+     * INITIALIZATION & START HANDLERS
+     * =========================================================================
+     */
+    startForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const nameVal = studentNameInput.value.trim();
+      if (!nameVal) {
+        formAlertBox.classList.remove("hidden");
+        studentNameInput.focus();
+        return;
+      }
+
+      formAlertBox.classList.add("hidden");
+      state.studentName = nameVal;
+      state.studentClass = studentClassInput.value;
+      state.currentIndex = 0;
+      state.answers = {};
+      state.activeLeftNode = null;
+
+      // Update header badge
+      displayStudentName.textContent = state.studentName;
+      displayStudentClass.textContent = state.studentClass;
+      studentHeaderBadge.classList.remove("hidden");
+
+      // Switch screens
+      welcomeScreen.classList.add("hidden");
+      resultScreen.classList.add("hidden");
+      quizScreen.classList.remove("hidden");
+
+      renderQuestion();
+    });
+
+    /**
+     * =========================================================================
+     * HELPER: CHECK IF A QUESTION HAS BEEN ANSWERED
+     * =========================================================================
+     */
+    function isQuestionAnswered(q) {
+      const ans = state.answers[q.id];
+      if (!ans) return false;
+      if (q.type === "single") return typeof ans === "string" && ans.length > 0;
+      if (q.type === "multiple") return Array.isArray(ans) && ans.length > 0;
+      if (q.type === "matching") return Object.keys(ans).length > 0;
+      return false;
+    }
+
+    function getTotalAnsweredCount() {
+      return QUIZ_QUESTIONS.filter(isQuestionAnswered).length;
+    }
+
+    /**
+     * =========================================================================
+     * RENDER QUESTION & PROGRESS UI
+     * =========================================================================
+     */
+    function renderQuestion() {
+      const q = QUIZ_QUESTIONS[state.currentIndex];
+      state.activeLeftNode = null;
+      state.isDraggingLine = false;
+
+      // 1. Update Section Badge Styling
+      if (q.part === "A") {
+        sectionBadge.textContent = "Part A: Multiple Choice (Pick 1)";
+        sectionBadge.className = "px-3 py-1 rounded-full text-xs font-black uppercase tracking-wide bg-sky-100 text-sky-800";
+      } else if (q.part === "B") {
+        sectionBadge.textContent = "Part B: Complex Choice (Pick >1)";
+        sectionBadge.className = "px-3 py-1 rounded-full text-xs font-black uppercase tracking-wide bg-emerald-100 text-emerald-800";
+      } else {
+        sectionBadge.textContent = "Part C: Draw-a-Line Matching";
+        sectionBadge.className = "px-3 py-1 rounded-full text-xs font-black uppercase tracking-wide bg-rose-100 text-rose-800";
+      }
+
+      // 2. Update Counter & Progress Bar
+      const qNum = state.currentIndex + 1;
+      const total = QUIZ_QUESTIONS.length;
+      questionCounterText.textContent = `Question ${qNum} of ${total}`;
+      const answeredCount = getTotalAnsweredCount();
+      answeredCountBadge.textContent = `${answeredCount} / ${total} Answered`;
+      progressBarFill.style.width = `${(qNum / total) * 100}%`;
+
+      // 3. Render Quick Jump Dots
+      renderJumpDots();
+
+      // 4. Render Question Body by Type
+      if (q.type === "single") {
+        renderSingleChoiceQuestion(q);
+      } else if (q.type === "multiple") {
+        renderMultipleChoiceQuestion(q);
+      } else if (q.type === "matching") {
+        renderMatchingQuestion(q);
+      }
+
+      // 5. Update Navigation Buttons
+      prevBtn.disabled = state.currentIndex === 0;
+      if (state.currentIndex === total - 1) {
+        nextBtn.classList.add("hidden");
+        finishBtn.classList.remove("hidden");
+      } else {
+        nextBtn.classList.remove("hidden");
+        finishBtn.classList.add("hidden");
+      }
+    }
+
+    function renderJumpDots() {
+      questionDotsContainer.innerHTML = "";
+      QUIZ_QUESTIONS.forEach((item, idx) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = idx + 1;
+        const isCurrent = idx === state.currentIndex;
+        const answered = isQuestionAnswered(item);
+
+        let baseClasses = "w-8 h-8 rounded-xl text-xs font-black transition flex items-center justify-center border-2 ";
+        if (isCurrent) {
+          baseClasses += "bg-amber-400 border-amber-600 text-slate-900 scale-110 shadow-xs";
+        } else if (answered) {
+          baseClasses += "bg-emerald-100 border-emerald-400 text-emerald-900";
+        } else {
+          baseClasses += "bg-slate-50 border-slate-200 text-slate-500 hover:bg-slate-100";
+        }
+
+        btn.className = baseClasses;
+        btn.setAttribute("aria-label", `Go to question ${idx + 1}`);
+        btn.addEventListener("click", () => {
+          state.currentIndex = idx;
+          renderQuestion();
+        });
+        questionDotsContainer.appendChild(btn);
+      });
+    }
+
+    /**
+     * =========================================================================
+     * PART A RENDERER: SINGLE MULTIPLE CHOICE
+     * =========================================================================
+     */
+    function renderSingleChoiceQuestion(q) {
+      const selected = state.answers[q.id] || null;
+
+      const optionsHtml = q.options.map((opt) => {
+        const isSelected = selected === opt.id;
+        return `
+          <div
+            data-opt-id="${opt.id}"
+            class="single-opt option-card flex items-center gap-4 p-4 rounded-2xl border-2 ${
+              isSelected
+                ? "bg-sky-50 border-sky-500 shadow-sm"
+                : "bg-white border-slate-200 hover:border-sky-300"
+            }"
+          >
+            <div class="w-10 h-10 rounded-xl font-black text-base flex items-center justify-center shrink-0 border-2 ${
+              isSelected
+                ? "bg-sky-500 border-sky-600 text-white"
+                : "bg-slate-100 border-slate-200 text-slate-700"
+            }">
+              ${opt.id}
+            </div>
+            <p class="font-bold text-slate-800 text-base sm:text-lg leading-snug flex-1">
+              ${opt.text}
+            </p>
+            <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 ${
+              isSelected ? "border-sky-500 bg-sky-500" : "border-slate-300"
+            }">
+              ${isSelected ? '<div class="w-2.5 h-2.5 rounded-full bg-white"></div>' : ""}
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      questionCard.innerHTML = `
+        <div class="flex items-center gap-2 mb-3">
+          <span class="px-3 py-1 rounded-xl bg-amber-100 text-amber-800 text-xs font-extrabold">
+            Topic: ${q.topic}
+          </span>
+        </div>
+        <h3 class="text-lg sm:text-2xl font-extrabold text-slate-800 leading-relaxed mb-6">
+          <span class="text-sky-600 font-black mr-1">${q.id}.</span> ${q.prompt}
+        </h3>
+        <div class="space-y-3">
+          ${optionsHtml}
+        </div>
+      `;
+
+      // Attach click listeners
+      questionCard.querySelectorAll(".single-opt").forEach((el) => {
+        el.addEventListener("click", () => {
+          state.answers[q.id] = el.getAttribute("data-opt-id");
+          renderQuestion();
+        });
+      });
+    }
+
+    /**
+     * =========================================================================
+     * PART B RENDERER: COMPLEX MULTIPLE CHOICE (CHECKBOXES)
+     * =========================================================================
+     */
+    function renderMultipleChoiceQuestion(q) {
+      const selectedArr = Array.isArray(state.answers[q.id]) ? state.answers[q.id] : [];
+
+      const optionsHtml = q.options.map((opt) => {
+        const isChecked = selectedArr.includes(opt.id);
+        return `
+          <div
+            data-opt-id="${opt.id}"
+            class="multi-opt option-card flex items-center gap-4 p-4 rounded-2xl border-2 ${
+              isChecked
+                ? "bg-emerald-50 border-emerald-500 shadow-sm"
+                : "bg-white border-slate-200 hover:border-emerald-300"
+            }"
+          >
+            <div class="w-10 h-10 rounded-xl font-black text-base flex items-center justify-center shrink-0 border-2 ${
+              isChecked
+                ? "bg-emerald-500 border-emerald-600 text-white"
+                : "bg-slate-100 border-slate-200 text-slate-700"
+            }">
+              ${opt.id}
+            </div>
+            <p class="font-bold text-slate-800 text-base sm:text-lg leading-snug flex-1">
+              ${opt.text}
+            </p>
+            <div class="w-7 h-7 rounded-lg border-2 flex items-center justify-center shrink-0 ${
+              isChecked ? "border-emerald-600 bg-emerald-500 text-white" : "border-slate-300 bg-white"
+            }">
+              ${isChecked ? "✓" : ""}
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      questionCard.innerHTML = `
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <span class="px-3 py-1 rounded-xl bg-amber-100 text-amber-800 text-xs font-extrabold">
+            Topic: ${q.topic}
+          </span>
+          <span class="px-3 py-1 rounded-xl bg-emerald-100 text-emerald-800 text-xs font-black">
+            ✨ Tap 2 or more correct answers!
+          </span>
+        </div>
+        <h3 class="text-lg sm:text-2xl font-extrabold text-slate-800 leading-relaxed mb-6">
+          <span class="text-emerald-600 font-black mr-1">${q.id}.</span> ${q.prompt}
+        </h3>
+        <div class="space-y-3">
+          ${optionsHtml}
+        </div>
+      `;
+
+      // Toggle checkbox selection
+      questionCard.querySelectorAll(".multi-opt").forEach((el) => {
+        el.addEventListener("click", () => {
+          const id = el.getAttribute("data-opt-id");
+          const current = Array.isArray(state.answers[q.id]) ? [...state.answers[q.id]] : [];
+          const idx = current.indexOf(id);
+          if (idx > -1) {
+            current.splice(idx, 1);
+          } else {
+            current.push(id);
+          }
+          state.answers[q.id] = current;
+          renderQuestion();
+        });
+      });
+    }
+
+    /**
+     * =========================================================================
+     * PART C RENDERER: INTERACTIVE LINE-DRAWING MATCHING (SVG + MOUSE/TOUCH)
+     * Supports BOTH:
+     *   1) Click/Tap a left card, then Click/Tap a right card
+     *   2) Drag a live elastic line from a left card/dot to a right card/dot
+     * =========================================================================
+     */
+    function renderMatchingQuestion(q) {
+      if (!state.answers[q.id]) {
+        state.answers[q.id] = {};
+      }
+      const userPairs = state.answers[q.id];
+
+      // Build Left Column Cards
+      const leftHtml = q.leftItems.map((item, idx) => {
+        const color = LINE_COLORS[idx % LINE_COLORS.length];
+        const connectedRightId = userPairs[item.id];
+        return `
+          <div
+            data-side="left"
+            data-id="${item.id}"
+            data-color="${color}"
+            class="match-item relative bg-white border-2 rounded-2xl p-3 sm:p-4 pr-7 sm:pr-8 shadow-xs cursor-pointer flex items-center justify-between gap-2 ${
+              connectedRightId ? "border-slate-400 bg-slate-50/80" : "border-slate-200 hover:border-amber-400"
+            }"
+          >
+            <span class="font-extrabold text-slate-800 text-xs sm:text-base leading-snug">
+              ${item.text}
+            </span>
+            <!-- Anchor Dot on Right Edge of Left Card -->
+            <span
+              id="dot-${item.id}"
+              class="match-dot w-5 h-5 rounded-full border-4 border-white shadow-md shrink-0 absolute -right-2.5 top-1/2 -translate-y-1/2"
+              style="background-color: ${color};"
+            ></span>
+          </div>
+        `;
+      }).join("");
+
+      // Build Right Column Cards
+      const rightHtml = q.rightItems.map((item) => {
+        // Check if any left item is connected to this right item
+        const matchedLeftId = Object.keys(userPairs).find((lKey) => userPairs[lKey] === item.id);
+        const leftIdx = q.leftItems.findIndex((l) => l.id === matchedLeftId);
+        const dotColor = leftIdx >= 0 ? LINE_COLORS[leftIdx % LINE_COLORS.length] : "#94A3B8";
+
+        return `
+          <div
+            data-side="right"
+            data-id="${item.id}"
+            class="match-item relative bg-white border-2 rounded-2xl p-3 sm:p-4 pl-7 sm:pl-8 shadow-xs cursor-pointer flex items-center gap-2 ${
+              matchedLeftId ? "border-slate-400 bg-slate-50/80" : "border-slate-200 hover:border-sky-400"
+            }"
+          >
+            <!-- Anchor Dot on Left Edge of Right Card -->
+            <span
+              id="dot-${item.id}"
+              class="match-dot w-5 h-5 rounded-full border-4 border-white shadow-md shrink-0 absolute -left-2.5 top-1/2 -translate-y-1/2"
+              style="background-color: ${dotColor};"
+            ></span>
+            <span class="font-bold text-slate-800 text-xs sm:text-base leading-snug">
+              ${item.text}
+            </span>
+          </div>
+        `;
+      }).join("");
+
+      questionCard.innerHTML = `
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <span class="px-3 py-1 rounded-xl bg-amber-100 text-amber-800 text-xs font-extrabold">
+            Topic: ${q.topic}
+          </span>
+          <button
+            id="clearLinesBtn"
+            type="button"
+            class="px-3.5 py-1.5 rounded-xl bg-rose-100 hover:bg-rose-200 text-rose-800 text-xs font-black transition flex items-center gap-1.5"
+          >
+            <span>🧹</span>
+            <span>Reset Lines</span>
+          </button>
+        </div>
+
+        <h3 class="text-lg sm:text-2xl font-extrabold text-slate-800 leading-relaxed mb-2">
+          <span class="text-rose-500 font-black mr-1">${q.id}.</span> ${q.prompt}
+        </h3>
+        <p class="text-xs sm:text-sm font-bold text-sky-700 bg-sky-50 border border-sky-200 rounded-xl px-3.5 py-2 mb-5">
+          💡 How to play: Tap or drag from a colorful dot on the <strong>Left</strong> to its matching dot on the <strong>Right</strong>!
+        </p>
+
+        <!-- Interactive Matching Arena with SVG Overlay -->
+        <div id="matchingArena" class="relative grid grid-cols-2 gap-10 sm:gap-20 items-center py-2 select-none">
+          <!-- SVG Canvas Layer for Connecting Lines -->
+          <svg
+            id="matchingSvg"
+            class="absolute inset-0 w-full h-full pointer-events-none z-10 overflow-visible"
+          ></svg>
+
+          <!-- Left Column -->
+          <div class="space-y-3.5 z-20">
+            ${leftHtml}
+          </div>
+
+          <!-- Right Column -->
+          <div class="space-y-3.5 z-20">
+            ${rightHtml}
+          </div>
+        </div>
+      `;
+
+      // Bind Reset Lines button
+      document.getElementById("clearLinesBtn").addEventListener("click", () => {
+        state.answers[q.id] = {};
+        state.activeLeftNode = null;
+        renderQuestion();
+      });
+
+      setupMatchingInteractions(q);
+      // Draw existing lines after DOM layout settles
+      requestAnimationFrame(() => drawMatchingLines(q));
+    }
+
+    /**
+     * Attaches both Click/Tap and Pointer Drag events to Left & Right items
+     */
+    function setupMatchingInteractions(q) {
+      const arena = document.getElementById("matchingArena");
+      const leftCards = arena.querySelectorAll('[data-side="left"]');
+      const rightCards = arena.querySelectorAll('[data-side="right"]');
+
+      // LEFT ITEMS: Start selection or drag
+      leftCards.forEach((card) => {
+        const leftId = card.getAttribute("data-id");
+
+        card.addEventListener("pointerdown", (e) => {
+          e.preventDefault();
+          // Set as active source
+          state.activeLeftNode = leftId;
+          state.isDraggingLine = true;
+
+          // Highlight active card
+          leftCards.forEach((c) => c.classList.remove("active-source"));
+          card.classList.add("active-source");
+
+          const rect = arena.getBoundingClientRect();
+          state.pointerPos = {
+            x: e.clientX - rect.left,
+            y: e.clientY - rect.top
+          };
+          drawMatchingLines(q);
+        });
+      });
+
+      // RIGHT ITEMS: Complete connection when clicked/tapped
+      rightCards.forEach((card) => {
+        const rightId = card.getAttribute("data-id");
+
+        card.addEventListener("click", () => {
+          if (state.activeLeftNode) {
+            connectNodes(q, state.activeLeftNode, rightId);
+          }
+        });
+      });
+
+      // ARENA POINTER MOVE: Update elastic preview line while dragging
+      arena.addEventListener("pointermove", (e) => {
+        if (!state.isDraggingLine || !state.activeLeftNode) return;
+        const rect = arena.getBoundingClientRect();
+        state.pointerPos = {
+          x: e.clientX - rect.left,
+          y: e.clientY - rect.top
+        };
+        drawMatchingLines(q);
+      });
+
+      // WINDOW POINTER UP: Check if released over a right-side item
+      const onPointerUp = (e) => {
+        if (!state.isDraggingLine) return;
+        state.isDraggingLine = false;
+
+        // Detect element under pointer (works for both mouse & touch release!)
+        const targetEl = document.elementFromPoint(e.clientX, e.clientY);
+        const rightCard = targetEl ? targetEl.closest('[data-side="right"]') : null;
+
+        if (rightCard && state.activeLeftNode) {
+          const rightId = rightCard.getAttribute("data-id");
+          connectNodes(q, state.activeLeftNode, rightId);
+        } else {
+          // Keep activeLeftNode selected so student can still tap a right card next
+          drawMatchingLines(q);
+        }
+      };
+
+      window.addEventListener("pointerup", onPointerUp, { once: false });
+    }
+
+    /**
+     * Connects a Left ID to a Right ID cleanly (1-to-1 enforcement)
+     */
+    function connectNodes(q, leftId, rightId) {
+      const pairs = state.answers[q.id] || {};
+
+      // Remove any existing pair that already used this rightId so lines stay 1-to-1
+      Object.keys(pairs).forEach((existingLeft) => {
+        if (pairs[existingLeft] === rightId) {
+          delete pairs[existingLeft];
+        }
+      });
+
+      pairs[leftId] = rightId;
+      state.answers[q.id] = pairs;
+      state.activeLeftNode = null;
+      state.isDraggingLine = false;
+      renderQuestion();
+    }
+
+    /**
+     * Calculates exact center coordinates of anchor dots and renders smooth SVG curves
+     */
+    function drawMatchingLines(q) {
+      const arena = document.getElementById("matchingArena");
+      const svg = document.getElementById("matchingSvg");
+      if (!arena || !svg) return;
+
+      const arenaRect = arena.getBoundingClientRect();
+      const userPairs = state.answers[q.id] || {};
+      let svgMarkup = "";
+
+      // 1. Draw all confirmed connections
+      Object.entries(userPairs).forEach(([leftId, rightId]) => {
+        const leftDot = document.getElementById(`dot-${leftId}`);
+        const rightDot = document.getElementById(`dot-${rightId}`);
+        if (!leftDot || !rightDot) return;
+
+        const lRect = leftDot.getBoundingClientRect();
+        const rRect = rightDot.getBoundingClientRect();
+
+        const x1 = lRect.left + lRect.width / 2 - arenaRect.left;
+        const y1 = lRect.top + lRect.height / 2 - arenaRect.top;
+        const x2 = rRect.left + rRect.width / 2 - arenaRect.left;
+        const y2 = rRect.top + rRect.height / 2 - arenaRect.top;
+
+        const leftIdx = q.leftItems.findIndex((item) => item.id === leftId);
+        const strokeColor = LINE_COLORS[leftIdx % LINE_COLORS.length];
+
+        // Smooth cubic bezier curve
+        const cpOffset = Math.abs(x2 - x1) * 0.45;
+        const pathData = `M ${x1} ${y1} C ${x1 + cpOffset} ${y1}, ${x2 - cpOffset} ${y2}, ${x2} ${y2}`;
+
+        svgMarkup += `
+          <path d="${pathData}" fill="none" stroke="white" stroke-width="8" class="drawn-line opacity-80" />
+          <path d="${pathData}" fill="none" stroke="${strokeColor}" stroke-width="5" class="drawn-line" />
+        `;
+      });
+
+      // 2. Draw live elastic dragging line if student is actively dragging
+      if (state.isDraggingLine && state.activeLeftNode) {
+        const leftDot = document.getElementById(`dot-${state.activeLeftNode}`);
+        if (leftDot) {
+          const lRect = leftDot.getBoundingClientRect();
+          const x1 = lRect.left + lRect.width / 2 - arenaRect.left;
+          const y1 = lRect.top + lRect.height / 2 - arenaRect.top;
+          const x2 = state.pointerPos.x;
+          const y2 = state.pointerPos.y;
+
+          const leftIdx = q.leftItems.findIndex((item) => item.id === state.activeLeftNode);
+          const strokeColor = LINE_COLORS[leftIdx % LINE_COLORS.length];
+          const cpOffset = Math.abs(x2 - x1) * 0.4;
+          const pathData = `M ${x1} ${y1} C ${x1 + cpOffset} ${y1}, ${x2 - cpOffset} ${y2}, ${x2} ${y2}`;
+
+          svgMarkup += `
+            <path d="${pathData}" fill="none" stroke="${strokeColor}" stroke-width="4" stroke-dasharray="8 6" class="drawn-line" />
+          `;
+        }
+      }
+
+      svg.innerHTML = svgMarkup;
+    }
+
+    // Keep SVG lines aligned smoothly if window or tablet rotates/resizes
+    window.addEventListener("resize", () => {
+      const currentQ = QUIZ_QUESTIONS[state.currentIndex];
+      if (currentQ && currentQ.type === "matching" && !quizScreen.classList.contains("hidden")) {
+        drawMatchingLines(currentQ);
+      }
+    });
+
+    /**
+     * =========================================================================
+     * NAVIGATION & SUBMISSION HANDLERS
+     * =========================================================================
+     */
+    prevBtn.addEventListener("click", () => {
+      if (state.currentIndex > 0) {
+        state.currentIndex--;
+        renderQuestion();
+      }
+    });
+
+    nextBtn.addEventListener("click", () => {
+      if (state.currentIndex < QUIZ_QUESTIONS.length - 1) {
+        state.currentIndex++;
+        renderQuestion();
+      }
+    });
+
+    finishBtn.addEventListener("click", () => {
+      const unanswered = QUIZ_QUESTIONS.length - getTotalAnsweredCount();
+      if (unanswered > 0) {
+        unansweredWarningText.textContent = `You still have ${unanswered} unanswered question${
+          unanswered > 1 ? "s" : ""
+        }. Would you like to submit now or keep checking?`;
+        submitConfirmModal.classList.remove("hidden");
+      } else {
+        calculateAndShowResults();
+      }
+    });
+
+    cancelSubmitBtn.addEventListener("click", () => {
+      submitConfirmModal.classList.add("hidden");
+    });
+
+    confirmSubmitBtn.addEventListener("click", () => {
+      submitConfirmModal.classList.add("hidden");
+      calculateAndShowResults();
+    });
+
+    restartQuizBtn.addEventListener("click", () => {
+      resultScreen.classList.add("hidden");
+      studentHeaderBadge.classList.add("hidden");
+      welcomeScreen.classList.remove("hidden");
+      studentNameInput.value = "";
+    });
+
+    /**
+     * =========================================================================
+     * GRADING ENGINE & DETAILED ANSWER REVIEW RENDERER
+     * Scoring: 15 Questions total -> Equal weight per question (100 points max)
+     * - Part A (5 Qs): Exact match
+     * - Part B (5 Qs): Exact set match of all correct options
+     * - Part C (5 Qs): All pairs matched accurately (with partial credit per line)
+     * =========================================================================
+     */
+    function calculateAndShowResults() {
+      let earnedPoints = 0;
+      const pointsPerQuestion = 100 / QUIZ_QUESTIONS.length;
+
+      let partACorrect = 0;
+      let partBCorrect = 0;
+      let partCCorrect = 0;
+
+      const reviewItemsHtml = QUIZ_QUESTIONS.map((q) => {
+        let isFullyCorrect = false;
+        let studentAnswerSummary = "";
+        let correctAnswerSummary = "";
+
+        if (q.type === "single") {
+          const userOptId = state.answers[q.id];
+          isFullyCorrect = userOptId === q.correctAnswer;
+          if (isFullyCorrect) {
+            earnedPoints += pointsPerQuestion;
+            partACorrect++;
+          }
+          const userOptObj = q.options.find((o) => o.id === userOptId);
+          const corrOptObj = q.options.find((o) => o.id === q.correctAnswer);
+
+          studentAnswerSummary = userOptObj ? `${userOptObj.id}. ${userOptObj.text}` : "No answer selected";
+          correctAnswerSummary = `${corrOptObj.id}. ${corrOptObj.text}`;
+        } else if (q.type === "multiple") {
+          const userArr = Array.isArray(state.answers[q.id]) ? [...state.answers[q.id]].sort() : [];
+          const corrArr = [...q.correctAnswers].sort();
+          isFullyCorrect =
+            userArr.length === corrArr.length &&
+            userArr.every((val, index) => val === corrArr[index]);
+
+          if (isFullyCorrect) {
+            earnedPoints += pointsPerQuestion;
+            partBCorrect++;
+          }
+
+          studentAnswerSummary =
+            userArr.length > 0
+              ? userArr
+                  .map((id) => {
+                    const obj = q.options.find((o) => o.id === id);
+                    return obj ? `${obj.id}. ${obj.text}` : id;
+                  })
+                  .join(" | ")
+              : "No answers selected";
+
+          correctAnswerSummary = corrArr
+            .map((id) => {
+              const obj = q.options.find((o) => o.id === id);
+              return obj ? `${obj.id}. ${obj.text}` : id;
+            })
+            .join(" | ");
+        } else if (q.type === "matching") {
+          const userPairs = state.answers[q.id] || {};
+          const leftKeys = Object.keys(q.correctPairs);
+          let matchedCount = 0;
+
+          const pairDetails = leftKeys.map((lId) => {
+            const leftObj = q.leftItems.find((l) => l.id === lId);
+            const expectedRId = q.correctPairs[lId];
+            const expectedRObj = q.rightItems.find((r) => r.id === expectedRId);
+
+            const chosenRId = userPairs[lId];
+            const chosenRObj = q.rightItems.find((r) => r.id === chosenRId);
+
+            const lineGood = chosenRId === expectedRId;
+            if (lineGood) matchedCount++;
+
+            return `<li class="text-xs sm:text-sm ${lineGood ? "text-emerald-800" : "text-rose-700"}">
+              ${lineGood ? "✅" : "❌"} <strong>${leftObj.text}</strong> → ${
+              chosenRObj ? chosenRObj.text : "<em>Not connected</em>"
+            } ${!lineGood ? `<span class="text-slate-600">(Correct: <strong>${expectedRObj.text}</strong>)</span>` : ""}
+            </li>`;
+          });
+
+          // Partial credit per accurate line drawn
+          const fraction = matchedCount / leftKeys.length;
+          earnedPoints += pointsPerQuestion * fraction;
+
+          isFullyCorrect = matchedCount === leftKeys.length;
+          if (isFullyCorrect) partCCorrect++;
+
+          studentAnswerSummary = `<ul class="space-y-1 mt-1">${pairDetails.join("")}</ul>`;
+          correctAnswerSummary = "All lines matched accurately (see breakdown above)";
+        }
+
+        return `
+          <div class="rounded-2xl border-2 p-4 sm:p-5 ${
+            isFullyCorrect ? "bg-emerald-50/60 border-emerald-300" : "bg-rose-50/50 border-rose-200"
+          }">
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <span class="text-xs font-black uppercase px-2.5 py-0.5 rounded-full ${
+                isFullyCorrect ? "bg-emerald-200 text-emerald-900" : "bg-rose-200 text-rose-900"
+              }">
+                Part ${q.part} • Question ${q.id} • ${isFullyCorrect ? "Awesome! Correct" : "Needs Review"}
+              </span>
+              <span class="text-xs font-bold text-slate-500">${q.topic}</span>
+            </div>
+
+            <p class="font-extrabold text-slate-800 text-sm sm:text-base mb-3">
+              ${q.prompt}
+            </p>
+
+            <div class="text-xs sm:text-sm space-y-1.5 bg-white/90 rounded-xl p-3 border border-slate-200">
+              <div class="text-slate-700">
+                <span class="font-extrabold text-slate-900">Your Answer:</span>
+                ${q.type === "matching" ? studentAnswerSummary : `<span>${studentAnswerSummary}</span>`}
+              </div>
+              ${
+                q.type !== "matching" && !isFullyCorrect
+                  ? `<div class="text-emerald-800">
+                      <span class="font-extrabold">Correct Answer:</span>
+                      <span>${correctAnswerSummary}</span>
+                    </div>`
+                  : ""
+              }
+              <div class="pt-1.5 mt-1.5 border-t border-slate-100 text-sky-800 font-semibold">
+                💡 <strong>Teacher Note:</strong> ${q.explanation}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      const finalScore = Math.round(earnedPoints);
+
+      // Update Result Trophy & Greeting
+      document.getElementById("finalScoreNumber").textContent = finalScore;
+      document.getElementById("resultGreeting").textContent =
+        finalScore >= 80
+          ? `Mashallah, Great Job ${state.studentName}!`
+          : finalScore >= 60
+          ? `Well Done, ${state.studentName}!`
+          : `Keep Practicing, ${state.studentName}!`;
+
+      document.getElementById("resultTrophyEmoji").textContent =
+        finalScore >= 85 ? "🏆" : finalScore >= 65 ? "🌟" : "🎈";
+
+      document.getElementById("resultSubtext").textContent = `${state.studentClass} • MI Muslimat NU Pucang Sidoarjo`;
+
+      document.getElementById("partAScoreText").textContent = `${partACorrect} / 5 Correct`;
+      document.getElementById("partBScoreText").textContent = `${partBCorrect} / 5 Correct`;
+      document.getElementById("partCScoreText").textContent = `${partCCorrect} / 5 Correct`;
+
+      document.getElementById("reviewContainer").innerHTML = reviewItemsHtml;
+
+      // Switch to Result Screen
+      quizScreen.classList.add("hidden");
+      resultScreen.classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  </script>
+</body>
+</html>

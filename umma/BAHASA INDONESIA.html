@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petualangan Bahasa Indonesia Kelas 1 - MI Muslimat NU Pucang</title>
+    <!-- Memuat Tailwind CSS untuk tata letak responsif dan warna pastel cerah -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Memuat Google Fonts Fredoka & Nunito agar tulisan bulat, besar, dan sangat ramah anak kelas 1 SD -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Pengaturan Font Dasar Ramah Anak */
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #FFF9DB 0%, #E3FAFC 50%, #F3D9FA 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            user-select: none; /* Mencegah teks terblok saat anak menarik garis */
+        }
+
+        h1, h2, h3, .font-judul {
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        /* Animasi Mengambang untuk Ilustrasi SVG */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(1.5deg); }
+        }
+        .animate-float {
+            animation: floatSlow 3.5s ease-in-out infinite;
+        }
+
+        /* Animasi Denyut lembut saat gambar diklik */
+        @keyframes popBounce {
+            0% { transform: scale(1); }
+            40% { transform: scale(1.08) rotate(-2deg); }
+            70% { transform: scale(0.96) rotate(2deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+        .animate-pop {
+            animation: popBounce 0.5s ease-out;
+        }
+
+        /* Gaya Tombol 3D Ceria */
+        .btn-3d {
+            transition: all 0.15s ease;
+            box-shadow: 0 5px 0 rgba(0, 0, 0, 0.18);
+        }
+        .btn-3d:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 rgba(0, 0, 0, 0.18);
+        }
+
+        /* Area Kanvas SVG Tarik Garis */
+        .matching-wrapper {
+            position: relative;
+            touch-action: none; /* Penting agar layar HP tidak ikut tergulir saat menarik garis */
+        }
+        #matching-svg-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* Titik Hubung (Dot) Kiri & Kanan */
+        .anchor-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 9999px;
+            border: 4px solid #ffffff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+            cursor: pointer;
+            z-index: 20;
+        }
+        .anchor-dot:hover, .anchor-dot.active-dot {
+            transform: scale(1.3);
+        }
+
+        /* Kartu Kata Susun Kalimat SPOK */
+        .word-chip {
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .word-chip:hover {
+            transform: translateY(-3px) scale(1.03);
+        }
+    </style>
+</head>
+<body class="text-slate-800 p-3 sm:p-6">
+
+    <!-- Kotak Pesan Pengganti alert() yang Ramah Anak -->
+    <div id="custom-toast" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 hidden transition-all duration-300">
+        <div class="bg-amber-400 border-4 border-white text-slate-900 font-bold px-6 py-3 rounded-full shadow-xl flex items-center gap-3 text-base sm:text-lg">
+            <span id="toast-icon">🌟</span>
+            <span id="toast-text">Pesan informasi</span>
+        </div>
+    </div>
+
+    <!-- Kontainer Utama Aplikasi -->
+    <div class="max-w-4xl mx-auto">
+
+        <!-- Header Sekolah & Kontrol Suara (Selalu tampil ringkas) -->
+        <header class="bg-white/90 backdrop-blur rounded-3xl p-4 mb-5 shadow-md border-4 border-emerald-200 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <!-- Logo Ilustrasi Buku & Bintang MI Muslimat NU -->
+                <div class="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center text-white shadow-inner shrink-0">
+                    <svg viewBox="0 0 64 64" class="w-9 h-9">
+                        <path d="M8 18 C20 14, 30 18, 32 22 C34 18, 44 14, 56 18 L56 48 C44 44, 34 48, 32 52 C30 48, 20 44, 8 48 Z" fill="#FEF08A" stroke="#15803D" stroke-width="3"/>
+                        <line x1="32" y1="22" x2="32" y2="52" stroke="#15803D" stroke-width="3"/>
+                        <circle cx="32" cy="11" r="5" fill="#FBBF24"/>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="font-judul text-base sm:text-lg text-emerald-700 leading-tight">MI Muslimat NU Pucang Sidoarjo</h2>
+                    <p class="text-xs sm:text-sm text-slate-500 font-bold">Asesmen Interaktif Bahasa Indonesia • Kelas 1</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <!-- Info Siswa Aktif -->
+                <div id="student-badge" class="hidden bg-sky-100 text-sky-800 px-3 py-1.5 rounded-2xl text-xs sm:text-sm font-extrabold border-2 border-sky-200">
+                    👤 <span id="badge-name">Siswa</span> (<span id="badge-class">1 ICP</span>)
+                </div>
+                <!-- Tombol Suara Efek -->
+                <button onclick="toggleSound()" id="sound-btn" title="Aktifkan/Matikan Suara" class="bg-amber-100 hover:bg-amber-200 text-amber-800 p-2.5 rounded-2xl border-2 border-amber-300 font-bold text-sm transition">
+                    🔊 Suara
+                </button>
+            </div>
+        </header>
+
+        <!-- ========================================================= -->
+        <!-- HALAMAN 1: HALAMAN AWAL (START SCREEN)                    -->
+        <!-- ========================================================= -->
+        <section id="screen-start" class="bg-white rounded-3xl p-6 sm:p-10 shadow-xl border-4 border-sky-200 text-center">
+            <div class="inline-block bg-amber-100 text-amber-800 font-extrabold px-4 py-1.5 rounded-full text-sm mb-3 border-2 border-amber-300">
+                ✨ Belajar Sambil Bermain • Kurikulum Merdeka ✨
+            </div>
+            <h1 class="font-judul text-3xl sm:text-5xl text-sky-600 mb-3 tracking-wide drop-shadow-sm">
+                Petualangan Bahasa Indonesia Kelas 1
+            </h1>
+            <p class="text-slate-600 text-base sm:text-lg max-w-2xl mx-auto mb-6 font-semibold">
+                Ayo berlatih membaca teks cerita, mengenal bagian kalimat <span class="text-rose-500 font-extrabold">S-P-O-K</span>, dan menyusun kalimat yang hebat!
+            </p>
+
+            <!-- Ilustrasi SVG Interaktif Anak Membaca Buku (Bisa diklik!) -->
+            <div class="my-4 flex flex-col items-center">
+                <div id="hero-svg-box" onclick="interactHeroIllustration()" class="cursor-pointer bg-gradient-to-b from-sky-100 to-emerald-100 p-4 rounded-3xl border-4 border-dashed border-sky-300 hover:border-amber-400 transition max-w-md w-full animate-float">
+                    <svg viewBox="0 0 360 200" class="w-full h-44 sm:h-52">
+                        <!-- Matahari & Awan Ceria -->
+                        <circle cx="52" cy="42" r="24" fill="#FDE047" stroke="#F59E0B" stroke-width="3"/>
+                        <g stroke="#F59E0B" stroke-width="3" stroke-linecap="round">
+                            <line x1="52" y1="10" x2="52" y2="14"/><line x1="52" y1="70" x2="52" y2="74"/>
+                            <line x1="20" y1="42" x2="24" y2="42"/><line x1="80" y1="42" x2="84" y2="42"/>
+                        </g>
+                        <path d="M260 45 Q270 30 285 38 Q300 25 315 40 Q330 42 325 55 L255 55 Q248 48 260 45 Z" fill="#FFFFFF"/>
+
+                        <!-- Meja Belajar -->
+                        <rect x="75" y="145" width="210" height="14" rx="7" fill="#D97706"/>
+                        <rect x="95" y="159" width="14" height="35" fill="#B45309"/>
+                        <rect x="250" y="159" width="14" height="35" fill="#B45309"/>
+
+                        <!-- Karakter Anak Duduk Tegak Membaca -->
+                        <!-- Badan / Baju Seragam Hijau MI -->
+                        <path d="M145 145 L155 95 Q180 88 205 95 L215 145 Z" fill="#10B981"/>
+                        <!-- Kepala & Jilbab/Peci Ceria -->
+                        <circle cx="180" cy="68" r="26" fill="#FDE68A"/>
+                        <path d="M152 68 Q152 36 180 36 Q208 36 208 68 Q214 95 198 102 L162 102 Q146 95 152 68 Z" fill="#059669"/>
+                        <circle cx="180" cy="70" r="20" fill="#FDE68A"/>
+                        <!-- Mata & Senyum -->
+                        <circle cx="173" cy="67" r="2.8" fill="#1E293B"/>
+                        <circle cx="187" cy="67" r="2.8" fill="#1E293B"/>
+                        <path d="M174 76 Q180 82 186 76" fill="none" stroke="#1E293B" stroke-width="2.5" stroke-linecap="round"/>
+                        <circle cx="168" cy="73" r="3" fill="#FDA4AF"/>
+                        <circle cx="192" cy="73" r="3" fill="#FDA4AF"/>
+
+                        <!-- Buku Terbuka di Atas Meja -->
+                        <path d="M140 142 L180 135 L220 142 L212 120 L180 115 L148 120 Z" fill="#FFFFFF" stroke="#0284C7" stroke-width="3"/>
+                        <line x1="180" y1="115" x2="180" y2="135" stroke="#0284C7" stroke-width="2"/>
+
+                        <!-- Garis Jarak Pandang Mata ke Buku (25-30 cm) -->
+                        <line x1="180" y1="76" x2="180" y2="112" stroke="#F43F5E" stroke-width="2.5" stroke-dasharray="5,4"/>
+                        <rect x="192" y="86" width="84" height="22" rx="11" fill="#FFE4E6" stroke="#F43F5E" stroke-width="2"/>
+                        <text x="234" y="101" text-anchor="middle" font-size="11" font-weight="bold" fill="#BE123C">Jarak 25-30 cm</text>
+                    </svg>
+                    <p id="hero-caption" class="text-xs sm:text-sm font-bold text-sky-700 mt-1">
+                        👆 Klik gambar di atas untuk mendengar tips membaca sehat!
+                    </p>
+                </div>
+            </div>
+
+            <!-- Form Input Nama & Kelas Siswa -->
+            <div class="max-w-md mx-auto bg-amber-50 p-5 rounded-3xl border-3 border-amber-200 text-left space-y-4 mt-4">
+                <div>
+                    <label for="input-nama" class="block font-extrabold text-slate-700 text-base mb-1">✏️ Nama Lengkapmu:</label>
+                    <input type="text" id="input-nama" placeholder="Contoh: Rassi / Evi / Dody..." class="w-full px-4 py-3 rounded-2xl border-2 border-amber-300 focus:border-sky-500 focus:outline-none text-lg font-bold bg-white">
+                </div>
+                <div>
+                    <label for="input-kelas" class="block font-extrabold text-slate-700 text-base mb-1">🏫 Pilih Kelas:</label>
+                    <select id="input-kelas" class="w-full px-4 py-3 rounded-2xl border-2 border-amber-300 focus:border-sky-500 focus:outline-none text-lg font-bold bg-white">
+                        <option value="Kelas 1 ICP 1">Kelas 1 ICP 1</option>
+                        <option value="Kelas 1 ICP 2">Kelas 1 ICP 2</option>
+                        <option value="Kelas 1 Unggulan">Kelas 1 Unggulan</option>
+                        <option value="Kelas 1 Reguler">Kelas 1 Reguler</option>
+                    </select>
+                </div>
+                <button onclick="startQuiz()" class="w-full btn-3d bg-emerald-500 hover:bg-emerald-600 text-white font-judul text-xl sm:text-2xl py-4 rounded-2xl mt-2 cursor-pointer">
+                    🚀 Mulai Petualangan Kuis!
+                </button>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- HALAMAN 2: AREA KUIS UTAMA (15 SOAL + LATIHAN SPOK)       -->
+        <!-- ========================================================= -->
+        <section id="screen-quiz" class="hidden">
+            <!-- Bilah Kemajuan (Progress Bar) & Peta Bagian -->
+            <div class="bg-white rounded-3xl p-4 mb-5 shadow-md border-4 border-purple-200">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                    <span id="section-tag" class="bg-purple-100 text-purple-800 font-extrabold px-4 py-1 rounded-full text-sm border-2 border-purple-300">
+                        Bagian 1: Pilihan Ganda
+                    </span>
+                    <span id="question-counter" class="font-judul text-lg text-slate-700">
+                        Soal 1 dari 16
+                    </span>
+                </div>
+                <div class="w-full bg-slate-100 h-4 rounded-full overflow-hidden border-2 border-slate-200">
+                    <div id="progress-bar" class="bg-gradient-to-r from-emerald-400 via-sky-400 to-purple-500 h-full transition-all duration-500 rounded-full" style="width: 6%;"></div>
+                </div>
+            </div>
+
+            <!-- Kartu Konten Soal Dinamis -->
+            <div id="quiz-card" class="bg-white rounded-3xl p-5 sm:p-8 shadow-xl border-4 border-sky-200">
+                <!-- Isi soal akan dirender otomatis oleh JavaScript -->
+            </div>
+
+            <!-- Navigasi Bawah Soal -->
+            <div class="flex items-center justify-between gap-4 mt-6">
+                <button id="btn-prev" onclick="prevStep()" class="btn-3d bg-slate-200 hover:bg-slate-300 text-slate-700 font-judul text-lg px-6 py-3.5 rounded-2xl disabled:opacity-40 cursor-pointer">
+                    ⬅️ Sebelumnya
+                </button>
+                <button id="btn-next" onclick="nextStep()" class="btn-3d bg-sky-500 hover:bg-sky-600 text-white font-judul text-lg sm:text-xl px-8 py-3.5 rounded-2xl cursor-pointer">
+                    Lanjut ➡️
+                </button>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- HALAMAN 3: HASIL AKHIR & REKAP PEMBAHASAN                 -->
+        <!-- ========================================================= -->
+        <section id="screen-result" class="hidden bg-white rounded-3xl p-6 sm:p-10 shadow-xl border-4 border-amber-300 text-center">
+            <div class="inline-block bg-emerald-100 text-emerald-800 font-extrabold px-5 py-1.5 rounded-full text-sm mb-3 border-2 border-emerald-300">
+                🎉 Hore! Petualangan Selesai! 🎉
+            </div>
+            <h1 class="font-judul text-3xl sm:text-4xl text-slate-800 mb-1">
+                Hebat Sekali, <span id="result-name" class="text-sky-600">Siswa</span>!
+            </h1>
+            <p id="result-class" class="text-slate-500 font-bold mb-4">Kelas 1</p>
+
+            <!-- Bintang Penghargaan -->
+            <div id="stars-container" class="flex justify-center gap-3 text-4xl sm:text-5xl my-4">
+                ⭐⭐⭐
+            </div>
+
+            <!-- Kotak Skor Besar -->
+            <div class="max-w-sm mx-auto bg-gradient-to-br from-amber-100 to-yellow-200 p-6 rounded-3xl border-4 border-amber-300 shadow-inner my-5">
+                <p class="text-amber-900 font-extrabold text-base uppercase tracking-wider">Nilai Akhir Kamu</p>
+                <div id="final-score" class="font-judul text-6xl sm:text-7xl text-amber-600 my-1">100</div>
+                <p id="score-message" class="text-amber-900 font-bold text-base">Luar biasa! Kamu anak cerdas!</p>
+            </div>
+
+            <!-- Tombol Aksi -->
+            <div class="flex flex-wrap justify-center gap-4 my-6">
+                <button onclick="restartQuiz()" class="btn-3d bg-emerald-500 hover:bg-emerald-600 text-white font-judul text-xl px-8 py-4 rounded-2xl cursor-pointer">
+                    🔄 Main Lagi
+                </button>
+            </div>
+
+            <!-- Rekap Pembahasan Jawaban -->
+            <div class="text-left mt-8 border-t-4 border-dashed border-slate-200 pt-6">
+                <h2 class="font-judul text-2xl text-purple-700 mb-4 flex items-center gap-2">
+                    📖 Rekap Pembahasan Jawabanmu
+                </h2>
+                <div id="review-list" class="space-y-4">
+                    <!-- Daftar pembahasan per soal dirender di sini -->
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- KODE JAVASCRIPT LENGKAP DENGAN KOMENTAR PENJELASAN UNTUK GURU         -->
+    <!-- ===================================================================== -->
+    <script>
+        /* -------------------------------------------------------------------------
+           1. SISTEM EFEK SUARA (WEB AUDIO API) - Tanpa File Audio Eksternal
+           Menghasilkan nada ceria saat klik, benar, tarik garis, dan selesai kuis.
+        ------------------------------------------------------------------------- */
+        let soundEnabled = true;
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playTone(type) {
+            if (!soundEnabled) return;
+            try {
+                initAudio();
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if (type === 'click') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(520, now);
+                    osc.frequency.exponentialRampToValueAtTime(780, now + 0.08);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.09);
+                    osc.start(now);
+                    osc.stop(now + 0.09);
+                } else if (type === 'connect') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(440, now);
+                    osc.frequency.setValueAtTime(660, now + 0.08);
+                    gain.gain.setValueAtTime(0.18, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+                    osc.start(now);
+                    osc.stop(now + 0.2);
+                } else if (type === 'success') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, now);       // C5
+                    osc.frequency.setValueAtTime(659.25, now + 0.12); // E5
+                    osc.frequency.setValueAtTime(783.99, now + 0.24); // G5
+                    osc.frequency.setValueAtTime(1046.5, now + 0.36); // C6
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.55);
+                    osc.start(now);
+                    osc.stop(now + 0.55);
+                } else if (type === 'pop') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(350, now);
+                    osc.frequency.exponentialRampToValueAtTime(700, now + 0.15);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.16);
+                    osc.start(now);
+                    osc.stop(now + 0.16);
+                }
+            } catch (e) {
+                // Abaikan jika browser membatasi autoplay audio
+            }
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const btn = document.getElementById('sound-btn');
+            btn.innerHTML = soundEnabled ? '🔊 Suara' : '🔇 Bisu';
+            if (soundEnabled) playTone('click');
+        }
+
+        /* -------------------------------------------------------------------------
+           2. NOTIFIKASI TOAST RAMAH ANAK (Pengganti alert() bawaan browser)
+        ------------------------------------------------------------------------- */
+        let toastTimer = null;
+        function showToast(msg, icon = '🌟') {
+            const toast = document.getElementById('custom-toast');
+            document.getElementById('toast-text').textContent = msg;
+            document.getElementById('toast-icon').textContent = icon;
+            toast.classList.remove('hidden');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+
+        /* -------------------------------------------------------------------------
+           3. BANK ILUSTRASI SVG INTERAKTIF
+           Setiap tema soal memiliki gambar SVG warna-warni yang bisa diklik siswa
+           untuk memunculkan animasi dan petunjuk belajar!
+        ------------------------------------------------------------------------- */
+        function getInteractiveSVG(type) {
+            const illustrations = {
+                'membaca': {
+                    hint: '💡 Petunjuk: Duduk tegak ya! Jarak mata ke buku 25-30 cm dengan lampu terang.',
+                    svg: `<svg viewBox="0 0 280 140" class="w-full h-36">
+                        <rect x="20" y="10" width="240" height="120" rx="20" fill="#E0F2FE"/>
+                        <circle cx="220" cy="32" r="14" fill="#FDE047" stroke="#F59E0B" stroke-width="3"/>
+                        <line x1="220" y1="50" x2="155" y2="85" stroke="#FDE047" stroke-width="4" stroke-dasharray="6,4"/>
+                        <!-- Anak duduk tegak -->
+                        <rect x="75" y="102" width="130" height="10" rx="5" fill="#D97706"/>
+                        <circle cx="115" cy="48" r="18" fill="#FDE68A"/>
+                        <path d="M97 46 Q115 26 133 46" fill="#1E293B"/>
+                        <circle cx="121" cy="47" r="2.5" fill="#1E293B"/>
+                        <path d="M100 102 L105 68 L125 68 L130 102 Z" fill="#3B82F6"/>
+                        <!-- Buku -->
+                        <path d="M135 100 L165 92 L185 100 L165 82 Z" fill="#FFFFFF" stroke="#0284C7" stroke-width="3"/>
+                        <line x1="128" y1="48" x2="158" y2="86" stroke="#F43F5E" stroke-width="2" stroke-dasharray="4,3"/>
+                        <text x="175" y="65" font-size="11" font-weight="bold" fill="#0369A1">Duduk Tegak!</text>
+                    </svg>`
+                },
+                'wortel': {
+                    hint: '🥕 Petunjuk: Wortel kaya Vitamin A yang membuat mata kita jernih dan sehat!',
+                    svg: `<svg viewBox="0 0 280 140" class="w-full h-36">
+                        <rect x="20" y="10" width="240" height="120" rx="20" fill="#FFEDD5"/>
+                        <!-- Wortel Lucu -->
+                        <path d="M95 45 Q115 35 125 55 L92 110 Q82 115 80 105 Z" fill="#F97316" stroke="#C2410C" stroke-width="3"/>
+                        <path d="M112 42 Q115 20 105 18 M116 44 Q130 22 135 28" fill="none" stroke="#16A34A" stroke-width="4" stroke-linecap="round"/>
+                        <!-- Gelas Jus Wortel -->
+                        <rect x="165" y="55" width="42" height="55" rx="8" fill="#FFFFFF" stroke="#0284C7" stroke-width="3"/>
+                        <rect x="169" y="68" width="34" height="38" rx="4" fill="#FB923C"/>
+                        <line x1="195" y1="35" x2="185" y2="75" stroke="#EC4899" stroke-width="4" stroke-linecap="round"/>
+                        <text x="140" y="124" text-anchor="middle" font-size="11" font-weight="bold" fill="#9A3412">Vitamin A untuk Mata Sehat</text>
+                    </svg>`
+                },
+                'teh': {
+                    hint: '🍵 Petunjuk: Urutan membuat teh dimulai dari menyiapkan gelas bersih dulu ya!',
+                    svg: `<svg viewBox="0 0 280 140" class="w-full h-36">
+                        <rect x="20" y="10" width="240" height="120" rx="20" fill="#FEF3C7"/>
+                        <!-- Cangkir Teh -->
+                        <path d="M105 60 L165 60 L158 105 Q135 112 112 105 Z" fill="#FFFFFF" stroke="#D97706" stroke-width="3"/>
+                        <path d="M163 68 Q182 68 182 82 Q182 95 160 95" fill="none" stroke="#D97706" stroke-width="4"/>
+                        <!-- Kantong Teh & Uap -->
+                        <line x1="135" y1="60" x2="145" y2="82" stroke="#92400E" stroke-width="2"/>
+                        <rect x="138" y="80" width="14" height="16" rx="3" fill="#B45309"/>
+                        <path d="M122 48 Q117 38 124 28 M142 48 Q137 38 144 28" fill="none" stroke="#F59E0B" stroke-width="3" stroke-linecap="round"/>
+                        <text x="140" y="124" text-anchor="middle" font-size="11" font-weight="bold" fill="#92400E">Teh Hangat Manis</text>
+                    </svg>`
+                },
+                'perkenalan': {
+                    hint: '👋 Petunjuk: Saat berkenalan, sebutkan nama lengkap, panggilan, alamat, dan hobi!',
+                    svg: `<svg viewBox="0 0 280 140" class="w-full h-36">
+                        <rect x="20" y="10" width="240" height="120" rx="20" fill="#FCE7F3"/>
+                        <!-- Anak 1 (Sony) -->
+                        <circle cx="95" cy="58" r="20" fill="#FDE68A"/>
+                        <path d="M75 54 Q95 32 115 54" fill="#1E293B"/>
+                        <circle cx="90" cy="57" r="2.5" fill="#1E293B"/><circle cx="102" cy="57" r="2.5" fill="#1E293B"/>
+                        <path d="M90 65 Q96 71 102 65" fill="none" stroke="#1E293B" stroke-width="2"/>
+                        <rect x="75" y="80" width="40" height="38" rx="10" fill="#3B82F6"/>
+                        <!-- Anak 2 (Didik) -->
+                        <circle cx="185" cy="58" r="20" fill="#FED7AA"/>
+                        <path d="M165 54 Q185 32 205 54" fill="#451A03"/>
+                        <circle cx="180" cy="57" r="2.5" fill="#1E293B"/><circle cx="192" cy="57" r="2.5" fill="#1E293B"/>
+                        <path d="M180 65 Q186 71 192 65" fill="none" stroke="#1E293B" stroke-width="2"/>
+                        <rect x="165" y="80" width="40" height="38" rx="10" fill="#10B981"/>
+                        <!-- Balon Kata -->
+                        <rect x="112" y="18" width="58" height="24" rx="12" fill="#FFFFFF" stroke="#EC4899" stroke-width="2"/>
+                        <text x="141" y="34" text-anchor="middle" font-size="11" font-weight="bold" fill="#BE185D">Halo! 👋</text>
+                    </svg>`
+                },
+                'sepakbola': {
+                    hint: '⚽ Petunjuk: S (Subjek) = pelaku, P (Predikat) = kegiatan, O (Objek) = sasaran, K (Keterangan) = tempat/waktu.',
+                    svg: `<svg viewBox="0 0 280 140" class="w-full h-36">
+                        <rect x="20" y="10" width="240" height="120" rx="20" fill="#DCFCE7"/>
+                        <rect x="20" y="95" width="240" height="35" rx="10" fill="#4ADE80"/>
+                        <!-- Edo Menendang Bola -->
+                        <circle cx="105" cy="52" r="17" fill="#FDE68A"/>
+                        <path d="M88 48 Q105 30 122 48" fill="#1E293B"/>
+                        <rect x="90" y="70" width="30" height="32" rx="8" fill="#EF4444"/>
+                        <!-- Bola Sepak -->
+                        <circle cx="165" cy="95" r="14" fill="#FFFFFF" stroke="#1E293B" stroke-width="3"/>
+                        <polygon points="165,88 171,93 168,100 162,100 159,93" fill="#1E293B"/>
+                        <text x="195" y="55" font-size="12" font-weight="bold" fill="#15803D">Gol! ⚽</text>
+                    </svg>`
+                },
+                'tubuh': {
+                    hint: '🦷 Petunjuk: Gosok gigi 2x sehari, cuci tangan sebelum makan, dan keramas teratur!',
+                    svg: `<svg viewBox="0 0 280 140" class="w-full h-36">
+                        <rect x="20" y="10" width="240" height="120" rx="20" fill="#E0E7FF"/>
+                        <!-- Sikat Gigi & Sabun -->
+                        <rect x="65" y="72" width="85" height="12" rx="6" fill="#38BDF8"/>
+                        <rect x="125" y="58" width="24" height="14" rx="4" fill="#FFFFFF" stroke="#0284C7" stroke-width="2"/>
+                        <!-- Gelembung Sabun -->
+                        <circle cx="185" cy="55" r="16" fill="#BAE6FD" stroke="#0284C7" stroke-width="2"/>
+                        <circle cx="212" cy="75" r="12" fill="#FBCFE8" stroke="#DB2777" stroke-width="2"/>
+                        <circle cx="180" cy="88" r="10" fill="#FEF08A" stroke="#CA8A04" stroke-width="2"/>
+                        <text x="140" y="118" text-anchor="middle" font-size="11" font-weight="bold" fill="#3730A3">Aku Rajin Merawat Tubuh!</text>
+                    </svg>`
+                },
+                'pancaindra': {
+                    hint: '👀 Petunjuk: Mata (melihat), Telinga (mendengar), Hidung (membau), Lidah (mengecap).',
+                    svg: `<svg viewBox="0 0 280 140" class="w-full h-36">
+                        <rect x="20" y="10" width="240" height="120" rx="20" fill="#F3E8FF"/>
+                        <!-- Mata -->
+                        <ellipse cx="75" cy="65" rx="24" ry="14" fill="#FFFFFF" stroke="#1E293B" stroke-width="3"/>
+                        <circle cx="75" cy="65" r="8" fill="#1E293B"/>
+                        <!-- Telinga -->
+                        <path d="M135 48 Q152 48 150 68 Q148 84 135 82" fill="#FDE68A" stroke="#B45309" stroke-width="3"/>
+                        <!-- Hidung & Lidah -->
+                        <path d="M180 50 L174 72 L186 72" fill="none" stroke="#B45309" stroke-width="3" stroke-linecap="round"/>
+                        <path d="M205 62 Q220 62 220 78 Q212 88 205 78 Z" fill="#FB7185" stroke="#BE123C" stroke-width="2.5"/>
+                        <text x="140" y="116" text-anchor="middle" font-size="11" font-weight="bold" fill="#6B21A8">5 Pancaindra Karunia Allah</text>
+                    </svg>`
+                },
+                'perintah': {
+                    hint: '📢 Petunjuk: Kalimat perintah menggunakan kata berakhiran -lah dan tanda seru (!).',
+                    svg: `<svg viewBox="0 0 280 140" class="w-full h-36">
+                        <rect x="20" y="10" width="240" height="120" rx="20" fill="#FEF9C3"/>
+                        <!-- Tempat Sampah Bersih -->
+                        <rect x="115" y="55" width="50" height="55" rx="8" fill="#22C55E" stroke="#15803D" stroke-width="3"/>
+                        <rect x="108" y="46" width="64" height="10" rx="5" fill="#16A34A"/>
+                        <text x="140" y="88" text-anchor="middle" font-size="18" fill="#FFFFFF">♻️</text>
+                        <text x="140" y="34" text-anchor="middle" font-size="11" font-weight="bold" fill="#854D0E">Buanglah Sampah pada Tempatnya!</text>
+                    </svg>`
+                }
+            };
+            const item = illustrations[type] || illustrations['membaca'];
+            return `
+                <div onclick="triggerCardIllustration(this, '${item.hint.replace(/'/g, "\\'")}')" class="cursor-pointer mb-5 rounded-3xl overflow-hidden border-3 border-dashed border-sky-300 hover:border-amber-400 transition bg-white p-2 text-center">
+                    ${item.svg}
+                    <span class="inline-block text-xs font-extrabold text-sky-700 bg-sky-50 px-3 py-1 rounded-full mt-1">
+                        👆 Klik gambar untuk melihat petunjuk!
+                    </span>
+                </div>
+            `;
+        }
+
+        function interactHeroIllustration() {
+            playTone('pop');
+            const box = document.getElementById('hero-svg-box');
+            box.classList.remove('animate-pop');
+            void box.offsetWidth;
+            box.classList.add('animate-pop');
+            showToast('Duduk tegak dan jarak mata 25-30 cm membuat mata sehat!', '👀');
+        }
+
+        function triggerCardIllustration(el, hintText) {
+            playTone('pop');
+            el.classList.remove('animate-pop');
+            void el.offsetWidth;
+            el.classList.add('animate-pop');
+            showToast(hintText, '💡');
+        }
+
+        /* -------------------------------------------------------------------------
+           4. DATA SOAL LENGKAP (DIADAPTASI DARI PAS B. INDONESIA KELAS 1)
+           - 5 Soal Pilihan Ganda (Nomor 1 - 5)
+           - 5 Soal Pilihan Ganda Kompleks (Nomor 6 - 10)
+           - 5 Soal Menjodohkan / Tarik Garis (Nomor 11 - 15)
+           - 1 Aktivitas Akhir: Susun Kartu Kalimat SPOK Interaktif (Langkah 16)
+        ------------------------------------------------------------------------- */
+        const quizSteps = [
+            // ================= BAGIAN 1: 5 SOAL PILIHAN GANDA =================
+            {
+                id: 1,
+                type: 'pg',
+                section: 'Bagian 1: Pilihan Ganda (Pilih 1 Jawaban Benar)',
+                illustration: 'membaca',
+                passage: `<strong>Kegiatan Membaca</strong><br>
+                Membaca harus dilakukan dengan baik dan benar agar mata tidak sakit. Membaca sambil berbaring bisa menyebabkan gangguan mata minus karena cahaya lampu tidak merata. Cara membaca yang benar adalah dengan <strong>duduk tegak</strong> dengan jarak mata ke buku sekitar <strong>25–30 cm</strong>.`,
+                question: 'Sesuai bacaan di atas, bagaimana cara membaca yang benar agar mata tetap sehat?',
+                options: [
+                    'Membaca sambil tiduran di kasur',
+                    'Duduk tegak dengan jarak mata 25–30 cm',
+                    'Membaca di tempat yang gelap',
+                    'Menempelkan buku terlalu dekat ke mata'
+                ],
+                correct: 1,
+                explanation: 'Cara membaca yang benar adalah duduk tegak dengan jarak ideal 25–30 cm dan pencahayaan terang.'
+            },
+            {
+                id: 2,
+                type: 'pg',
+                section: 'Bagian 1: Pilihan Ganda (Pilih 1 Jawaban Benar)',
+                illustration: 'membaca',
+                passage: `Membaca sambil berbaring memang bisa menyebabkan gangguan mata minus atau silinder, karena saat tiduran cahaya dari lampu tidak merata.`,
+                question: 'Kalimat tanya yang paling sesuai dengan informasi pada teks bacaan di atas adalah...',
+                options: [
+                    'Siapa yang suka membeli buku cerita?',
+                    'Kapan waktu kita pergi ke sekolah?',
+                    'Di mana kita menyimpan tas sekolah?',
+                    'Mengapa membaca sambil tiduran dapat menyebabkan mata minus?'
+                ],
+                correct: 3,
+                explanation: 'Kata tanya "Mengapa" menanyakan sebab/alasan, yaitu karena saat tiduran cahaya lampu tidak merata.'
+            },
+            {
+                id: 3,
+                type: 'pg',
+                section: 'Bagian 1: Pilihan Ganda (Pilih 1 Jawaban Benar)',
+                illustration: 'teh',
+                passage: `Perhatikan langkah membuat teh berikut:<br>
+                (1) Masukkan satu kantong teh ke dalam gelas<br>
+                (2) Siapkan gelas atau cangkir bersih<br>
+                (3) Tuangkan air panas ke dalam gelas<br>
+                (4) Tambahkan gula sesuai selera lalu aduk<br>
+                (5) Teh hangat siap disajikan`,
+                question: 'Urutan langkah membuat teh yang tepat dari awal hingga akhir adalah...',
+                options: [
+                    '(1) – (2) – (3) – (4) – (5)',
+                    '(2) – (1) – (3) – (4) – (5)',
+                    '(3) – (1) – (2) – (4) – (5)',
+                    '(2) – (3) – (4) – (1) – (5)'
+                ],
+                correct: 1,
+                explanation: 'Langkah pertama adalah (2) menyiapkan gelas bersih, lalu (1) masukkan teh, (3) tuang air panas, (4) beri gula & aduk, (5) siap disajikan.'
+            },
+            {
+                id: 4,
+                type: 'pg',
+                section: 'Bagian 1: Pilihan Ganda (Pilih 1 Jawaban Benar)',
+                illustration: 'perkenalan',
+                passage: `Cermati penggalan cerita berikut:<br>
+                "Sony bertemu dengan teman lamanya yang bernama Didik. Didik memperkenalkan adiknya kepada Sony. Sony memperkenalkan diri dan menyebutkan nama lengkapnya yaitu Sony Anggara."`,
+                question: 'Kalimat manakah yang menunjukkan ungkapan perkenalan diri?',
+                options: [
+                    'Kakek dan nenek datang makan malam bersama.',
+                    'Tomy dan Amara senang melukis pemandangan di taman.',
+                    'Halo, perkenalkan nama lengkap saya Sony Anggara.',
+                    'Hari Minggu kami mengikuti lomba tujuh belasan.'
+                ],
+                correct: 2,
+                explanation: 'Ungkapan perkenalan diri ditandai dengan kata "perkenalkan" dan menyebutkan nama diri.'
+            },
+            {
+                id: 5,
+                type: 'pg',
+                section: 'Bagian 1: Pilihan Ganda (Pilih 1 Jawaban Benar)',
+                illustration: 'sepakbola',
+                passage: `Perhatikan kalimat dari bacaan "Sepak Bola" berikut:<br>
+                <div class="mt-2 p-3 bg-amber-50 rounded-2xl border-2 border-amber-300 text-center text-lg font-extrabold text-slate-800">
+                    "Edo menendang bola di lapangan."
+                </div>`,
+                question: 'Pada kalimat di atas, kata <span class="text-rose-600 underline">Edo</span> berkedudukan sebagai...',
+                options: [
+                    'Subjek (S) — Pelaku kegiatan',
+                    'Predikat (P) — Kata kerja/kegiatan',
+                    'Objek (O) — Benda yang dikenai pekerjaan',
+                    'Keterangan (K) — Tempat kejadian'
+                ],
+                correct: 0,
+                explanation: 'Edo adalah orang yang melakukan kegiatan menendang, sehingga Edo adalah Subjek (S).'
+            },
+
+            // ============= BAGIAN 2: 5 SOAL PILIHAN GANDA KOMPLEKS =============
+            {
+                id: 6,
+                type: 'pgk',
+                section: 'Bagian 2: Pilihan Ganda Kompleks (Pilih 2 Jawaban Benar)',
+                illustration: 'tubuh',
+                passage: `Perhatikan kalimat-kalimat tentang cara merawat anggota tubuh di bawah ini!`,
+                question: 'Manakah cara merawat anggota tubuh yang BENAR? (Pilih 2 jawaban)',
+                options: [
+                    'Menggosok gigi dua kali sehari, sebelum tidur dan sesudah makan.',
+                    'Membersihkan telinga setiap satu jam sekali dengan benda tajam.',
+                    'Mencuci tangan dengan sabun setelah bermain dan sebelum makan.',
+                    'Membaca buku sambil tiduran di tempat redup.'
+                ],
+                correct: [0, 2],
+                explanation: 'Menggosok gigi 2 kali sehari dan mencuci tangan sebelum makan adalah cara merawat tubuh yang benar.'
+            },
+            {
+                id: 7,
+                type: 'pgk',
+                section: 'Bagian 2: Pilihan Ganda Kompleks (Pilih 2 Jawaban Benar)',
+                illustration: 'wortel',
+                passage: `<strong>Manfaat Wortel untuk Mata</strong><br>
+                Mata merupakan organ tubuh yang penting. Salah satu cara menjaga kesehatan mata adalah mengonsumsi wortel yang kaya vitamin A, baik dimakan langsung maupun dibuat jus wortel. Selain itu, kita juga harus menjaga jarak pandangan mata ketika membaca.`,
+                question: 'Berdasarkan bacaan tersebut, hal yang harus kita lakukan supaya mata tetap sehat adalah... (Pilih 2 jawaban)',
+                options: [
+                    'Mengonsumsi wortel yang diolah menjadi makanan atau jus wortel.',
+                    'Menonton televisi dari jarak yang sangat dekat.',
+                    'Makan jajanan pedas setiap hari.',
+                    'Menjaga jarak pandangan mata ketika membaca.'
+                ],
+                correct: [0, 3],
+                explanation: 'Sesuai bacaan, cara menjaga kesehatan mata adalah mengonsumsi wortel dan menjaga jarak pandangan mata.'
+            },
+            {
+                id: 8,
+                type: 'pgk',
+                section: 'Bagian 2: Pilihan Ganda Kompleks (Pilih 2 Jawaban Benar)',
+                illustration: 'wortel',
+                passage: `Wortel mengandung vitamin A, vitamin C, dan mineral yang bermanfaat menjaga kesehatan mata serta mencegah rabun senja.`,
+                question: 'Kalimat tanya yang sesuai dengan informasi bacaan di atas adalah... (Pilih 2 jawaban)',
+                options: [
+                    'Bagaimana cara menjaga kesehatan mata?',
+                    'Berapa harga satu kilogram wortel di pasar?',
+                    'Siapa yang menanam wortel di kebun?',
+                    'Apa manfaat yang terkandung dalam wortel?'
+                ],
+                correct: [0, 3],
+                explanation: 'Bacaan menjelaskan cara menjaga kesehatan mata dan manfaat kandungan nutrisi dalam wortel.'
+            },
+            {
+                id: 9,
+                type: 'pgk',
+                section: 'Bagian 2: Pilihan Ganda Kompleks (Pilih 2 Jawaban Benar)',
+                illustration: 'perkenalan',
+                passage: `<strong>Perkenalan Diri Rassi</strong><br>
+                Halo, teman-teman! Perkenalkan nama saya Rassi. Saya tinggal di Jalan Pahlawan no. 10, Sidoarjo. Sebelumnya saya tinggal di Solo. Saya lahir di Sidoarjo, 17 Juli 2013. Saya suka membaca dan melukis.`,
+                question: 'Pernyataan yang BENAR tentang Rassi sesuai teks di atas adalah... (Pilih 2 jawaban)',
+                options: [
+                    'Rassi tinggal di Jalan Pahlawan no. 10, Sidoarjo.',
+                    'Rassi gemar membaca dan melukis.',
+                    'Sekarang Rassi masih tinggal di kota Solo.',
+                    'Rassi lahir pada tanggal 10 Juli 2012.'
+                ],
+                correct: [0, 1],
+                explanation: 'Rassi sekarang tinggal di Jl. Pahlawan no. 10 Sidoarjo dan memiliki hobi membaca serta melukis.'
+            },
+            {
+                id: 10,
+                type: 'pgk',
+                section: 'Bagian 2: Pilihan Ganda Kompleks (Pilih 2 Jawaban Benar)',
+                illustration: 'membaca',
+                passage: `Cermati struktur kalimat SPOK berikut:<br>
+                <div class="mt-2 p-3 bg-purple-50 rounded-2xl border-2 border-purple-300 text-center text-lg font-extrabold">
+                    <span class="text-rose-600">Evi</span> (S) + <span class="text-blue-600">membaca</span> (P) + <span class="text-emerald-600">buku cerita</span> (O) + <span class="text-amber-600">di rumah</span> (K)
+                </div>`,
+                question: 'Manakah pernyataan yang BENAR tentang bagian kalimat SPOK di atas? (Pilih 2 jawaban)',
+                options: [
+                    'Kata "membaca" adalah Predikat (P) karena menunjukkan kegiatan.',
+                    'Kata "di rumah" adalah Subjek (S) karena nama tempat.',
+                    'Kata "buku cerita" adalah Objek (O) yang dibaca oleh Evi.',
+                    'Kata "Evi" adalah Keterangan waktu.'
+                ],
+                correct: [0, 2],
+                explanation: 'Dalam kalimat tersebut: Evi (S), membaca (P), buku cerita (O), dan di rumah (Keterangan tempat).'
+            },
+
+            // =========== BAGIAN 3: 5 SOAL MENJODOHKAN (TARIK GARIS) ============
+            {
+                id: 11,
+                type: 'matching',
+                section: 'Bagian 3: Menjodohkan Tarik Garis (Soal 1 dari 5)',
+                illustration: 'perkenalan',
+                question: 'Tarik garis untuk memasangkan unsur identitas perkenalan diri di kiri dengan contoh kalimat yang tepat di kanan!',
+                leftItems: [
+                    { id: 'L1', text: 'Nama lengkap & panggilan' },
+                    { id: 'L2', text: 'Alamat tempat tinggal' },
+                    { id: 'L3', text: 'Kegemaran / Hobi' },
+                    { id: 'L4', text: 'Nama orang tua' }
+                ],
+                rightItems: [
+                    { id: 'R1', text: 'Saya tinggal di Jl. Ahmad Yani no. 3 Sidoarjo.' },
+                    { id: 'R2', text: 'Nama lengkapku Rio Perdana, panggilanku Rio.' },
+                    { id: 'R3', text: 'Hobiku olahraga dan menulis cerita.' },
+                    { id: 'R4', text: 'Nama ayahku Budi dan nama ibuku Rini.' }
+                ],
+                correctPairs: { 'L1': 'R2', 'L2': 'R1', 'L3': 'R3', 'L4': 'R4' },
+                explanation: 'Identitas perkenalan meliputi nama lengkap, alamat rumah, hobi, dan nama ayah/ibu.'
+            },
+            {
+                id: 12,
+                type: 'matching',
+                section: 'Bagian 3: Menjodohkan Tarik Garis (Soal 2 dari 5)',
+                illustration: 'perintah',
+                question: 'Tarik garis untuk memasangkan peristiwa dengan Kalimat Perintah yang tepat!',
+                leftItems: [
+                    { id: 'L1', text: 'Budi menaruh bungkus snack di meja.' },
+                    { id: 'L2', text: 'Anti keluar rumah lupa menutup pintu.' },
+                    { id: 'L3', text: 'Anton sakit perut karena jajan sembarangan.' },
+                    { id: 'L4', text: 'Doni belum mau berbagi dengan teman.' }
+                ],
+                rightItems: [
+                    { id: 'R1', text: 'Jagalah kebersihan saat membeli jajan!' },
+                    { id: 'R2', text: 'Buanglah sampah pada tempatnya!' },
+                    { id: 'R3', text: 'Tutuplah pintu rumah jika keluar!' },
+                    { id: 'R4', text: 'Berbagilah kepada teman yang membutuhkan!' }
+                ],
+                correctPairs: { 'L1': 'R2', 'L2': 'R3', 'L3': 'R1', 'L4': 'R4' },
+                explanation: 'Kalimat perintah diucapkan dengan sopan untuk mengajak melakukan kebaikan.'
+            },
+            {
+                id: 13,
+                type: 'matching',
+                section: 'Bagian 3: Menjodohkan Tarik Garis (Soal 3 dari 5)',
+                illustration: 'membaca',
+                passage: `<strong>Evi Senang Membaca</strong><br>
+                Evi rajin belajar membaca sejak taman kanak-kanak. Evi senang membaca buku cerita lucu. Suatu hari Ibu dan Bimo melihat Evi tertawa sambil membaca, lalu Evi tersenyum malu.`,
+                question: 'Tarik garis untuk memasangkan Pertanyaan di kiri dengan Jawaban yang sesuai bacaan di kanan!',
+                leftItems: [
+                    { id: 'L1', text: 'Siapa yang rajin belajar membaca?' },
+                    { id: 'L2', text: 'Apa buku yang disenangi Evi?' },
+                    { id: 'L3', text: 'Kapan Evi mulai belajar membaca?' },
+                    { id: 'L4', text: 'Bagaimana perasaan Evi saat dilihat Ibu?' }
+                ],
+                rightItems: [
+                    { id: 'R1', text: 'Evi senang membaca buku cerita lucu.' },
+                    { id: 'R2', text: 'Yang rajin belajar membaca adalah Evi.' },
+                    { id: 'R3', text: 'Evi tersenyum malu.' },
+                    { id: 'R4', text: 'Sejak taman kanak-kanak.' }
+                ],
+                correctPairs: { 'L1': 'R2', 'L2': 'R1', 'L3': 'R4', 'L4': 'R3' },
+                explanation: 'Kata tanya Siapa (orang), Apa (benda), Kapan (waktu), dan Bagaimana (keadaan/perasaan).'
+            },
+            {
+                id: 14,
+                type: 'matching',
+                section: 'Bagian 3: Menjodohkan Tarik Garis (Soal 4 dari 5)',
+                illustration: 'pancaindra',
+                question: 'Tarik garis untuk memasangkan Pancaindra di kiri dengan Fungsinya di kanan!',
+                leftItems: [
+                    { id: 'L1', text: '👀 Mata' },
+                    { id: 'L2', text: '👂 Telinga' },
+                    { id: 'L3', text: '👃 Hidung' },
+                    { id: 'L4', text: '👅 Lidah' }
+                ],
+                rightItems: [
+                    { id: 'R1', text: 'Untuk mendengar suara' },
+                    { id: 'R2', text: 'Untuk melihat bacaan' },
+                    { id: 'R3', text: 'Untuk mengecap rasa manis & asin' },
+                    { id: 'R4', text: 'Untuk membau harum bunga' }
+                ],
+                correctPairs: { 'L1': 'R2', 'L2': 'R1', 'L3': 'R4', 'L4': 'R3' },
+                explanation: 'Mata untuk melihat, telinga untuk mendengar, hidung untuk membau, dan lidah untuk mengecap.'
+            },
+            {
+                id: 15,
+                type: 'matching',
+                section: 'Bagian 3: Menjodohkan Tarik Garis (Soal 5 dari 5)',
+                illustration: 'sepakbola',
+                passage: `Perhatikan kalimat berikut:<br>
+                <div class="mt-1 p-2.5 bg-emerald-50 rounded-xl border-2 border-emerald-300 text-center font-extrabold text-lg">
+                    "Udin / menyiram / bunga / di halaman."
+                </div>`,
+                question: 'Tarik garis untuk memasangkan Unsur Kalimat SPOK di kiri dengan Kata yang tepat di kanan!',
+                leftItems: [
+                    { id: 'L1', text: 'Subjek (S) — Pelaku' },
+                    { id: 'L2', text: 'Predikat (P) — Kegiatan' },
+                    { id: 'L3', text: 'Objek (O) — Sasaran' },
+                    { id: 'L4', text: 'Keterangan (K) — Tempat' }
+                ],
+                rightItems: [
+                    { id: 'R1', text: 'menyiram' },
+                    { id: 'R2', text: 'Udin' },
+                    { id: 'R3', text: 'di halaman' },
+                    { id: 'R4', text: 'bunga' }
+                ],
+                correctPairs: { 'L1': 'R2', 'L2': 'R1', 'L3': 'R4', 'L4': 'R3' },
+                explanation: 'Udin (Subjek), menyiram (Predikat), bunga (Objek), di halaman (Keterangan tempat).'
+            },
+
+            // ======= LANGKAH 16: AKTIVITAS MEMBUAT KALIMAT SPOK INTERAKTIF =======
+            {
+                id: 16,
+                type: 'spok_builder',
+                section: 'Bonus Aktivitas: Ayo Menyusun Kalimat SPOK!',
+                illustration: 'wortel',
+                question: 'Susunlah kartu kata acak di bawah ini menjadi kalimat berpola <strong>S - P - O - K</strong> yang benar! (Klik kartu kata sesuai urutan)',
+                words: [
+                    { id: 'w1', text: 'Dody', role: 'Subjek (S)', color: 'bg-rose-100 border-rose-400 text-rose-800' },
+                    { id: 'w2', text: 'minum', role: 'Predikat (P)', color: 'bg-sky-100 border-sky-400 text-sky-800' },
+                    { id: 'w3', text: 'jus wortel', role: 'Objek (O)', color: 'bg-emerald-100 border-emerald-400 text-emerald-800' },
+                    { id: 'w4', text: 'di dapur', role: 'Keterangan (K)', color: 'bg-amber-100 border-amber-400 text-amber-800' }
+                ],
+                shuffledOrder: ['w3', 'w1', 'w4', 'w2'],
+                correctOrder: ['w1', 'w2', 'w3', 'w4'],
+                explanation: 'Susunan SPOK yang tepat adalah: Dody (S) + minum (P) + jus wortel (O) + di dapur (K).'
+            }
+        ];
+
+        /* -------------------------------------------------------------------------
+           5. STATE / PENYIMPANAN JAWABAN SISWA
+        ------------------------------------------------------------------------- */
+        let studentName = '';
+        let studentClass = '';
+        let currentStepIndex = 0;
+        let userAnswers = {}; // Menyimpan jawaban tiap ID soal
+        let selectedLeftDot = null; // Untuk interaksi klik/tarik garis matching
+        const lineColors = ['#F43F5E', '#0EA5E9', '#10B981', '#F59E0B']; // Warna-warni garis matching
+
+        /* -------------------------------------------------------------------------
+           6. FUNGSI MULAI & NAVIGASI HALAMAN
+        ------------------------------------------------------------------------- */
+        function startQuiz() {
+            const nameInput = document.getElementById('input-nama').value.trim();
+            const classInput = document.getElementById('input-kelas').value;
+
+            if (!nameInput) {
+                showToast('Ayo tuliskan namamu terlebih dahulu ya!', '✏️');
+                document.getElementById('input-nama').focus();
+                return;
+            }
+
+            playTone('success');
+            studentName = nameInput;
+            studentClass = classInput;
+
+            // Tampilkan badge nama di header
+            document.getElementById('badge-name').textContent = studentName;
+            document.getElementById('badge-class').textContent = studentClass;
+            document.getElementById('student-badge').classList.remove('hidden');
+
+            // Ganti tampilan ke layar kuis
+            document.getElementById('screen-start').classList.add('hidden');
+            document.getElementById('screen-quiz').classList.remove('hidden');
+
+            currentStepIndex = 0;
+            renderStep();
+        }
+
+        function prevStep() {
+            if (currentStepIndex > 0) {
+                playTone('click');
+                currentStepIndex--;
+                renderStep();
+            }
+        }
+
+        function nextStep() {
+            const step = quizSteps[currentStepIndex];
+
+            // Validasi ringan agar siswa tidak melewatkan soal secara tidak sengaja
+            if (!isStepAnswered(step)) {
+                showToast('Ayo selesaikan jawaban soal ini dulu sebelum lanjut!', '😊');
+                return;
+            }
+
+            playTone('click');
+            if (currentStepIndex < quizSteps.length - 1) {
+                currentStepIndex++;
+                renderStep();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function isStepAnswered(step) {
+            const ans = userAnswers[step.id];
+            if (step.type === 'pg') return ans !== undefined;
+            if (step.type === 'pgk') return Array.isArray(ans) && ans.length > 0;
+            if (step.type === 'matching') return ans && Object.keys(ans).length === 4;
+            if (step.type === 'spok_builder') return Array.isArray(ans) && ans.length === 4;
+            return false;
+        }
+
+        /* -------------------------------------------------------------------------
+           7. RENDER TAMPILAN SOAL DINAMIS (PG, PGK, MATCHING, SPOK BUILDER)
+        ------------------------------------------------------------------------- */
+        function renderStep() {
+            const step = quizSteps[currentStepIndex];
+            const card = document.getElementById('quiz-card');
+
+            // Update Progress Bar & Counter
+            document.getElementById('section-tag').textContent = step.section;
+            document.getElementById('question-counter').textContent = `Langkah ${currentStepIndex + 1} dari ${quizSteps.length}`;
+            const pct = Math.round(((currentStepIndex + 1) / quizSteps.length) * 100);
+            document.getElementById('progress-bar').style.width = `${pct}%`;
+
+            // Update Tombol Navigasi
+            document.getElementById('btn-prev').disabled = (currentStepIndex === 0);
+            document.getElementById('btn-next').innerHTML = (currentStepIndex === quizSteps.length - 1)
+                ? '🏆 Lihat Hasil Nilai!'
+                : 'Lanjut ➡️';
+
+            // Bangun HTML dasar soal
+            let html = `
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="w-11 h-11 rounded-2xl bg-amber-400 text-slate-900 font-judul text-xl flex items-center justify-center shadow shrink-0">
+                        ${step.id}
+                    </span>
+                    <h3 class="font-judul text-xl sm:text-2xl text-slate-800 leading-snug">
+                        ${step.question}
+                    </h3>
+                </div>
+            `;
+
+            // Tambahkan Ilustrasi SVG Interaktif
+            html += getInteractiveSVG(step.illustration);
+
+            // Tambahkan Teks Bacaan jika ada
+            if (step.passage) {
+                html += `
+                    <div class="bg-amber-50/90 border-l-8 border-amber-400 p-4 rounded-2xl mb-5 text-base sm:text-lg leading-relaxed text-slate-700 shadow-inner">
+                        ${step.passage}
+                    </div>
+                `;
+            }
+
+            // Render berdasarkan tipe soal
+            if (step.type === 'pg') {
+                html += renderPG(step);
+            } else if (step.type === 'pgk') {
+                html += renderPGK(step);
+            } else if (step.type === 'matching') {
+                html += renderMatching(step);
+            } else if (step.type === 'spok_builder') {
+                html += renderSpokBuilder(step);
+            }
+
+            card.innerHTML = html;
+
+            // Jika tipe soal matching, gambar ulang garis yang sudah tersimpan & pasang listener resize
+            if (step.type === 'matching') {
+                selectedLeftDot = null;
+                setTimeout(() => drawMatchingLines(step), 50);
+            }
+        }
+
+        /* --- A. Render Pilihan Ganda (1 Jawaban) --- */
+        function renderPG(step) {
+            const selected = userAnswers[step.id];
+            const letters = ['A', 'B', 'C', 'D'];
+            return `<div class="grid grid-cols-1 gap-3.5">
+                ${step.options.map((opt, idx) => {
+                    const isSelected = selected === idx;
+                    const styleClass = isSelected
+                        ? 'bg-sky-100 border-sky-500 ring-4 ring-sky-200'
+                        : 'bg-slate-50 hover:bg-sky-50 border-slate-200';
+                    return `
+                        <button onclick="selectPG(${step.id}, ${idx})" class="w-full text-left p-4 rounded-2xl border-3 ${styleClass} transition flex items-center gap-4 cursor-pointer">
+                            <span class="w-10 h-10 rounded-xl ${isSelected ? 'bg-sky-500 text-white' : 'bg-white text-slate-700 border-2 border-slate-300'} font-judul text-lg flex items-center justify-center shrink-0">
+                                ${letters[idx]}
+                            </span>
+                            <span class="text-base sm:text-lg font-bold text-slate-800">${opt}</span>
+                        </button>
+                    `;
+                }).join('')}
+            </div>`;
+        }
+
+        function selectPG(stepId, optionIdx) {
+            playTone('click');
+            userAnswers[stepId] = optionIdx;
+            renderStep();
+        }
+
+        /* --- B. Render Pilihan Ganda Kompleks (Kotak Centang >1 Jawaban) --- */
+        function renderPGK(step) {
+            const selectedArr = userAnswers[step.id] || [];
+            return `
+                <div class="mb-3 text-sm font-extrabold text-purple-700 bg-purple-50 px-4 py-2 rounded-xl inline-block border border-purple-200">
+                    ☑️ Centang 2 kotak jawaban yang paling tepat! (Terpilih: ${selectedArr.length}/2)
+                </div>
+                <div class="grid grid-cols-1 gap-3.5">
+                ${step.options.map((opt, idx) => {
+                    const isChecked = selectedArr.includes(idx);
+                    const styleClass = isChecked
+                        ? 'bg-purple-100 border-purple-500 ring-4 ring-purple-200'
+                        : 'bg-slate-50 hover:bg-purple-50 border-slate-200';
+                    return `
+                        <button onclick="togglePGK(${step.id}, ${idx})" class="w-full text-left p-4 rounded-2xl border-3 ${styleClass} transition flex items-center gap-4 cursor-pointer">
+                            <span class="w-10 h-10 rounded-xl ${isChecked ? 'bg-purple-600 text-white' : 'bg-white text-slate-400 border-2 border-slate-300'} font-judul text-xl flex items-center justify-center shrink-0">
+                                ${isChecked ? '✓' : ''}
+                            </span>
+                            <span class="text-base sm:text-lg font-bold text-slate-800">${opt}</span>
+                        </button>
+                    `;
+                }).join('')}
+            </div>`;
+        }
+
+        function togglePGK(stepId, optionIdx) {
+            playTone('click');
+            if (!userAnswers[stepId]) userAnswers[stepId] = [];
+            const idxPos = userAnswers[stepId].indexOf(optionIdx);
+            if (idxPos > -1) {
+                userAnswers[stepId].splice(idxPos, 1);
+            } else {
+                if (userAnswers[stepId].length >= 2) {
+                    showToast('Kamu sudah memilih 2 jawaban. Hapus salah satu jika ingin mengganti!', 'ℹ️');
+                    return;
+                }
+                userAnswers[stepId].push(optionIdx);
+            }
+            renderStep();
+        }
+
+        /* --- C. Render Menjodohkan dengan Desain Tarik Garis Interaktif --- */
+        function renderMatching(step) {
+            const pairs = userAnswers[step.id] || {};
+            return `
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-3 bg-emerald-50 p-3 rounded-2xl border-2 border-emerald-200">
+                    <span class="text-xs sm:text-sm font-extrabold text-emerald-800">
+                        🖍️ Cara bermain: Klik/sentuh kartu atau titik di <strong>Kiri</strong>, lalu tarik/klik ke pasangan di <strong>Kanan</strong>!
+                    </span>
+                    <button onclick="resetMatching(${step.id})" class="bg-rose-500 hover:bg-rose-600 text-white text-xs sm:text-sm font-extrabold px-3.5 py-1.5 rounded-xl shadow cursor-pointer">
+                        🗑️ Hapus Garis
+                    </button>
+                </div>
+
+                <div id="matching-area" class="matching-wrapper relative grid grid-cols-2 gap-6 sm:gap-14 py-2">
+                    <!-- Lapisan Kanvas SVG untuk Menggambar Garis Warna-Warni -->
+                    <svg id="matching-svg-layer"></svg>
+
+                    <!-- Kolom Kiri -->
+                    <div class="space-y-4 z-20">
+                        ${step.leftItems.map((item, idx) => {
+                            const isPaired = pairs[item.id] !== undefined;
+                            const color = lineColors[idx % lineColors.length];
+                            return `
+                                <div id="box-${item.id}" onclick="handleLeftClick('${item.id}')"
+                                     onpointerdown="startDragLine(event, '${item.id}')"
+                                     class="relative bg-amber-50 hover:bg-amber-100 border-3 ${isPaired ? 'border-emerald-500' : 'border-amber-300'} p-3.5 pr-6 rounded-2xl shadow-sm cursor-pointer flex items-center justify-between min-h-[76px]">
+                                    <span class="text-sm sm:text-base font-extrabold text-slate-800 leading-snug">${item.text}</span>
+                                    <span id="dot-${item.id}" style="background-color: ${color};" class="anchor-dot absolute -right-3 top-1/2 -translate-y-1/2"></span>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+
+                    <!-- Kolom Kanan -->
+                    <div class="space-y-4 z-20">
+                        ${step.rightItems.map((item) => {
+                            const isUsed = Object.values(pairs).includes(item.id);
+                            return `
+                                <div id="box-${item.id}" onclick="handleRightClick('${item.id}')"
+                                     data-right-id="${item.id}"
+                                     class="right-target relative bg-sky-50 hover:bg-sky-100 border-3 ${isUsed ? 'border-emerald-500' : 'border-sky-300'} p-3.5 pl-6 rounded-2xl shadow-sm cursor-pointer flex items-center min-h-[76px]">
+                                    <span id="dot-${item.id}" class="anchor-dot bg-sky-500 absolute -left-3 top-1/2 -translate-y-1/2"></span>
+                                    <span class="text-sm sm:text-base font-bold text-slate-800 leading-snug">${item.text}</span>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Logika Klik maupun Drag-and-Drop Layar Sentuh / Mouse untuk Tarik Garis
+        let isDraggingLine = false;
+        let dragStartId = null;
+
+        function handleLeftClick(leftId) {
+            playTone('click');
+            selectedLeftDot = leftId;
+            document.querySelectorAll('.anchor-dot').forEach(d => d.classList.remove('active-dot'));
+            const dot = document.getElementById(`dot-${leftId}`);
+            if (dot) dot.classList.add('active-dot');
+        }
+
+        function handleRightClick(rightId) {
+            if (!selectedLeftDot) {
+                showToast('Klik dulu titik warna di sebelah KIRI ya!', '👈');
+                return;
+            }
+            connectPair(selectedLeftDot, rightId);
+            selectedLeftDot = null;
+            document.querySelectorAll('.anchor-dot').forEach(d => d.classList.remove('active-dot'));
+        }
+
+        function startDragLine(e, leftId) {
+            isDraggingLine = true;
+            dragStartId = leftId;
+            selectedLeftDot = leftId;
+        }
+
+        // Event global pointermove & pointerup untuk menggambar garis sementara saat jari/mouse ditarik
+        window.addEventListener('pointermove', (e) => {
+            if (!isDraggingLine || !dragStartId) return;
+            const step = quizSteps[currentStepIndex];
+            if (!step || step.type !== 'matching') return;
+
+            const container = document.getElementById('matching-area');
+            const startDot = document.getElementById(`dot-${dragStartId}`);
+            if (!container || !startDot) return;
+
+            const cRect = container.getBoundingClientRect();
+            const sRect = startDot.getBoundingClientRect();
+            const x1 = sRect.left + sRect.width / 2 - cRect.left;
+            const y1 = sRect.top + sRect.height / 2 - cRect.top;
+            const x2 = e.clientX - cRect.left;
+            const y2 = e.clientY - cRect.top;
+
+            drawMatchingLines(step, { x1, y1, x2, y2 });
+        });
+
+        window.addEventListener('pointerup', (e) => {
+            if (!isDraggingLine || !dragStartId) return;
+            isDraggingLine = false;
+
+            // Cek apakah pointer dilepas di atas kartu kanan
+            const elemBelow = document.elementFromPoint(e.clientX, e.clientY);
+            const rightBox = elemBelow ? elemBelow.closest('.right-target') : null;
+            if (rightBox) {
+                const rightId = rightBox.getAttribute('data-right-id');
+                connectPair(dragStartId, rightId);
+                selectedLeftDot = null;
+            } else {
+                const step = quizSteps[currentStepIndex];
+                if (step && step.type === 'matching') drawMatchingLines(step);
+            }
+            dragStartId = null;
+        });
+
+        function connectPair(leftId, rightId) {
+            const step = quizSteps[currentStepIndex];
+            if (!userAnswers[step.id]) userAnswers[step.id] = {};
+
+            // Pastikan 1 titik kanan hanya terhubung ke 1 titik kiri
+            for (const key in userAnswers[step.id]) {
+                if (userAnswers[step.id][key] === rightId) {
+                    delete userAnswers[step.id][key];
+                }
+            }
+            userAnswers[step.id][leftId] = rightId;
+            playTone('connect');
+            renderStep();
+        }
+
+        function resetMatching(stepId) {
+            playTone('click');
+            userAnswers[stepId] = {};
+            selectedLeftDot = null;
+            renderStep();
+        }
+
+        function drawMatchingLines(step, tempLine = null) {
+            const svg = document.getElementById('matching-svg-layer');
+            const container = document.getElementById('matching-area');
+            if (!svg || !container) return;
+
+            const cRect = container.getBoundingClientRect();
+            const pairs = userAnswers[step.id] || {};
+            let pathsHTML = '';
+
+            step.leftItems.forEach((lItem, idx) => {
+                const rId = pairs[lItem.id];
+                if (rId) {
+                    const d1 = document.getElementById(`dot-${lItem.id}`);
+                    const d2 = document.getElementById(`dot-${rId}`);
+                    if (d1 && d2) {
+                        const r1 = d1.getBoundingClientRect();
+                        const r2 = d2.getBoundingClientRect();
+                        const x1 = r1.left + r1.width / 2 - cRect.left;
+                        const y1 = r1.top + r1.height / 2 - cRect.top;
+                        const x2 = r2.left + r2.width / 2 - cRect.left;
+                        const y2 = r2.top + r2.height / 2 - cRect.top;
+                        const color = lineColors[idx % lineColors.length];
+                        // Kurva Bezier halus agar garis terlihat cantik seperti pita warna
+                        const cx = (x1 + x2) / 2;
+                        pathsHTML += `<path d="M ${x1} ${y1} C ${cx} ${y1}, ${cx} ${y2}, ${x2} ${y2}" stroke="${color}" stroke-width="6" fill="none" stroke-linecap="round"/>`;
+                    }
+                }
+            });
+
+            if (tempLine) {
+                pathsHTML += `<line x1="${tempLine.x1}" y1="${tempLine.y1}" x2="${tempLine.x2}" y2="${tempLine.y2}" stroke="#94A3B8" stroke-width="5" stroke-dasharray="8,6" stroke-linecap="round"/>`;
+            }
+
+            svg.innerHTML = pathsHTML;
+        }
+
+        // Gambar ulang garis jika ukuran layar berubah / HP diputar
+        window.addEventListener('resize', () => {
+            const step = quizSteps[currentStepIndex];
+            if (step && step.type === 'matching') {
+                drawMatchingLines(step);
+            }
+        });
+
+        /* --- D. Render Aktivitas Susun Kartu Kalimat SPOK --- */
+        function renderSpokBuilder(step) {
+            const chosenIds = userAnswers[step.id] || [];
+            const slots = ['Subjek (S)', 'Predikat (P)', 'Objek (O)', 'Keterangan (K)'];
+
+            return `
+                <!-- Kotak Susunan Kalimat S - P - O - K -->
+                <div class="bg-slate-50 p-4 rounded-3xl border-3 border-dashed border-sky-400 mb-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="font-extrabold text-sky-800 text-sm sm:text-base">🧩 Susunan Kalimatmu:</span>
+                        <button onclick="resetSpokBuilder(${step.id})" class="bg-amber-200 hover:bg-amber-300 text-amber-900 font-extrabold text-xs sm:text-sm px-3 py-1 rounded-xl cursor-pointer">
+                            🔄 Ulangi Susunan
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        ${slots.map((slotLabel, idx) => {
+                            const wordId = chosenIds[idx];
+                            const wordObj = step.words.find(w => w.id === wordId);
+                            return `
+                                <div class="bg-white rounded-2xl p-3 border-2 border-slate-300 text-center min-h-[82px] flex flex-col justify-between">
+                                    <span class="text-xs font-extrabold text-slate-400 uppercase">${slotLabel}</span>
+                                    ${wordObj
+                                        ? `<div onclick="removeSpokWord(${step.id}, '${wordObj.id}')" class="word-chip ${wordObj.color} border-2 font-judul text-lg py-1.5 px-2 rounded-xl mt-1">${wordObj.text}</div>`
+                                        : `<div class="text-slate-300 font-bold text-sm py-2">...</div>`
+                                    }
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+
+                <!-- Pilihan Kartu Kata Acak -->
+                <div class="text-center">
+                    <p class="text-sm font-extrabold text-slate-600 mb-3">👇 Klik kartu kata di bawah ini secara berurutan:</p>
+                    <div class="flex flex-wrap justify-center gap-3">
+                        ${step.shuffledOrder.map(wId => {
+                            const w = step.words.find(item => item.id === wId);
+                            const isUsed = chosenIds.includes(w.id);
+                            return `
+                                <button onclick="pickSpokWord(${step.id}, '${w.id}')" ${isUsed ? 'disabled' : ''}
+                                    class="word-chip ${isUsed ? 'opacity-30 cursor-not-allowed bg-slate-200 border-slate-300 text-slate-500' : w.color} border-3 font-judul text-xl px-5 py-3 rounded-2xl shadow">
+                                    ${w.text}
+                                </button>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function pickSpokWord(stepId, wordId) {
+            playTone('click');
+            if (!userAnswers[stepId]) userAnswers[stepId] = [];
+            if (!userAnswers[stepId].includes(wordId) && userAnswers[stepId].length < 4) {
+                userAnswers[stepId].push(wordId);
+                renderStep();
+            }
+        }
+
+        function removeSpokWord(stepId, wordId) {
+            playTone('click');
+            if (!userAnswers[stepId]) return;
+            userAnswers[stepId] = userAnswers[stepId].filter(id => id !== wordId);
+            renderStep();
+        }
+
+        function resetSpokBuilder(stepId) {
+            playTone('click');
+            userAnswers[stepId] = [];
+            renderStep();
+        }
+
+        /* -------------------------------------------------------------------------
+           8. PERHITUNGAN SKOR AKHIR & REKAP PEMBAHASAN
+        ------------------------------------------------------------------------- */
+        function finishQuiz() {
+            playTone('success');
+            document.getElementById('screen-quiz').classList.add('hidden');
+            document.getElementById('screen-result').classList.remove('hidden');
+
+            document.getElementById('result-name').textContent = studentName;
+            document.getElementById('result-class').textContent = `${studentClass} • MI Muslimat NU Pucang Sidoarjo`;
+
+            let totalPoints = 0;
+            let maxPoints = 0;
+            let reviewHTML = '';
+
+            quizSteps.forEach((step) => {
+                let earned = 0;
+                let stepMax = 0;
+                let userSummary = '';
+                let correctSummary = '';
+
+                if (step.type === 'pg') {
+                    stepMax = 2;
+                    const ans = userAnswers[step.id];
+                    earned = (ans === step.correct) ? 2 : 0;
+                    userSummary = step.options[ans] || '-';
+                    correctSummary = step.options[step.correct];
+                } else if (step.type === 'pgk') {
+                    stepMax = 2;
+                    const ansArr = userAnswers[step.id] || [];
+                    ansArr.forEach(a => {
+                        if (step.correct.includes(a)) earned += 1;
+                    });
+                    userSummary = ansArr.map(i => step.options[i]).join(' & ') || '-';
+                    correctSummary = step.correct.map(i => step.options[i]).join(' & ');
+                } else if (step.type === 'matching') {
+                    stepMax = 4;
+                    const pairs = userAnswers[step.id] || {};
+                    Object.keys(step.correctPairs).forEach(lKey => {
+                        if (pairs[lKey] === step.correctPairs[lKey]) earned += 1;
+                    });
+                    userSummary = `${earned} dari 4 pasangan tepat`;
+                    correctSummary = 'Semua 4 pasangan terhubung sesuai';
+                } else if (step.type === 'spok_builder') {
+                    stepMax = 4;
+                    const chosen = userAnswers[step.id] || [];
+                    const isExact = JSON.stringify(chosen) === JSON.stringify(step.correctOrder);
+                    earned = isExact ? 4 : 0;
+                    userSummary = chosen.map(id => step.words.find(w => w.id === id)?.text).join(' ') || '-';
+                    correctSummary = 'Dody minum jus wortel di dapur.';
+                }
+
+                totalPoints += earned;
+                maxPoints += stepMax;
+
+                const isPerfect = (earned === stepMax);
+                reviewHTML += `
+                    <div class="p-4 rounded-2xl border-3 ${isPerfect ? 'bg-emerald-50 border-emerald-300' : 'bg-rose-50 border-rose-300'}">
+                        <div class="flex items-center justify-between gap-2 mb-1">
+                            <span class="font-judul text-lg ${isPerfect ? 'text-emerald-800' : 'text-rose-800'}">
+                                ${isPerfect ? '✅' : '💡'} Soal ${step.id}
+                            </span>
+                            <span class="text-xs font-extrabold px-3 py-1 rounded-full ${isPerfect ? 'bg-emerald-200 text-emerald-900' : 'bg-rose-200 text-rose-900'}">
+                                Skor: ${earned} / ${stepMax}
+                            </span>
+                        </div>
+                        <p class="font-bold text-slate-800 text-sm sm:text-base mb-2">${step.question}</p>
+                        <p class="text-xs sm:text-sm text-slate-700"><strong>Jawabanmu:</strong> ${userSummary}</p>
+                        <p class="text-xs sm:text-sm text-emerald-700"><strong>Kunci Jawaban:</strong> ${correctSummary}</p>
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1 italic">💬 ${step.explanation}</p>
+                    </div>
+                `;
+            });
+
+            const finalPercent = Math.round((totalPoints / maxPoints) * 100);
+            document.getElementById('final-score').textContent = finalPercent;
+            document.getElementById('review-list').innerHTML = reviewHTML;
+
+            // Tentukan bintang & pesan motivasi
+            const starsEl = document.getElementById('stars-container');
+            const msgEl = document.getElementById('score-message');
+            if (finalPercent >= 85) {
+                starsEl.textContent = '⭐⭐⭐';
+                msgEl.textContent = 'MasyaAllah, Luar Biasa! Kamu Bintang Bahasa Indonesia!';
+            } else if (finalPercent >= 65) {
+                starsEl.textContent = '⭐⭐';
+                msgEl.textContent = 'Bagus Sekali! Terus rajin membaca buku ya!';
+            } else {
+                starsEl.textContent = '⭐';
+                msgEl.textContent = 'Tetap Semangat! Ayo coba main lagi agar makin mahir!';
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function restartQuiz() {
+            playTone('click');
+            userAnswers = {};
+            currentStepIndex = 0;
+            selectedLeftDot = null;
+            document.getElementById('screen-result').classList.add('hidden');
+            document.getElementById('screen-start').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

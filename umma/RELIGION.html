@@ -1,0 +1,1650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RELIGION ADVENTURE – GRADE 1</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Fredoka (display) & Nunito (clean child-friendly body) + Amiri for crisp Arabic script -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Fredoka:wght@400;500;600;700&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: linear-gradient(135deg, #ecfdf5 0%, #fefce8 45%, #e0f2fe 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    h1, h2, h3, h4, .font-display {
+      font-family: 'Fredoka', sans-serif;
+    }
+    .font-arabic {
+      font-family: 'Amiri', serif;
+      direction: rtl;
+    }
+    /* Tactile 3D kids' buttons */
+    .btn-3d {
+      transition: transform 0.14s ease, box-shadow 0.14s ease, filter 0.14s ease;
+      box-shadow: 0 5px 0 rgba(15, 23, 42, 0.18);
+    }
+    .btn-3d:active:not(:disabled) {
+      transform: translateY(4px);
+      box-shadow: 0 1px 0 rgba(15, 23, 42, 0.18);
+    }
+    @keyframes floatGentle {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+    }
+    .animate-float {
+      animation: floatGentle 3.4s ease-in-out infinite;
+    }
+    @keyframes popCard {
+      0% { transform: scale(0.92); opacity: 0; }
+      70% { transform: scale(1.02); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .animate-pop {
+      animation: popCard 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+    .svg-hotspot {
+      cursor: pointer;
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+    .svg-hotspot:hover {
+      filter: brightness(1.05) drop-shadow(0 4px 8px rgba(16, 185, 129, 0.28));
+    }
+    .no-select {
+      user-select: none;
+      -webkit-user-select: none;
+    }
+  </style>
+</head>
+<body class="text-slate-800 selection:bg-emerald-200">
+
+  <!-- Confetti Canvas -->
+  <canvas id="confetti-canvas" class="fixed inset-0 pointer-events-none z-50"></canvas>
+
+  <!-- Main Responsive Container -->
+  <div class="max-w-4xl mx-auto px-3 sm:px-6 py-4 sm:py-7">
+
+    <!-- Top Header Bar -->
+    <header class="bg-white/95 backdrop-blur-md rounded-3xl p-3.5 sm:px-6 shadow-lg border-2 border-emerald-200 flex flex-wrap items-center justify-between gap-3 mb-6">
+      <div class="flex items-center gap-3">
+        <!-- Islamic Star & Crescent / Open Qur'an Emblem -->
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-md shrink-0">
+          <svg class="w-8 h-8" viewBox="0 0 64 64" fill="none">
+            <polygon points="32,3 40,14 54,14 54,28 61,32 54,36 54,50 40,50 32,61 24,50 10,50 10,36 3,32 10,28 10,14 24,14" fill="#a7f3d0" stroke="#fef08a" stroke-width="2.5"/>
+            <path d="M19 26 C25 22, 32 26, 32 26 C32 26, 39 22, 45 26 L45 43 C39 39, 32 43, 32 43 C32 43, 25 39, 19 43 Z" fill="#ffffff" stroke="#065f46" stroke-width="2.3"/>
+            <circle cx="32" cy="17" r="3" fill="#065f46"/>
+          </svg>
+        </div>
+        <div>
+          <span class="text-[11px] sm:text-xs font-extrabold uppercase tracking-wider text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full">
+            MI Muslimat NU Pucang • Grade 1 ICP
+          </span>
+          <h1 class="text-lg sm:text-xl font-bold text-slate-800 leading-tight mt-0.5">RELIGION ADVENTURE – GRADE 1</h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2.5">
+        <!-- Star Score Pill -->
+        <div id="header-score-pill" class="hidden items-center gap-1.5 bg-amber-100 border-2 border-amber-300 px-3.5 py-1.5 rounded-2xl font-display font-bold text-amber-800 shadow-sm">
+          <span>⭐</span>
+          <span id="live-score">0</span>
+          <span class="text-xs font-normal text-amber-700">/ 20</span>
+        </div>
+
+        <!-- Mute / Unmute Button -->
+        <button onclick="toggleSound()" title="Toggle Gentle Sound Effects" class="p-2.5 rounded-2xl bg-sky-100 hover:bg-sky-200 text-sky-700 border-2 border-sky-300 transition cursor-pointer">
+          <span id="sound-icon" class="text-lg">🔊</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ==================== 1. WELCOME SCREEN ==================== -->
+    <section id="welcome-screen" class="bg-white rounded-3xl p-6 sm:p-10 shadow-xl border-4 border-emerald-300 text-center animate-pop">
+      <div class="inline-flex items-center gap-2 bg-amber-100 text-amber-800 font-bold text-xs sm:text-sm px-4 py-1.5 rounded-full border border-amber-300 mb-4">
+        <span>🌙</span>
+        <span>Semester 1 Final Assessment • Cambridge ICP</span>
+        <span>✨</span>
+      </div>
+
+      <h2 class="text-3xl sm:text-4xl font-bold text-slate-800 mb-3">
+        Assalamu'alaikum, <span class="text-emerald-600">Little Explorers!</span> 🌟
+      </h2>
+      <p class="text-slate-600 max-w-2xl mx-auto text-base sm:text-lg mb-6">
+        Get ready for a joyful Islamic Studies journey! Explore <strong>Hijaiyah Letters</strong>, <strong>Surah Al-Fatihah, An-Nas, Al-Falaq &amp; Al-Ikhlas</strong>, <strong>Thoharoh</strong>, <strong>Asmaul Husna</strong>, and <strong>Akhlak Terpuji</strong>.
+      </p>
+
+      <!-- 8 Topic Badges Grid -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 max-w-2xl mx-auto mb-7">
+        <div class="bg-emerald-50 border-2 border-emerald-200 rounded-2xl p-2.5">
+          <div class="text-xl mb-0.5">🔤</div>
+          <div class="font-display font-bold text-emerald-800 text-xs sm:text-sm">Hijaiyah Letters</div>
+        </div>
+        <div class="bg-amber-50 border-2 border-amber-200 rounded-2xl p-2.5">
+          <div class="text-xl mb-0.5">📖</div>
+          <div class="font-display font-bold text-amber-800 text-xs sm:text-sm">Surah Al-Fatihah</div>
+        </div>
+        <div class="bg-sky-50 border-2 border-sky-200 rounded-2xl p-2.5">
+          <div class="text-xl mb-0.5">💧</div>
+          <div class="font-display font-bold text-sky-800 text-xs sm:text-sm">Thoharoh &amp; Wudu</div>
+        </div>
+        <div class="bg-rose-50 border-2 border-rose-200 rounded-2xl p-2.5">
+          <div class="text-xl mb-0.5">🛡️</div>
+          <div class="font-display font-bold text-rose-800 text-xs sm:text-sm">An-Nas &amp; Al-Falaq</div>
+        </div>
+        <div class="bg-purple-50 border-2 border-purple-200 rounded-2xl p-2.5">
+          <div class="text-xl mb-0.5">☝️</div>
+          <div class="font-display font-bold text-purple-800 text-xs sm:text-sm">Surah Al-Ikhlas</div>
+        </div>
+        <div class="bg-teal-50 border-2 border-teal-200 rounded-2xl p-2.5">
+          <div class="text-xl mb-0.5">✨</div>
+          <div class="font-display font-bold text-teal-800 text-xs sm:text-sm">Asmaul Husna</div>
+        </div>
+        <div class="bg-orange-50 border-2 border-orange-200 rounded-2xl p-2.5 col-span-2">
+          <div class="text-xl mb-0.5">💖</div>
+          <div class="font-display font-bold text-orange-800 text-xs sm:text-sm">Akhlak Terpuji &amp; Kalimat Thayyibah</div>
+        </div>
+      </div>
+
+      <!-- Mission Roadmap (20 Questions) -->
+      <div class="bg-slate-50 rounded-2xl p-4 max-w-xl mx-auto mb-6 border border-slate-200 text-left">
+        <h3 class="font-display font-bold text-slate-700 text-xs uppercase tracking-wider mb-2.5 text-center">Quiz Map (20 Total Questions)</h3>
+        <div class="space-y-2 text-sm">
+          <div class="flex items-center justify-between bg-white p-2.5 rounded-xl border border-slate-200">
+            <span class="font-bold text-emerald-700">Section 1: Multiple Choice (Choose 1)</span>
+            <span class="bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded-lg text-xs">7 Questions</span>
+          </div>
+          <div class="flex items-center justify-between bg-white p-2.5 rounded-xl border border-slate-200">
+            <span class="font-bold text-purple-700">Section 2: Complex Multiple Choice (Choose 2)</span>
+            <span class="bg-purple-100 text-purple-800 font-bold px-2.5 py-0.5 rounded-lg text-xs">7 Questions</span>
+          </div>
+          <div class="flex items-center justify-between bg-white p-2.5 rounded-xl border border-slate-200">
+            <span class="font-bold text-amber-700">Section 3: Draw-a-Line Matching</span>
+            <span class="bg-amber-100 text-amber-800 font-bold px-2.5 py-0.5 rounded-lg text-xs">6 Pairs</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Student Name Field -->
+      <div class="max-w-sm mx-auto mb-6">
+        <label for="student-name" class="block text-sm font-bold text-slate-700 mb-1.5">Your Name (for your Star Certificate):</label>
+        <input id="student-name" type="text" placeholder="e.g., Fatimah / Arkan / Zahra" class="w-full px-4 py-3 rounded-2xl border-2 border-emerald-300 focus:border-emerald-500 focus:outline-none text-center font-bold text-slate-800 bg-emerald-50/40" />
+      </div>
+
+      <button onclick="startQuiz()" class="btn-3d bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-display font-bold text-xl px-10 py-4 rounded-2xl cursor-pointer inline-flex items-center gap-2.5">
+        <span>Bismillah, Start Quiz!</span>
+        <span>🚀</span>
+      </button>
+    </section>
+
+    <!-- ==================== 2. SECTIONS 1 & 2 (MC & COMPLEX MC) ==================== -->
+    <section id="quiz-screen" class="hidden">
+      <!-- Top Progress Bar -->
+      <div class="bg-white rounded-3xl p-4 sm:p-5 shadow-md border-2 border-slate-200 mb-5">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div class="flex items-center gap-2">
+            <span id="section-badge" class="bg-emerald-500 text-white font-display font-bold text-xs sm:text-sm px-3 py-1 rounded-xl">Section 1: Multiple Choice</span>
+            <span id="topic-badge" class="bg-amber-100 text-amber-800 font-bold text-xs px-2.5 py-1 rounded-xl border border-amber-300">Thoharoh</span>
+          </div>
+          <span id="question-counter" class="font-display font-bold text-slate-600 text-sm sm:text-base">Question 1 of 20</span>
+        </div>
+        <div class="w-full h-3.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
+          <div id="progress-bar" class="h-full bg-gradient-to-r from-emerald-400 via-teal-400 to-amber-400 transition-all duration-500 rounded-full" style="width: 5%"></div>
+        </div>
+      </div>
+
+      <!-- Active Question Card -->
+      <div id="question-card" class="bg-white rounded-3xl p-5 sm:p-8 shadow-xl border-4 border-emerald-200 animate-pop">
+        <div class="mb-5">
+          <h2 id="question-text" class="text-xl sm:text-2xl font-bold text-slate-800 leading-snug"></h2>
+          <div id="complex-banner" class="hidden mt-2.5 inline-flex items-center gap-2 bg-purple-100 text-purple-800 border border-purple-300 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold">
+            <span>☑️</span>
+            <span>Select ALL correct answers (2 correct answers), then click "Check My Answers"!</span>
+          </div>
+        </div>
+
+        <!-- Interactive SVG Illustration Stage -->
+        <div id="illustration-stage" class="mb-6 bg-gradient-to-b from-slate-50 to-emerald-50/40 rounded-2xl p-3.5 sm:p-5 border-2 border-dashed border-emerald-200 flex flex-col items-center justify-center overflow-hidden">
+          <!-- Injected dynamically -->
+        </div>
+
+        <!-- Options Grid -->
+        <div id="options-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-6">
+          <!-- Injected dynamically -->
+        </div>
+
+        <!-- Instant Feedback Box -->
+        <div id="feedback-banner" class="hidden rounded-2xl p-4 mb-5 border-2 animate-pop">
+          <div class="flex items-start gap-3">
+            <span id="feedback-emoji" class="text-2xl shrink-0">🌟</span>
+            <div>
+              <h4 id="feedback-heading" class="font-display font-bold text-base sm:text-lg"></h4>
+              <p id="feedback-text" class="text-sm mt-0.5 leading-relaxed"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer Controls -->
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100">
+          <span class="text-xs text-slate-400 font-semibold">💡 Tip: Tap the colorful illustration cards to explore!</span>
+          <div class="flex items-center gap-3 ml-auto">
+            <button id="check-complex-btn" onclick="submitComplexQuestion()" class="hidden btn-3d bg-purple-600 hover:bg-purple-700 text-white font-display font-bold px-6 py-3 rounded-2xl cursor-pointer">
+              Check My Answers ✓
+            </button>
+            <button id="next-question-btn" onclick="advanceQuestion()" class="hidden btn-3d bg-emerald-500 hover:bg-emerald-600 text-white font-display font-bold px-7 py-3 rounded-2xl cursor-pointer flex items-center gap-2">
+              <span id="next-btn-label">Next Question</span>
+              <span>➔</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 3. SECTION 3: INTERACTIVE LINE-DRAWING MATCHING ==================== -->
+    <section id="matching-screen" class="hidden animate-pop">
+      <div class="bg-white rounded-3xl p-4 sm:p-5 shadow-md border-2 border-amber-300 mb-5">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div class="flex items-center gap-2">
+            <span class="bg-amber-500 text-white font-display font-bold text-xs sm:text-sm px-3 py-1 rounded-xl">Section 3: Line-Drawing Matching</span>
+            <span class="bg-emerald-100 text-emerald-800 font-bold text-xs px-2.5 py-1 rounded-xl border border-emerald-300">Asmaul Husna, Al-Fatihah &amp; Thoharoh</span>
+          </div>
+          <span class="font-display font-bold text-slate-600 text-sm sm:text-base">Questions 15 – 20 of 20</span>
+        </div>
+        <div class="w-full h-3.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
+          <div class="h-full bg-gradient-to-r from-emerald-400 via-teal-400 to-amber-400 rounded-full" style="width: 100%"></div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-3xl p-4 sm:p-7 shadow-xl border-4 border-amber-300 no-select">
+        <div class="text-center mb-4">
+          <h2 class="text-2xl sm:text-3xl font-bold text-slate-800">Draw Lines to Match Each Pair! ✏️✨</h2>
+          <p class="text-slate-600 text-sm sm:text-base mt-1">
+            <strong>Drag a line</strong> from a card on the left to its matching meaning or purification method on the right (or <strong>tap a left card, then tap a right card</strong>)!
+          </p>
+        </div>
+
+        <!-- Matching Board with Elastic SVG Overlay -->
+        <div id="matching-arena" class="relative grid grid-cols-11 gap-2 sm:gap-4 items-stretch my-4 py-2">
+          <svg id="matching-svg" class="absolute inset-0 w-full h-full pointer-events-none z-20" style="overflow: visible;"></svg>
+
+          <!-- Left Column (6 items) -->
+          <div id="match-left-col" class="col-span-5 flex flex-col justify-between gap-3 z-10"></div>
+
+          <!-- Center Line Space -->
+          <div class="col-span-1"></div>
+
+          <!-- Right Column (6 items) -->
+          <div id="match-right-col" class="col-span-5 flex flex-col justify-between gap-3 z-10"></div>
+        </div>
+
+        <!-- Matching Feedback Box -->
+        <div id="matching-feedback" class="hidden rounded-2xl p-4 my-4 border-2 animate-pop"></div>
+
+        <!-- Matching Controls -->
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-200">
+          <div class="flex items-center gap-2.5">
+            <button id="undo-lines-btn" onclick="clearMatchingLines()" class="btn-3d bg-slate-200 hover:bg-slate-300 text-slate-700 font-display font-bold px-4 py-2.5 rounded-2xl text-sm cursor-pointer">
+              🔄 Clear Lines
+            </button>
+            <span id="match-progress-text" class="text-sm font-bold text-slate-500">0 / 6 lines drawn</span>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <button id="check-matching-btn" onclick="evaluateMatchingSection()" class="btn-3d bg-emerald-500 hover:bg-emerald-600 text-white font-display font-bold px-6 py-3 rounded-2xl cursor-pointer">
+              Check All 6 Matches ✓
+            </button>
+            <button id="finish-adventure-btn" onclick="openFinalCertificate()" class="hidden btn-3d bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-display font-bold px-7 py-3 rounded-2xl cursor-pointer">
+              See Certificate &amp; Review 🏆
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 4. FINAL CERTIFICATE & ANSWER REVIEW ==================== -->
+    <section id="result-screen" class="hidden space-y-6 animate-pop">
+      <!-- Certificate Card -->
+      <div class="bg-white rounded-3xl p-6 sm:p-10 shadow-2xl border-4 border-amber-400 text-center relative overflow-hidden">
+        <div class="inline-flex items-center gap-2 bg-amber-100 text-amber-800 font-bold text-xs sm:text-sm px-4 py-1.5 rounded-full border border-amber-300 mb-3">
+          <span>🌙</span>
+          <span>MI MUSLIMAT NU PUCANG • RELIGION STAR CERTIFICATE</span>
+          <span>🌙</span>
+        </div>
+
+        <h2 class="text-3xl sm:text-4xl font-bold text-slate-800 mb-1">
+          MashaAllah, <span id="cert-name-display" class="text-emerald-600">Little Star</span>! 🎉
+        </h2>
+        <p id="cert-message" class="text-slate-600 text-base sm:text-lg mb-6">You completed the Grade 1 Religion Adventure!</p>
+
+        <!-- Score Badge -->
+        <div class="w-40 h-40 mx-auto rounded-full bg-gradient-to-br from-emerald-400 via-teal-400 to-amber-400 p-2 shadow-xl mb-6 animate-float">
+          <div class="w-full h-full bg-white rounded-full flex flex-col items-center justify-center">
+            <span class="text-xs font-extrabold uppercase tracking-wider text-slate-400">Your Score</span>
+            <span id="final-percentage" class="text-4xl sm:text-5xl font-display font-bold text-slate-800">100</span>
+            <span id="final-fraction" class="text-xs font-bold text-emerald-600 mt-0.5">20 / 20 Stars</span>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-wrap items-center justify-center gap-3">
+          <button onclick="toggleReviewPanel()" class="btn-3d bg-sky-500 hover:bg-sky-600 text-white font-display font-bold text-base sm:text-lg px-6 py-3.5 rounded-2xl cursor-pointer inline-flex items-center gap-2">
+            <span>📋</span>
+            <span id="review-toggle-label">View Detailed Answer Review</span>
+          </button>
+          <button onclick="resetFullQuiz()" class="btn-3d bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-display font-bold text-base sm:text-lg px-7 py-3.5 rounded-2xl cursor-pointer inline-flex items-center gap-2">
+            <span>🔁</span>
+            <span>Play Again</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Detailed Answer Review Section -->
+      <div id="review-panel" class="bg-white rounded-3xl p-5 sm:p-8 shadow-xl border-4 border-sky-200">
+        <h3 class="text-2xl font-display font-bold text-slate-800 mb-2 flex items-center gap-2">
+          <span>📚</span>
+          <span>Complete Answer Review (All 20 Items)</span>
+        </h3>
+        <p class="text-sm text-slate-500 mb-5">Review your answers and learn the explanations for every topic.</p>
+        <div id="review-list" class="space-y-3.5"></div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    // =========================================================================
+    // 1. GENTLE WEB AUDIO CHIMES (No external sound URLs needed)
+    // =========================================================================
+    let soundOn = true;
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+
+    function playNote(freq, type, duration, delay = 0) {
+      if (!soundOn) return;
+      try {
+        if (!audioCtx) audioCtx = new AudioContextClass();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime + delay);
+        gain.gain.setValueAtTime(0.13, audioCtx.currentTime + delay);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + delay + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(audioCtx.currentTime + delay);
+        osc.stop(audioCtx.currentTime + delay + duration);
+      } catch (e) {}
+    }
+
+    function playFx(fx) {
+      if (fx === 'tap') playNote(540, 'sine', 0.08);
+      if (fx === 'link') { playNote(440, 'triangle', 0.09); playNote(660, 'triangle', 0.13, 0.06); }
+      if (fx === 'correct') {
+        playNote(523.25, 'sine', 0.14, 0);
+        playNote(659.25, 'sine', 0.14, 0.09);
+        playNote(783.99, 'sine', 0.24, 0.18);
+      }
+      if (fx === 'wrong') {
+        playNote(270, 'triangle', 0.16, 0);
+        playNote(220, 'triangle', 0.22, 0.13);
+      }
+      if (fx === 'celebrate') {
+        [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => playNote(f, 'triangle', 0.26, i * 0.11));
+      }
+    }
+
+    function toggleSound() {
+      soundOn = !soundOn;
+      document.getElementById('sound-icon').textContent = soundOn ? '🔊' : '🔇';
+    }
+
+    function inspectHotspot(targetId, message) {
+      playFx('tap');
+      const el = document.getElementById(targetId);
+      if (el) {
+        el.textContent = '✨ ' + message;
+        el.classList.add('scale-105');
+        setTimeout(() => el.classList.remove('scale-105'), 200);
+      }
+    }
+
+    // =========================================================================
+    // 2. RICH INTERACTIVE SVG ILLUSTRATIONS FOR ALL 14 MC / COMPLEX QUESTIONS
+    // =========================================================================
+    const ILLUSTRATIONS = {
+      // Q1: Thoharoh — Etiquette of Urinating (Cleanliness & Health Shield)
+      q1_hygiene: () => `
+        <div class="w-full max-w-md text-center">
+          <svg viewBox="0 0 420 145" class="w-full h-auto">
+            <g class="svg-hotspot" onclick="inspectHotspot('q1-tip', 'Islam teaches clean toilet manners (Istinja) so our clothes and body stay pure for Shalat!')">
+              <rect x="15" y="12" width="180" height="115" rx="18" fill="#ffffff" stroke="#10b981" stroke-width="2.5"/>
+              <circle cx="105" cy="52" r="24" fill="#d1fae5"/>
+              <path d="M95 52 L102 60 L117 44" fill="none" stroke="#059669" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+              <text x="105" y="92" text-anchor="middle" font-family="Fredoka" font-weight="700" font-size="13" fill="#065f46">Clean &amp; Pure Body</text>
+              <text x="105" y="110" text-anchor="middle" font-family="Nunito" font-weight="700" font-size="11" fill="#047857">No splashes on clothes!</text>
+            </g>
+            <g class="svg-hotspot" onclick="inspectHotspot('q1-tip', 'Squatting helps empty the bladder completely and keeps our urinary tract healthy!')">
+              <rect x="220" y="12" width="185" height="115" rx="18" fill="#ffffff" stroke="#0ea5e9" stroke-width="2.5"/>
+              <circle cx="312" cy="52" r="24" fill="#e0f2fe"/>
+              <path d="M312 38 C302 52, 302 62, 312 66 C322 62, 322 52, 312 38 Z" fill="#0284c7"/>
+              <text x="312" y="92" text-anchor="middle" font-family="Fredoka" font-weight="700" font-size="13" fill="#075985">Healthy &amp; Hygienic</text>
+              <text x="312" y="110" text-anchor="middle" font-family="Nunito" font-weight="700" font-size="11" fill="#0369a1">Prevents infection</text>
+            </g>
+          </svg>
+          <div id="q1-tip" class="text-xs font-bold text-emerald-700 mt-1">Tap either card to learn about Islamic toilet etiquette!</div>
+        </div>
+      `,
+
+      // Q2: Pillars of Islam (Statements 1 to 7 from exam)
+      q2_pillars: () => `
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full max-w-xl text-xs sm:text-sm">
+          ${[
+            { n: 1, text: 'Believe in the holy books of Allah' },
+            { n: 2, text: 'Read Syahadatain (Two Testimonies)' },
+            { n: 3, text: 'Do Shalat (5 Daily Prayers)' },
+            { n: 4, text: 'Believe in Qadha and Qadar' },
+            { n: 5, text: 'Pay Zakat (Almsgiving)' },
+            { n: 6, text: 'Fasting in Ramadhan' },
+            { n: 7, text: 'Go to Hajj for people who are able' }
+          ].map(item => `
+            <div onclick="inspectHotspot('q2-tip', 'Statement ${item.n}: ${item.text}')"
+                 class="svg-hotspot bg-white px-3 py-2 rounded-xl border-2 border-amber-200 font-bold flex items-center gap-2 ${item.n === 7 ? 'sm:col-span-2' : ''}">
+              <span class="w-6 h-6 rounded-full bg-amber-500 text-white text-xs flex items-center justify-center shrink-0">${item.n}</span>
+              <span class="text-slate-700">${item.text}</span>
+            </div>
+          `).join('')}
+          <div id="q2-tip" class="sm:col-span-2 text-center text-xs font-bold text-amber-700 mt-1">Hint: There are 5 Pillars of Islam! Tap any statement card.</div>
+        </div>
+      `,
+
+      // Q3: Interactive Hijaiyah Letter Tiles for "اَلْحَمْدُ"
+      q3_hijaiyah: () => `
+        <div class="w-full max-w-lg text-center">
+          <div class="bg-white rounded-2xl p-4 border-2 border-emerald-300 shadow-sm mb-2">
+            <div class="text-xs font-bold uppercase tracking-wider text-emerald-600 mb-1">Interactive Arabic Word Explorer</div>
+            <div class="font-arabic text-4xl sm:text-5xl text-slate-800 my-2">اَلْحَمْدُ</div>
+            <div class="text-xs font-bold text-slate-500 mb-3">Read from Right to Left: Al - Ham - Du</div>
+            <!-- Clickable Hijaiyah Letter Tiles (Ordered Right-to-Left visually) -->
+            <div class="flex flex-row-reverse flex-wrap items-center justify-center gap-2.5">
+              ${[
+                { ar: 'اَ', name: 'Alif with Fathah ("A") — 1st Letter!' },
+                { ar: 'لْ', name: 'Lam with Sukun ("L") — 2nd Letter' },
+                { ar: 'حَ', name: 'Ha with Fathah ("Ha") — 3rd Letter' },
+                { ar: 'مْ', name: 'Mim with Sukun ("M") — 4th Letter' },
+                { ar: 'دُ', name: 'Dal with Dhammah ("Du") — 5th Letter' }
+              ].map(tile => `
+                <button type="button" onclick="inspectHotspot('q3-tip', '${tile.name}')"
+                  class="svg-hotspot w-14 h-16 rounded-2xl bg-emerald-50 hover:bg-emerald-100 border-2 border-emerald-400 flex flex-col items-center justify-center shadow-sm cursor-pointer">
+                  <span class="font-arabic text-3xl text-emerald-900 leading-none">${tile.ar}</span>
+                </button>
+              `).join('')}
+            </div>
+          </div>
+          <div id="q3-tip" class="text-xs font-bold text-emerald-700">Tap each Hijaiyah tile (remember: Arabic reads from RIGHT to LEFT)!</div>
+        </div>
+      `,
+
+      // Q4: Surah Al-Ikhlas Verse Card
+      q4_ikhlas: () => `
+        <div class="w-full max-w-md text-center">
+          <div onclick="inspectHotspot('q4-tip', 'Surah Al-Ikhlas has 4 verses and teaches Tauhid: Allah is One (Ahad)!')"
+               class="svg-hotspot bg-white rounded-2xl p-4 border-2 border-purple-300 shadow-sm">
+            <span class="bg-purple-100 text-purple-800 text-xs font-bold px-3 py-0.5 rounded-full">Surah #112 • 4 Verses</span>
+            <div class="font-arabic text-3xl sm:text-4xl text-purple-950 my-2.5 leading-relaxed">
+              قُلْ هُوَ اللّٰهُ أَحَدٌ ۝ اللّٰهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ
+            </div>
+            <p class="text-xs sm:text-sm font-bold text-slate-600 italic">
+              "Say: He is Allah, the One. Allah, the Eternal Refuge. He neither begets nor is born..."
+            </p>
+          </div>
+          <div id="q4-tip" class="text-xs font-bold text-purple-700 mt-1.5">Tap the verse card to learn more!</div>
+        </div>
+      `,
+
+      // Q5: Surah An-Nas Shield of Protection
+      q5_annas: () => `
+        <div class="w-full max-w-md text-center">
+          <div onclick="inspectHotspot('q5-tip', 'An-Nas means Mankind! It is the 114th (last) Surah in Al-Qur’an with 6 verses.')"
+               class="svg-hotspot bg-white rounded-2xl p-4 border-2 border-sky-300 shadow-sm">
+            <span class="bg-sky-100 text-sky-800 text-xs font-bold px-3 py-0.5 rounded-full">Surah #114 • 6 Verses</span>
+            <div class="font-arabic text-3xl sm:text-4xl text-sky-950 my-2">
+              قُلْ أَعُوذُ بِرَبِّ النَّاسِ
+            </div>
+            <p class="text-xs sm:text-sm font-bold text-slate-600 italic">
+              "Say: I seek refuge in the Lord of mankind."
+            </p>
+          </div>
+          <div id="q5-tip" class="text-xs font-bold text-sky-700 mt-1.5">Tap the Surah card to reveal a fun fact!</div>
+        </div>
+      `,
+
+      // Q6: Mr. Arkan on an Airplane — Tayammum
+      q6_tayammum: () => `
+        <div class="w-full max-w-lg text-center">
+          <svg viewBox="0 0 460 135" class="w-full h-auto">
+            <!-- Airplane Scene -->
+            <g class="svg-hotspot" onclick="inspectHotspot('q6-tip', 'On an airplane, there is no water for wudu, so Muslims perform Tayammum!')">
+              <rect x="12" y="12" width="205" height="110" rx="16" fill="#e0f2fe" stroke="#38bdf8" stroke-width="2.5"/>
+              <!-- Stylized Plane -->
+              <path d="M55 66 L155 66 L175 52 L182 52 L170 66 L185 66 L192 60 L196 60 L191 72 L155 76 L115 92 L105 92 L132 76 L62 76 Q46 76 55 66 Z" fill="#0284c7"/>
+              <text x="114" y="34" text-anchor="middle" font-family="Fredoka" font-weight="700" font-size="13" fill="#0369a1">Mr. Arkan on a Plane</text>
+              <text x="114" y="110" text-anchor="middle" font-family="Nunito" font-weight="700" font-size="11" fill="#075985">No water available for Ashar</text>
+            </g>
+            <!-- Clean Dust / Earth Tile -->
+            <g class="svg-hotspot" onclick="inspectHotspot('q6-tip', 'Tayammum uses clean dust/earth to wipe the face and both hands up to the wrists!')">
+              <rect x="235" y="12" width="213" height="110" rx="16" fill="#fef3c7" stroke="#f59e0b" stroke-width="2.5"/>
+              <ellipse cx="341" cy="66" rx="46" ry="16" fill="#d97706"/>
+              <circle cx="325" cy="58" r="3" fill="#b45309"/>
+              <circle cx="342" cy="54" r="3.5" fill="#92400e"/>
+              <circle cx="358" cy="60" r="2.5" fill="#b45309"/>
+              <text x="341" y="34" text-anchor="middle" font-family="Fredoka" font-weight="700" font-size="13" fill="#92400e">Pure Substitute</text>
+              <text x="341" y="110" text-anchor="middle" font-family="Nunito" font-weight="700" font-size="11" fill="#78350f">Wiping face &amp; hands with clean dust</text>
+            </g>
+          </svg>
+          <div id="q6-tip" class="text-xs font-bold text-amber-800 mt-1">Click the airplane or the clean dust card to explore!</div>
+        </div>
+      `,
+
+      // Q7: Akhlak Terpuji — Honesty (Sidiq)
+      q7_honesty: () => `
+        <div class="w-full max-w-md text-center">
+          <div onclick="inspectHotspot('q7-tip', 'Prophet Muhammad SAW is titled Al-Amin (The Trustworthy) because he was always honest!')"
+               class="svg-hotspot bg-white rounded-2xl p-4 border-2 border-orange-300 flex items-center justify-center gap-4 shadow-sm">
+            <div class="text-4xl">🤝</div>
+            <div class="text-left">
+              <div class="font-display font-bold text-orange-800 text-base">Akhlak Terpuji: Sidiq (Honesty)</div>
+              <p class="text-xs sm:text-sm text-slate-600 font-semibold">Words + Actions = Truthful &amp; Trustworthy!</p>
+            </div>
+          </div>
+          <div id="q7-tip" class="text-xs font-bold text-orange-700 mt-1.5">Tap the card for a Prophet Muhammad SAW fact!</div>
+        </div>
+      `,
+
+      // Q8: Basmalah Card
+      q8_basmalah: () => `
+        <div class="w-full max-w-md text-center">
+          <div onclick="inspectHotspot('q8-tip', 'Basmalah means: In the name of Allah, the Most Gracious, the Most Merciful.')"
+               class="svg-hotspot bg-white rounded-2xl p-4 border-2 border-emerald-300 shadow-sm">
+            <div class="font-arabic text-3xl sm:text-4xl text-emerald-900 my-1">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيمِ</div>
+            <div class="text-xs font-bold text-emerald-700 mt-1">Say "Bismillahirrahmanirrahim" before eating, studying, or traveling!</div>
+          </div>
+          <div id="q8-tip" class="text-xs font-bold text-emerald-700 mt-1.5">Tap the Basmalah banner to see its meaning!</div>
+        </div>
+      `,
+
+      // Q9: Hamdalah Card
+      q9_hamdalah: () => `
+        <div class="w-full max-w-md text-center">
+          <div onclick="inspectHotspot('q9-tip', 'Alhamdulillah is Kalimat Thayyibah to show gratitude (Syukur) to Allah SWT!')"
+               class="svg-hotspot bg-white rounded-2xl p-4 border-2 border-amber-300 shadow-sm">
+            <div class="font-arabic text-3xl sm:text-4xl text-amber-900 my-1">اَلْحَمْدُ لِلّٰهِ رَبِّ الْعَالَمِينَ</div>
+            <div class="text-xs font-bold text-amber-700 mt-1">"All praise be to Allah, the Lord of the worlds."</div>
+          </div>
+          <div id="q9-tip" class="text-xs font-bold text-amber-700 mt-1.5">Tap the Hamdalah banner to learn more!</div>
+        </div>
+      `,
+
+      // Q10: 5 Statements about Surah Al-Falaq (from exam)
+      q10_alfalaq: () => `
+        <div class="grid grid-cols-1 gap-2 w-full max-w-xl text-xs sm:text-sm">
+          ${[
+            { n: 1, t: 'Surah Al-Falaq means "Daybreak" (Waktu Subuh).' },
+            { n: 2, t: 'Surah Al-Falaq was revealed in Madinah.' },
+            { n: 3, t: 'It is the 113th Surah in Al-Qur’an and consists of 5 verses.' },
+            { n: 4, t: 'Al-Falaq & An-Nas are called Al-Muawwidzatain (two protection readings).' },
+            { n: 5, t: 'Surah Al-Falaq explains that Allah does not beget and is not begotten.' }
+          ].map(s => `
+            <div onclick="inspectHotspot('q10-tip', 'Checking Statement ${s.n}... Look carefully at whether it is true or false!')"
+                 class="svg-hotspot bg-white px-3.5 py-2 rounded-xl border-2 border-rose-200 font-bold flex items-center gap-2.5">
+              <span class="w-6 h-6 rounded-full bg-rose-500 text-white text-xs flex items-center justify-center shrink-0">${s.n}</span>
+              <span class="text-slate-700">${s.t}</span>
+            </div>
+          `).join('')}
+          <div id="q10-tip" class="text-center text-xs font-bold text-rose-700 mt-1">Read statements 1 to 5 carefully before choosing 2 answers!</div>
+        </div>
+      `,
+
+      // Q11: Things That Invalidate Wudu
+      q11_wudu: () => `
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 w-full max-w-xl text-xs">
+          ${[
+            { icon: '🚽', label: '1. Urinating & defecating' },
+            { icon: '💨', label: '2. Passing wind (farting)' },
+            { icon: '🥤', label: '3. Drinking mineral water' },
+            { icon: '🛌', label: '4. Sleeping lying down' },
+            { icon: '💫', label: '5. Fainting / loss of memory' },
+            { icon: '🍎', label: '6. Eating halal fruit' }
+          ].map(item => `
+            <div onclick="inspectHotspot('q11-tip', '${item.label}')"
+                 class="svg-hotspot bg-white p-2.5 rounded-xl border-2 border-sky-200 text-center font-bold text-slate-700">
+              <div class="text-2xl mb-1">${item.icon}</div>
+              <div>${item.label}</div>
+            </div>
+          `).join('')}
+          <div id="q11-tip" class="col-span-2 sm:col-span-3 text-center text-xs font-bold text-sky-700 mt-1">Which actions break our Wudu so we must make Wudu again?</div>
+        </div>
+      `,
+
+      // Q12: 4 Arabic Words Hijaiyah Explorer
+      q12_words: () => `
+        <div class="w-full max-w-xl text-center">
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+            ${[
+              { ar: 'قُلْ', tr: 'Qul', info: 'Starts with Qaf (ق) with Dhammah + Lam (ل) with Sukun' },
+              { ar: 'أَحَدٌ', tr: 'Ahadun', info: 'Alif Fathah (أَ) + Ha Fathah (حَ) + Dal Dhammatain (دٌ)' },
+              { ar: 'الْفَلَقِ', tr: 'Al-Falaqi', info: 'Contains Alif, Lam, Fa (ف), Lam (ل), Qaf (ق)' },
+              { ar: 'النَّاسِ', tr: 'An-Nasi', info: 'Contains Alif, Lam, Nun with Tasydid (نّ), Alif, Sin (س)' }
+            ].map(w => `
+              <button type="button" onclick="inspectHotspot('q12-tip', '${w.tr}: ${w.info}')"
+                class="svg-hotspot bg-white p-3 rounded-2xl border-2 border-teal-300 hover:bg-teal-50 shadow-sm cursor-pointer">
+                <div class="font-arabic text-3xl text-teal-900 mb-1">${w.ar}</div>
+                <div class="text-xs font-extrabold text-teal-700">${w.tr}</div>
+              </button>
+            `).join('')}
+          </div>
+          <div id="q12-tip" class="text-xs font-bold text-teal-700 mt-2">Tap any Arabic word card to inspect its Hijaiyah letters &amp; Harakat!</div>
+        </div>
+      `,
+
+      // Q13: Keeping the Heart Clean & Avoiding Syirik
+      q13_heart: () => `
+        <div class="w-full max-w-md text-center">
+          <div onclick="inspectHotspot('q13-tip', 'Tauhid means worshipping ONLY Allah SWT and keeping our heart pure from envy (Hasad) and Syirik!')"
+               class="svg-hotspot bg-white rounded-2xl p-4 border-2 border-emerald-300 shadow-sm">
+            <div class="font-arabic text-3xl text-emerald-800 mb-1">سُبْحَانَ اللّٰهِ</div>
+            <div class="font-display font-bold text-slate-800 text-sm">Subhanallah (Glory be to Allah — The Most Holy)</div>
+            <p class="text-xs text-slate-500 mt-1">A pure heart loves Allah alone and wishes good for friends.</p>
+          </div>
+          <div id="q13-tip" class="text-xs font-bold text-emerald-700 mt-1.5">Tap the card to read the Tauhid reminder!</div>
+        </div>
+      `,
+
+      // Q14: Bedtime Sunnah (Wudu + Al-Muawwidzatain)
+      q14_bedtime: () => `
+        <div class="w-full max-w-lg text-center">
+          <div class="grid grid-cols-2 gap-3">
+            <div onclick="inspectHotspot('q14-tip', 'Performing Wudu before sleep keeps us clean and protected by angels!')"
+                 class="svg-hotspot bg-white p-3.5 rounded-2xl border-2 border-sky-300">
+              <div class="text-3xl mb-1">💧🤲</div>
+              <div class="font-display font-bold text-sky-800 text-sm">Wudu Before Sleep</div>
+            </div>
+            <div onclick="inspectHotspot('q14-tip', 'Al-Muawwidzatain = Surah Al-Falaq & Surah An-Nas (plus Al-Ikhlas) read before sleeping!')"
+                 class="svg-hotspot bg-white p-3.5 rounded-2xl border-2 border-indigo-300">
+              <div class="text-3xl mb-1">🌙📖</div>
+              <div class="font-display font-bold text-indigo-800 text-sm">Al-Muawwidzatain</div>
+            </div>
+          </div>
+          <div id="q14-tip" class="text-xs font-bold text-indigo-700 mt-2">Tap both bedtime Sunnah cards to see why they are special!</div>
+        </div>
+      `
+    };
+
+    // =========================================================================
+    // 3. 14 QUESTIONS DATA (7 MULTIPLE CHOICE + 7 COMPLEX MULTIPLE CHOICE)
+    // =========================================================================
+    const quizQuestions = [
+      // ---------------- SECTION 1: 7 MULTIPLE CHOICE ----------------
+      {
+        id: 1,
+        section: 1,
+        topic: 'Thoharoh',
+        type: 'single',
+        question: '1. Islam recommends squatting when urinating because...',
+        illustration: 'q1_hygiene',
+        options: [
+          'By squatting, urine can come out completely so it prevents urinary tract infection',
+          'By squatting, urine splashes on the wall or trousers',
+          'Peeing by squatting causes sickness',
+          'Peeing by standing makes peeing smoother'
+        ],
+        correct: [0],
+        explanation: 'Squatting helps empty the bladder completely, keeps clothes free from impure splashes (najis), and prevents urinary tract infection!'
+      },
+      {
+        id: 2,
+        section: 1,
+        topic: 'Thoharoh',
+        type: 'single',
+        question: '2. Read the 7 statements above! Which numbers belong to the 5 Pillars of Islam (Rukun Islam)?',
+        illustration: 'q2_pillars',
+        options: [
+          '1, 3, 4, 6, 7',
+          '2, 3, 5, 6, 7',
+          '2, 3, 4, 5, 6',
+          '1, 2, 4, 5, 6'
+        ],
+        correct: [1],
+        explanation: 'The 5 Pillars of Islam are: (2) Read Syahadatain, (3) Do Shalat, (5) Pay Zakat, (6) Fasting in Ramadhan, and (7) Go to Hajj for those who are able!'
+      },
+      {
+        id: 3,
+        section: 1,
+        topic: 'Hijaiyah Letter',
+        type: 'single',
+        question: '3. Tap each Hijaiyah letter tile to inspect it! Which Hijaiyah letter is the FIRST letter of the word "اَلْحَمْدُ" (Alhamdu)?',
+        illustration: 'q3_hijaiyah',
+        options: [
+          'Alif (ا)',
+          'Ba (ب)',
+          'Dal (د)',
+          'Mim (م)'
+        ],
+        correct: [0],
+        explanation: 'Arabic is written and read from right to left, so "اَلْحَمْدُ" begins on the right with the Hijaiyah letter Alif (ا)!'
+      },
+      {
+        id: 4,
+        section: 1,
+        topic: 'Surah Al-Ikhlas',
+        type: 'single',
+        question: '4. Which Surah in the Al-Qur’an explains that Allah is One (Ahad) and does not beget nor is begotten?',
+        illustration: 'q4_ikhlas',
+        options: [
+          'Surah Al-Ikhlas',
+          'Surah Al-Falaq',
+          'Surah An-Nas',
+          'Surah Al-Fatihah'
+        ],
+        correct: [0],
+        explanation: 'Surah Al-Ikhlas teaches pure belief in Allah (Tauhid): Allah is One, Eternal, and has no parents or children.'
+      },
+      {
+        id: 5,
+        section: 1,
+        topic: 'Surah An-Nas',
+        type: 'single',
+        question: '5. In Surah An-Nas ("Say: I seek refuge in the Lord of mankind"), who do we ask for protection from the evil whisperings of jinn and humans?',
+        illustration: 'q5_annas',
+        options: [
+          'Allah SWT, the Lord of mankind',
+          'Our classmates',
+          'Angels only',
+          'Wealth and toys'
+        ],
+        correct: [0],
+        explanation: 'We seek refuge and protection ONLY in Allah SWT, the Lord, King, and God of all mankind.'
+      },
+      {
+        id: 6,
+        section: 1,
+        topic: 'Thoharoh',
+        type: 'single',
+        question: '6. Mr. Arkan is on an airplane and cannot find water to perform ablution for Ashar prayer. What is the pure substitute for ablution (wudu) when there is no water?',
+        illustration: 'q6_tayammum',
+        options: [
+          'Tayammum using clean dust/earth',
+          'Washing with apple juice',
+          'Skipping the prayer completely',
+          'Wiping with dry tissue only'
+        ],
+        correct: [0],
+        explanation: 'Tayammum is the Islamic way to purify ourselves using clean, pure dust/earth when water is unavailable or cannot be used.'
+      },
+      {
+        id: 7,
+        section: 1,
+        topic: 'Akhlak Terpuji',
+        type: 'single',
+        question: '7. Being honest (Sidiq) is a noble character (Akhlak Terpuji). What does being "Honest" mean in our daily life?',
+        illustration: 'q7_honesty',
+        options: [
+          'Your words match your actions and what you say is true',
+          'Saying whatever makes friends laugh',
+          'Hiding mistakes from parents and teachers',
+          'Only telling the truth when given a prize'
+        ],
+        correct: [0],
+        explanation: 'Honesty means speaking the truth and making sure our actions match our words—Allah loves honest children!'
+      },
+
+      // ---------------- SECTION 2: 7 COMPLEX MULTIPLE CHOICE (CHOOSE 2) ----------------
+      {
+        id: 8,
+        section: 2,
+        topic: 'Akhlak Terpuji',
+        type: 'complex',
+        question: '8. Basmalah is a good sentence (Kalimat Thayyibah). Why must we read "Basmalah" before starting our activities? (Choose 2 correct answers)',
+        illustration: 'q8_basmalah',
+        options: [
+          'In order not to get angry from parents',
+          'In order to make our activities easier',
+          'In order not to get punishment from teachers',
+          'Allah will give pleasure and blessing (Barakah) to our activities'
+        ],
+        correct: [1, 3],
+        explanation: 'Reading Bismillah before good activities asks Allah to make our work easier and fill it with His pleasure and blessings!'
+      },
+      {
+        id: 9,
+        section: 2,
+        topic: 'Akhlak Terpuji',
+        type: 'complex',
+        question: '9. The meaning of "اَلْحَمْدُ لِلّٰهِ رَبِّ الْعَالَمِينَ" is "All praise be to Allah, the Lord of the worlds." Why should we read it after finishing activities? (Choose 2 correct answers)',
+        illustration: 'q9_hamdalah',
+        options: [
+          'In order to get money from parents',
+          'As our gratitude (Syukur) to Allah for carrying out our activities well',
+          'In order not to get punishment from teachers',
+          'To thank Allah for all His blessings and help'
+        ],
+        correct: [1, 3],
+        explanation: 'Saying Hamdalah (Alhamdulillah) expresses gratitude to Allah for helping us finish our activities safely and well!'
+      },
+      {
+        id: 10,
+        section: 2,
+        topic: 'Surah Al-Falaq',
+        type: 'complex',
+        question: '10. Look at the 5 statements about Surah Al-Falaq! Which 2 options are TRUE?',
+        illustration: 'q10_alfalaq',
+        options: [
+          'Statements 1 and 3 are true (means Daybreak, 113th Surah, 5 verses)',
+          'Statements 2 and 5 are true',
+          'Statement 4 is true (Al-Muawwidzatain means two protection readings)',
+          'Surah Al-Falaq has 7 verses'
+        ],
+        correct: [0, 2],
+        explanation: 'Surah Al-Falaq means Daybreak, is the 113th Surah with 5 verses (revealed in Makkah), and together with An-Nas is called Al-Muawwidzatain!'
+      },
+      {
+        id: 11,
+        section: 2,
+        topic: 'Thoharoh',
+        type: 'complex',
+        question: '11. Which conditions make our ablution (Wudu) INVALID so we have to make Wudu again? (Choose 2 correct groups)',
+        illustration: 'q11_wudu',
+        options: [
+          '1 & 2: Urinating, defecating, and passing wind (farting)',
+          '3: Drinking clean mineral water',
+          '4 & 5: Deep sleeping while lying down and fainting (loss of memory)',
+          '6: Eating halal apples'
+        ],
+        correct: [0, 2],
+        explanation: 'Urinating, defecating, passing wind, sleeping while lying down, and fainting invalidate Wudu. Eating and drinking do NOT break Wudu.'
+      },
+      {
+        id: 12,
+        section: 2,
+        topic: 'Hijaiyah Letter',
+        type: 'complex',
+        question: '12. Inspect the 4 Arabic words above! Which 2 statements about their Hijaiyah letters and Harakat are TRUE?',
+        illustration: 'q12_words',
+        options: [
+          'The word "أَحَدٌ" starts with Alif Fathah (أَ) and ends with Dal Dhammatain (دٌ)',
+          'The word "قُلْ" starts with the letter Kaf (ك)',
+          'The word "الْفَلَقِ" contains the Hijaiyah letters Fa (ف), Lam (ل), and Qaf (ق)',
+          'Harakat Kasrah makes an "U" sound'
+        ],
+        correct: [0, 2],
+        explanation: '"أَحَدٌ" starts with Alif Fathah (أَ) and ends with Dal Dhammatain (دٌ), and "الْفَلَقِ" contains Fa (ف), Lam (ل), and Qaf (ق)!'
+      },
+      {
+        id: 13,
+        section: 2,
+        topic: 'Akhlak Terpuji',
+        type: 'complex',
+        question: '13. How can a good Muslim keep their heart clean and stay away from Syirik (associating partners with Allah)? (Choose 2 correct answers)',
+        illustration: 'q13_heart',
+        options: [
+          'Worship and pray ONLY to Allah SWT and never associate partners with Him',
+          'Feel jealous (Hasad) of a friend’s new bag',
+          'Remember Allah (Dzikir / Subhanallah) and forgive others sincerely',
+          'Show off good deeds just to get praise'
+        ],
+        correct: [0, 2],
+        explanation: 'We avoid Syirik by worshipping Allah alone, and we keep our heart clean through Dzikir (Subhanallah), sincerity, and forgiving others.'
+      },
+      {
+        id: 14,
+        section: 2,
+        topic: 'Surah Al-Fatihah & An-Nas',
+        type: 'complex',
+        question: '14. Which 2 good Islamic habits are recommended before going to sleep at night?',
+        illustration: 'q14_bedtime',
+        options: [
+          'Taking ablution (Wudu) so we sleep in a pure and clean state',
+          'Eating lots of candy without brushing teeth',
+          'Reciting Surah Al-Ikhlas, Al-Falaq, and An-Nas (Al-Muawwidzatain) for Allah’s protection',
+          'Staying awake playing games until morning'
+        ],
+        correct: [0, 2],
+        explanation: 'Performing Wudu and reciting Surah Al-Ikhlas, Al-Falaq, and An-Nas (Al-Muawwidzatain) brings Allah’s protection while we sleep!'
+      }
+    ];
+
+    // =========================================================================
+    // 4. QUIZ ENGINE FOR SECTIONS 1 & 2
+    // =========================================================================
+    let currentIndex = 0;
+    let score = 0;
+    let selectedMulti = new Set();
+    let isLocked = false;
+    let userHistory = []; // Stores review records for all 20 items
+
+    function startQuiz() {
+      playFx('link');
+      document.getElementById('welcome-screen').classList.add('hidden');
+      document.getElementById('quiz-screen').classList.remove('hidden');
+      document.getElementById('header-score-pill').classList.remove('hidden');
+      document.getElementById('header-score-pill').classList.add('flex');
+      currentIndex = 0;
+      score = 0;
+      userHistory = [];
+      updateScoreUI();
+      renderCurrentQuestion();
+    }
+
+    function updateScoreUI() {
+      document.getElementById('live-score').textContent = score;
+    }
+
+    function renderCurrentQuestion() {
+      isLocked = false;
+      selectedMulti.clear();
+      const q = quizQuestions[currentIndex];
+
+      // Section & Topic Badges
+      const secBadge = document.getElementById('section-badge');
+      const complexBanner = document.getElementById('complex-banner');
+      if (q.section === 1) {
+        secBadge.textContent = 'Section 1: Multiple Choice';
+        secBadge.className = 'bg-emerald-500 text-white font-display font-bold text-xs sm:text-sm px-3 py-1 rounded-xl';
+        complexBanner.classList.add('hidden');
+      } else {
+        secBadge.textContent = 'Section 2: Complex Multiple Choice';
+        secBadge.className = 'bg-purple-600 text-white font-display font-bold text-xs sm:text-sm px-3 py-1 rounded-xl';
+        complexBanner.classList.remove('hidden');
+      }
+
+      document.getElementById('topic-badge').textContent = q.topic;
+      document.getElementById('question-counter').textContent = `Question ${currentIndex + 1} of 20`;
+      document.getElementById('progress-bar').style.width = `${((currentIndex + 1) / 20) * 100}%`;
+
+      // Question Title & SVG
+      document.getElementById('question-text').textContent = q.question;
+      document.getElementById('illustration-stage').innerHTML = ILLUSTRATIONS[q.illustration]();
+
+      // Render Option Cards
+      const grid = document.getElementById('options-grid');
+      grid.innerHTML = '';
+      const letters = ['A', 'B', 'C', 'D'];
+
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.id = `q-opt-${idx}`;
+        btn.type = 'button';
+        btn.className = 'w-full text-left p-4 rounded-2xl border-2 border-slate-200 bg-white hover:border-emerald-400 hover:bg-emerald-50/50 transition flex items-center gap-3.5 cursor-pointer shadow-sm';
+
+        const iconBox = q.type === 'single'
+          ? `<span id="q-badge-${idx}" class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 font-display font-bold flex items-center justify-center shrink-0">${letters[idx]}</span>`
+          : `<span id="q-badge-${idx}" class="w-8 h-8 rounded-lg border-2 border-purple-300 bg-purple-50 text-purple-700 font-bold flex items-center justify-center shrink-0"></span>`;
+
+        btn.innerHTML = `${iconBox}<span class="font-bold text-slate-700 text-sm sm:text-base leading-snug">${opt}</span>`;
+        btn.onclick = () => onOptionClick(idx);
+        grid.appendChild(btn);
+      });
+
+      // Reset Feedback & Footer Buttons
+      document.getElementById('feedback-banner').classList.add('hidden');
+      document.getElementById('next-question-btn').classList.add('hidden');
+      const checkBtn = document.getElementById('check-complex-btn');
+      if (q.type === 'complex') {
+        checkBtn.classList.remove('hidden');
+      } else {
+        checkBtn.classList.add('hidden');
+      }
+
+      // Replay Card Pop Animation
+      const card = document.getElementById('question-card');
+      card.classList.remove('animate-pop');
+      void card.offsetWidth;
+      card.classList.add('animate-pop');
+    }
+
+    function onOptionClick(idx) {
+      if (isLocked) return;
+      const q = quizQuestions[currentIndex];
+
+      if (q.type === 'single') {
+        isLocked = true;
+        const isRight = q.correct.includes(idx);
+        styleEvaluatedOptions(q, [idx]);
+        displayQuestionFeedback(isRight, q.explanation);
+        if (isRight) {
+          score++;
+          updateScoreUI();
+          playFx('correct');
+        } else {
+          playFx('wrong');
+        }
+        recordHistory(q, [idx], isRight);
+        showNextControl();
+      } else {
+        playFx('tap');
+        const btn = document.getElementById(`q-opt-${idx}`);
+        const badge = document.getElementById(`q-badge-${idx}`);
+        if (selectedMulti.has(idx)) {
+          selectedMulti.delete(idx);
+          btn.classList.remove('border-purple-500', 'bg-purple-50');
+          btn.classList.add('border-slate-200', 'bg-white');
+          badge.textContent = '';
+          badge.classList.remove('bg-purple-600', 'text-white', 'border-purple-600');
+        } else {
+          selectedMulti.add(idx);
+          btn.classList.remove('border-slate-200', 'bg-white');
+          btn.classList.add('border-purple-500', 'bg-purple-50');
+          badge.textContent = '✓';
+          badge.classList.add('bg-purple-600', 'text-white', 'border-purple-600');
+        }
+      }
+    }
+
+    function submitComplexQuestion() {
+      if (isLocked) return;
+      const q = quizQuestions[currentIndex];
+      if (selectedMulti.size === 0) {
+        playFx('wrong');
+        const fb = document.getElementById('feedback-banner');
+        fb.className = 'rounded-2xl p-4 mb-5 border-2 border-amber-300 bg-amber-50 text-amber-800 animate-pop';
+        document.getElementById('feedback-emoji').textContent = '☝️';
+        document.getElementById('feedback-heading').textContent = 'Please select your answers first!';
+        document.getElementById('feedback-text').textContent = 'Tap 2 answer boxes that are true, then click "Check My Answers".';
+        fb.classList.remove('hidden');
+        return;
+      }
+
+      isLocked = true;
+      document.getElementById('check-complex-btn').classList.add('hidden');
+
+      const chosen = Array.from(selectedMulti).sort();
+      const expected = [...q.correct].sort();
+      const isRight = chosen.length === expected.length && chosen.every((v, i) => v === expected[i]);
+
+      styleEvaluatedOptions(q, chosen);
+      displayQuestionFeedback(isRight, q.explanation);
+
+      if (isRight) {
+        score++;
+        updateScoreUI();
+        playFx('correct');
+      } else {
+        playFx('wrong');
+      }
+      recordHistory(q, chosen, isRight);
+      showNextControl();
+    }
+
+    function styleEvaluatedOptions(q, chosenArr) {
+      q.options.forEach((_, idx) => {
+        const btn = document.getElementById(`q-opt-${idx}`);
+        const badge = document.getElementById(`q-badge-${idx}`);
+        btn.disabled = true;
+        btn.classList.remove('hover:border-emerald-400', 'hover:bg-emerald-50/50', 'border-purple-500', 'bg-purple-50');
+
+        const isCorrect = q.correct.includes(idx);
+        const wasSelected = chosenArr.includes(idx);
+
+        if (isCorrect) {
+          btn.classList.add('border-emerald-500', 'bg-emerald-50');
+          badge.className = 'w-9 h-9 rounded-xl bg-emerald-500 text-white font-display font-bold flex items-center justify-center shrink-0';
+          badge.textContent = '✓';
+        } else if (wasSelected && !isCorrect) {
+          btn.classList.add('border-rose-500', 'bg-rose-50');
+          badge.className = 'w-9 h-9 rounded-xl bg-rose-500 text-white font-display font-bold flex items-center justify-center shrink-0';
+          badge.textContent = '✕';
+        } else {
+          btn.classList.add('opacity-55');
+        }
+      });
+    }
+
+    function displayQuestionFeedback(isRight, explanation) {
+      const fb = document.getElementById('feedback-banner');
+      fb.classList.remove('hidden');
+      if (isRight) {
+        fb.className = 'rounded-2xl p-4 mb-5 border-2 border-emerald-400 bg-emerald-50 text-emerald-900 animate-pop';
+        document.getElementById('feedback-emoji').textContent = '🌟';
+        document.getElementById('feedback-heading').textContent = 'MashaAllah! Correct Answer!';
+      } else {
+        fb.className = 'rounded-2xl p-4 mb-5 border-2 border-rose-300 bg-rose-50 text-rose-900 animate-pop';
+        document.getElementById('feedback-emoji').textContent = '💡';
+        document.getElementById('feedback-heading').textContent = 'Good Try! Look at the Green Highlighted Answer:';
+      }
+      document.getElementById('feedback-text').textContent = explanation;
+    }
+
+    function recordHistory(q, chosenIndices, isCorrect) {
+      userHistory.push({
+        num: q.id,
+        topic: q.topic,
+        question: q.question,
+        userAnswer: chosenIndices.map(i => q.options[i]).join(' + '),
+        correctAnswer: q.correct.map(i => q.options[i]).join(' + '),
+        isCorrect,
+        explanation: q.explanation
+      });
+    }
+
+    function showNextControl() {
+      const btn = document.getElementById('next-question-btn');
+      const label = document.getElementById('next-btn-label');
+      label.textContent = currentIndex === quizQuestions.length - 1
+        ? 'Go to Section 3: Line Matching'
+        : 'Next Question';
+      btn.classList.remove('hidden');
+    }
+
+    function advanceQuestion() {
+      playFx('tap');
+      if (currentIndex < quizQuestions.length - 1) {
+        currentIndex++;
+        renderCurrentQuestion();
+      } else {
+        document.getElementById('quiz-screen').classList.add('hidden');
+        document.getElementById('matching-screen').classList.remove('hidden');
+        setupMatchingBoard();
+      }
+    }
+
+    // =========================================================================
+    // 5. SECTION 3: 6-PAIR LINE-DRAWING MATCHING (ASMAUL HUSNA, AL-FATIHAH, THOHAROH)
+    // =========================================================================
+    const leftMatchCards = [
+      {
+        id: 'ML1',
+        pairKey: 'muhaimin',
+        topic: 'Asmaul Husna',
+        title: 'Al-Muhaimin',
+        subtitle: 'Asmaul Husna',
+        svg: `<svg viewBox="0 0 48 48" class="w-10 h-10 shrink-0">
+          <path d="M24 4 L40 11 V23 C40 34 33 41 24 44 C15 41 8 34 8 23 V11 Z" fill="#a7f3d0" stroke="#059669" stroke-width="2.5"/>
+          <circle cx="24" cy="23" r="6" fill="#059669"/>
+        </svg>`
+      },
+      {
+        id: 'ML2',
+        pairKey: 'aziz',
+        topic: 'Asmaul Husna',
+        title: 'Al-Aziz',
+        subtitle: 'Asmaul Husna',
+        svg: `<svg viewBox="0 0 48 48" class="w-10 h-10 shrink-0">
+          <polygon points="8,36 12,16 24,25 36,16 40,36" fill="#fde047" stroke="#ca8a04" stroke-width="2.5" stroke-linejoin="round"/>
+          <rect x="8" y="36" width="32" height="5" rx="2" fill="#eab308"/>
+        </svg>`
+      },
+      {
+        id: 'ML3',
+        pairKey: 'jabbar',
+        topic: 'Asmaul Husna',
+        title: 'Al-Jabbar',
+        subtitle: 'Asmaul Husna',
+        svg: `<svg viewBox="0 0 48 48" class="w-10 h-10 shrink-0">
+          <polygon points="24,8 42,40 6,40" fill="#bae6fd" stroke="#0284c7" stroke-width="2.5" stroke-linejoin="round"/>
+          <polygon points="24,8 30,19 24,16 18,19" fill="#ffffff"/>
+        </svg>`
+      },
+      {
+        id: 'ML4',
+        pairKey: 'fatihah',
+        topic: 'Surah Al-Fatihah',
+        title: "Ummul Qur'an & Assab'ul Matsani",
+        subtitle: 'Other Names of Al-Fatihah',
+        svg: `<svg viewBox="0 0 48 48" class="w-10 h-10 shrink-0">
+          <path d="M8 14 C15 11, 24 14, 24 14 C24 14, 33 11, 40 14 V36 C33 33, 24 36, 24 36 C24 36, 15 33, 8 36 Z" fill="#fef3c7" stroke="#d97706" stroke-width="2.5"/>
+          <line x1="24" y1="14" x2="24" y2="36" stroke="#d97706" stroke-width="2"/>
+        </svg>`
+      },
+      {
+        id: 'ML5',
+        pairKey: 'mughallazhah',
+        topic: 'Thoharoh (Najis)',
+        title: 'Najis Mughallazhah',
+        subtitle: 'Dog saliva licking a bowl',
+        svg: `<svg viewBox="0 0 48 48" class="w-10 h-10 shrink-0">
+          <circle cx="24" cy="20" r="11" fill="#cbd5e1" stroke="#475569" stroke-width="2"/>
+          <ellipse cx="14" cy="18" rx="4" ry="8" fill="#64748b"/>
+          <ellipse cx="34" cy="18" rx="4" ry="8" fill="#64748b"/>
+          <circle cx="20" cy="18" r="1.8" fill="#0f172a"/>
+          <circle cx="28" cy="18" r="1.8" fill="#0f172a"/>
+          <path d="M22 25 Q24 32 26 25" fill="#f43f5e"/>
+          <path d="M13 36 H35 L32 42 H16 Z" fill="#38bdf8" stroke="#0284c7" stroke-width="1.5"/>
+        </svg>`
+      },
+      {
+        id: 'ML6',
+        pairKey: 'mukhaffafah',
+        topic: 'Thoharoh (Najis)',
+        title: 'Mukhaffafah & Mutawassithah',
+        subtitle: 'Baby boy pee / Blood & vomit',
+        svg: `<svg viewBox="0 0 48 48" class="w-10 h-10 shrink-0">
+          <circle cx="17" cy="20" r="9" fill="#fed7aa" stroke="#ea580c" stroke-width="2"/>
+          <circle cx="14" cy="19" r="1.5" fill="#7c2d12"/>
+          <circle cx="20" cy="19" r="1.5" fill="#7c2d12"/>
+          <path d="M35 14 C29 23, 29 30, 35 33 C41 30, 41 23, 35 14 Z" fill="#38bdf8" stroke="#0284c7" stroke-width="2"/>
+        </svg>`
+      }
+    ];
+
+    // Shuffled Right Column Targets
+    const rightMatchCards = [
+      {
+        id: 'MR1',
+        pairKey: 'aziz',
+        text: 'Strong to face problems (The Almighty)'
+      },
+      {
+        id: 'MR2',
+        pairKey: 'mughallazhah',
+        text: 'Wash 7 times with pure water, one mixed with clean soil'
+      },
+      {
+        id: 'MR3',
+        pairKey: 'muhaimin',
+        text: 'Take care of what we have (The Protector)'
+      },
+      {
+        id: 'MR4',
+        pairKey: 'mukhaffafah',
+        text: 'Sprinkle pure water (baby boy <2 yrs) / Wash until smell, taste & color are gone'
+      },
+      {
+        id: 'MR5',
+        pairKey: 'jabbar',
+        text: 'Beat laziness with strong willpower (The Compeller)'
+      },
+      {
+        id: 'MR6',
+        pairKey: 'fatihah',
+        text: "The Mother of Al-Qur'an & 7 repeated verses in Shalat"
+      }
+    ];
+
+    const lineColors = ['#059669', '#d97706', '#0284c7', '#9333ea', '#e11d48', '#0d9488'];
+    let matchLines = []; // { leftId, rightId, color, state: 'pending'|'correct'|'wrong' }
+    let activeLeftId = null;
+    let draggingNow = false;
+    let pointerXY = null;
+    let matchingChecked = false;
+
+    function setupMatchingBoard() {
+      matchLines = [];
+      activeLeftId = null;
+      draggingNow = false;
+      matchingChecked = false;
+
+      const leftCol = document.getElementById('match-left-col');
+      const rightCol = document.getElementById('match-right-col');
+      leftCol.innerHTML = '';
+      rightCol.innerHTML = '';
+
+      leftMatchCards.forEach((item) => {
+        const div = document.createElement('div');
+        div.id = `mcard-${item.id}`;
+        div.dataset.leftId = item.id;
+        div.className = 'bg-slate-50 hover:bg-emerald-50 border-2 border-slate-300 rounded-2xl p-2.5 sm:p-3 flex items-center justify-between gap-2 cursor-pointer transition shadow-sm';
+        div.innerHTML = `
+          <div class="flex items-center gap-2.5 pointer-events-none">
+            ${item.svg}
+            <div>
+              <div class="font-display font-bold text-slate-800 text-xs sm:text-sm leading-tight">${item.title}</div>
+              <div class="text-[11px] font-semibold text-slate-500">${item.subtitle}</div>
+            </div>
+          </div>
+          <div id="mdot-${item.id}" class="w-6 h-6 rounded-full bg-white border-4 border-emerald-500 shrink-0 flex items-center justify-center shadow">
+            <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+          </div>
+        `;
+
+        div.addEventListener('pointerdown', (e) => {
+          if (matchingChecked) return;
+          e.preventDefault();
+          beginLineFromLeft(item.id, e);
+        });
+
+        leftCol.appendChild(div);
+      });
+
+      rightMatchCards.forEach((item) => {
+        const div = document.createElement('div');
+        div.id = `mcard-${item.id}`;
+        div.dataset.rightId = item.id;
+        div.className = 'bg-slate-50 hover:bg-amber-50 border-2 border-slate-300 rounded-2xl p-2.5 sm:p-3 flex items-center gap-2.5 cursor-pointer transition shadow-sm';
+        div.innerHTML = `
+          <div id="mdot-${item.id}" class="w-6 h-6 rounded-full bg-white border-4 border-amber-500 shrink-0 flex items-center justify-center shadow">
+            <div class="w-2 h-2 rounded-full bg-amber-500"></div>
+          </div>
+          <div class="font-bold text-slate-700 text-xs sm:text-sm leading-snug pointer-events-none">${item.text}</div>
+        `;
+
+        div.addEventListener('pointerup', () => {
+          if (matchingChecked) return;
+          if (activeLeftId) finishLineToRight(item.id);
+        });
+
+        rightCol.appendChild(div);
+      });
+
+      window.addEventListener('pointermove', handleBoardPointerMove);
+      window.addEventListener('pointerup', handleBoardPointerUp);
+      window.addEventListener('resize', drawAllMatchLines);
+      drawAllMatchLines();
+    }
+
+    function beginLineFromLeft(leftId, e) {
+      playFx('tap');
+      matchLines = matchLines.filter(l => l.leftId !== leftId);
+      activeLeftId = leftId;
+      draggingNow = true;
+
+      leftMatchCards.forEach(c => {
+        const el = document.getElementById(`mcard-${c.id}`);
+        if (el) {
+          el.classList.toggle('ring-4', c.id === leftId);
+          el.classList.toggle('ring-emerald-300', c.id === leftId);
+        }
+      });
+
+      const rect = document.getElementById('matching-arena').getBoundingClientRect();
+      pointerXY = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+      drawAllMatchLines();
+    }
+
+    function handleBoardPointerMove(e) {
+      if (!draggingNow || !activeLeftId) return;
+      const arena = document.getElementById('matching-arena');
+      if (!arena) return;
+      const rect = arena.getBoundingClientRect();
+      pointerXY = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+      drawAllMatchLines();
+    }
+
+    function handleBoardPointerUp(e) {
+      if (!draggingNow) return;
+      draggingNow = false;
+      const target = document.elementFromPoint(e.clientX, e.clientY);
+      const rCard = target ? target.closest('[data-right-id]') : null;
+      if (rCard && activeLeftId) {
+        finishLineToRight(rCard.dataset.rightId);
+      } else {
+        pointerXY = null;
+        drawAllMatchLines();
+      }
+    }
+
+    function finishLineToRight(rightId) {
+      if (!activeLeftId) return;
+      playFx('link');
+
+      matchLines = matchLines.filter(l => l.leftId !== activeLeftId && l.rightId !== rightId);
+      const idx = leftMatchCards.findIndex(c => c.id === activeLeftId);
+      matchLines.push({
+        leftId: activeLeftId,
+        rightId: rightId,
+        color: lineColors[idx % lineColors.length],
+        state: 'pending'
+      });
+
+      const leftCard = document.getElementById(`mcard-${activeLeftId}`);
+      if (leftCard) leftCard.classList.remove('ring-4', 'ring-emerald-300');
+
+      activeLeftId = null;
+      draggingNow = false;
+      pointerXY = null;
+      drawAllMatchLines();
+    }
+
+    function getAnchorCenter(dotId) {
+      const arena = document.getElementById('matching-arena');
+      const dot = document.getElementById(dotId);
+      if (!arena || !dot) return { x: 0, y: 0 };
+      const a = arena.getBoundingClientRect();
+      const d = dot.getBoundingClientRect();
+      return {
+        x: d.left - a.left + d.width / 2,
+        y: d.top - a.top + d.height / 2
+      };
+    }
+
+    function drawAllMatchLines() {
+      const svg = document.getElementById('matching-svg');
+      if (!svg) return;
+      svg.innerHTML = '';
+
+      matchLines.forEach(line => {
+        const p1 = getAnchorCenter(`mdot-${line.leftId}`);
+        const p2 = getAnchorCenter(`mdot-${line.rightId}`);
+        let color = line.color;
+        if (line.state === 'correct') color = '#16a34a';
+        if (line.state === 'wrong') color = '#e11d48';
+
+        const midX = (p1.x + p2.x) / 2;
+        const d = `M ${p1.x} ${p1.y} C ${midX} ${p1.y}, ${midX} ${p2.y}, ${p2.x} ${p2.y}`;
+
+        const outline = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        outline.setAttribute('d', d);
+        outline.setAttribute('fill', 'none');
+        outline.setAttribute('stroke', '#ffffff');
+        outline.setAttribute('stroke-width', '8');
+        outline.setAttribute('stroke-linecap', 'round');
+        svg.appendChild(outline);
+
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', d);
+        path.setAttribute('fill', 'none');
+        path.setAttribute('stroke', color);
+        path.setAttribute('stroke-width', '4.5');
+        path.setAttribute('stroke-linecap', 'round');
+        if (line.state === 'wrong') path.setAttribute('stroke-dasharray', '8 6');
+        svg.appendChild(path);
+
+        [p1, p2].forEach(pt => {
+          const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          dot.setAttribute('cx', pt.x);
+          dot.setAttribute('cy', pt.y);
+          dot.setAttribute('r', '5.5');
+          dot.setAttribute('fill', color);
+          svg.appendChild(dot);
+        });
+      });
+
+      if (draggingNow && activeLeftId && pointerXY) {
+        const p1 = getAnchorCenter(`mdot-${activeLeftId}`);
+        const p2 = pointerXY;
+        const midX = (p1.x + p2.x) / 2;
+        const preview = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        preview.setAttribute('d', `M ${p1.x} ${p1.y} C ${midX} ${p1.y}, ${midX} ${p2.y}, ${p2.x} ${p2.y}`);
+        preview.setAttribute('fill', 'none');
+        preview.setAttribute('stroke', '#10b981');
+        preview.setAttribute('stroke-width', '4');
+        preview.setAttribute('stroke-dasharray', '6 6');
+        preview.setAttribute('stroke-linecap', 'round');
+        svg.appendChild(preview);
+      }
+
+      document.getElementById('match-progress-text').textContent = `${matchLines.length} / 6 lines drawn`;
+    }
+
+    function clearMatchingLines() {
+      if (matchingChecked) return;
+      playFx('tap');
+      matchLines = [];
+      activeLeftId = null;
+      document.getElementById('matching-feedback').classList.add('hidden');
+      drawAllMatchLines();
+    }
+
+    function evaluateMatchingSection() {
+      if (matchingChecked) return;
+      const fb = document.getElementById('matching-feedback');
+
+      if (matchLines.length < 6) {
+        playFx('wrong');
+        fb.className = 'rounded-2xl p-4 my-4 border-2 border-amber-300 bg-amber-50 text-amber-800 font-bold text-sm animate-pop';
+        fb.textContent = `☝️ Please connect all 6 pairs first! You have drawn ${matchLines.length} of 6 lines.`;
+        fb.classList.remove('hidden');
+        return;
+      }
+
+      matchingChecked = true;
+      let earnedMatches = 0;
+
+      leftMatchCards.forEach((lCard, i) => {
+        const conn = matchLines.find(m => m.leftId === lCard.id);
+        const chosenRight = rightMatchCards.find(r => r.id === conn.rightId);
+        const correctRight = rightMatchCards.find(r => r.pairKey === lCard.pairKey);
+        const cardEl = document.getElementById(`mcard-${lCard.id}`);
+        const isPairRight = chosenRight && chosenRight.pairKey === lCard.pairKey;
+
+        if (isPairRight) {
+          conn.state = 'correct';
+          earnedMatches++;
+          cardEl.classList.add('border-emerald-500', 'bg-emerald-50');
+        } else {
+          conn.state = 'wrong';
+          cardEl.classList.add('border-rose-500', 'bg-rose-50');
+        }
+
+        userHistory.push({
+          num: 15 + i,
+          topic: lCard.topic,
+          question: `Match: ${lCard.title} (${lCard.subtitle})`,
+          userAnswer: chosenRight ? chosenRight.text : 'No match',
+          correctAnswer: correctRight.text,
+          isCorrect: isPairRight,
+          explanation: `${lCard.title} matches with "${correctRight.text}".`
+        });
+      });
+
+      score += earnedMatches;
+      updateScoreUI();
+      drawAllMatchLines();
+
+      if (earnedMatches === 6) {
+        playFx('correct');
+        fb.className = 'rounded-2xl p-4 my-4 border-2 border-emerald-400 bg-emerald-50 text-emerald-900 font-bold text-sm sm:text-base animate-pop';
+        fb.textContent = '🌟 MashaAllah! All 6 lines are matched accurately!';
+      } else {
+        playFx('wrong');
+        fb.className = 'rounded-2xl p-4 my-4 border-2 border-amber-400 bg-amber-50 text-amber-900 font-bold text-sm animate-pop';
+        fb.textContent = `✨ You matched ${earnedMatches} out of 6 pairs correctly! Green lines = correct, Red dashed lines = incorrect.`;
+      }
+      fb.classList.remove('hidden');
+
+      document.getElementById('undo-lines-btn').classList.add('hidden');
+      document.getElementById('check-matching-btn').classList.add('hidden');
+      document.getElementById('finish-adventure-btn').classList.remove('hidden');
+    }
+
+    // =========================================================================
+    // 6. FINAL CERTIFICATE, DETAILED REVIEW & CONFETTI
+    // =========================================================================
+    function openFinalCertificate() {
+      playFx('celebrate');
+      document.getElementById('matching-screen').classList.add('hidden');
+      document.getElementById('result-screen').classList.remove('hidden');
+
+      const nameInput = document.getElementById('student-name').value.trim();
+      document.getElementById('cert-name-display').textContent = nameInput || 'Grade 1 ICP Star';
+
+      const pct = Math.round((score / 20) * 100);
+      document.getElementById('final-percentage').textContent = pct;
+      document.getElementById('final-fraction').textContent = `${score} / 20 Stars`;
+
+      if (pct >= 85) {
+        document.getElementById('cert-message').textContent = 'Alhamdulillah! Outstanding achievement in Islamic Studies!';
+      } else if (pct >= 65) {
+        document.getElementById('cert-message').textContent = 'Great effort! Review the explanations below to earn all 20 stars!';
+      } else {
+        document.getElementById('cert-message').textContent = 'Keep learning and practicing! Review each question below and try again.';
+      }
+
+      renderAnswerReviewList();
+      fireConfetti();
+    }
+
+    function renderAnswerReviewList() {
+      const container = document.getElementById('review-list');
+      container.innerHTML = userHistory.map(item => `
+        <div class="p-4 rounded-2xl border-2 ${item.isCorrect ? 'border-emerald-200 bg-emerald-50/50' : 'border-rose-200 bg-rose-50/50'}">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+            <span class="text-xs font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-lg ${item.isCorrect ? 'bg-emerald-200 text-emerald-900' : 'bg-rose-200 text-rose-900'}">
+              Item #${item.num} • ${item.topic}
+            </span>
+            <span class="font-display font-bold text-sm ${item.isCorrect ? 'text-emerald-700' : 'text-rose-700'}">
+              ${item.isCorrect ? '✅ Correct (+1 ⭐)' : '❌ Needs Review'}
+            </span>
+          </div>
+          <p class="font-bold text-slate-800 text-sm sm:text-base mb-1.5">${item.question}</p>
+          <div class="text-xs sm:text-sm space-y-1">
+            <div><span class="font-bold text-slate-500">Your Answer:</span> <span class="font-semibold ${item.isCorrect ? 'text-emerald-800' : 'text-rose-700'}">${item.userAnswer}</span></div>
+            ${!item.isCorrect ? `<div><span class="font-bold text-slate-500">Correct Answer:</span> <span class="font-bold text-emerald-800">${item.correctAnswer}</span></div>` : ''}
+            <div class="text-slate-600 italic pt-1">💡 ${item.explanation}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function toggleReviewPanel() {
+      playFx('tap');
+      const panel = document.getElementById('review-panel');
+      panel.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function resetFullQuiz() {
+      playFx('tap');
+      score = 0;
+      updateScoreUI();
+      document.getElementById('result-screen').classList.add('hidden');
+      document.getElementById('undo-lines-btn').classList.remove('hidden');
+      document.getElementById('check-matching-btn').classList.remove('hidden');
+      document.getElementById('finish-adventure-btn').classList.add('hidden');
+      document.getElementById('matching-feedback').classList.add('hidden');
+      document.getElementById('welcome-screen').classList.remove('hidden');
+    }
+
+    function fireConfetti() {
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const palette = ['#10b981', '#facc15', '#38bdf8', '#f472b6', '#a78bfa', '#fb923c'];
+      const bits = Array.from({ length: 120 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height - canvas.height,
+        w: Math.random() * 10 + 6,
+        h: Math.random() * 6 + 4,
+        color: palette[Math.floor(Math.random() * palette.length)],
+        vy: Math.random() * 3 + 2,
+        vx: (Math.random() - 0.5) * 2.2,
+        angle: Math.random() * 360,
+        spin: (Math.random() - 0.5) * 6
+      }));
+
+      let frame = 0;
+      function step() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        bits.forEach(b => {
+          b.y += b.vy;
+          b.x += b.vx;
+          b.angle += b.spin;
+          ctx.save();
+          ctx.translate(b.x, b.y);
+          ctx.rotate((b.angle * Math.PI) / 180);
+          ctx.fillStyle = b.color;
+          ctx.fillRect(-b.w / 2, -b.h / 2, b.w, b.h);
+          ctx.restore();
+        });
+        frame++;
+        if (frame < 210) requestAnimationFrame(step);
+        else ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      step();
+    }
+  </script>
+</body>
+</html>

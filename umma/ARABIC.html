@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ARABIC ADVENTURE – Let's Explore My Hobby and Isim Isyarah!</title>
+  <!-- Tailwind CSS for responsive layout & pastel color utilities -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Fredoka for playful child-friendly English UI & Amiri / Noto Naskh Arabic for crystal-clear vocalized Arabic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Fredoka:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       1. CUSTOM 3D CARTOON & CLAYMORPHISM DESIGN SYSTEM
+       ========================================================================== */
+    :root {
+      --pastel-blue: #BAE6FD;
+      --bright-blue: #38BDF8;
+      --deep-blue: #0284C7;
+      --pastel-yellow: #FEF08A;
+      --bright-yellow: #FACC15;
+      --deep-yellow: #CA8A04;
+      --pastel-green: #BBF7D0;
+      --bright-green: #4ADE80;
+      --deep-green: #16A34A;
+      --pastel-purple: #E9D5FF;
+      --bright-purple: #A855F7;
+      --deep-purple: #7E22CE;
+    }
+
+    body {
+      font-family: 'Fredoka', sans-serif;
+      background: linear-gradient(135deg, #E0F2FE 0%, #FEF9C3 35%, #DCFCE7 70%, #F3E8FF 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Clear, large, legible Arabic typography with proper line height for harakat (diacritics) */
+    .arabic-text {
+      font-family: 'Noto Naskh Arabic', 'Amiri', serif;
+      direction: rtl;
+      line-height: 1.85;
+      letter-spacing: 0;
+    }
+
+    /* 3D Clay / Toy Card Container */
+    .clay-card {
+      background: rgba(255, 255, 255, 0.94);
+      border-radius: 2rem;
+      border: 4px solid #FFFFFF;
+      box-shadow:
+        0 14px 0 rgba(56, 189, 248, 0.22),
+        0 20px 35px rgba(15, 23, 42, 0.08),
+        inset 0 -6px 12px rgba(186, 230, 253, 0.35);
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* 3D Glossy Toy Buttons */
+    .btn-3d {
+      position: relative;
+      border-radius: 1.4rem;
+      font-weight: 700;
+      transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transform: translateY(0);
+    }
+
+    .btn-3d:active:not(:disabled) {
+      transform: translateY(5px);
+    }
+
+    .btn-blue {
+      background: linear-gradient(180deg, #38BDF8 0%, #0EA5E9 100%);
+      color: white;
+      border: 3px solid #BAE6FD;
+      box-shadow: 0 7px 0 #0284C7, 0 12px 20px rgba(2, 132, 199, 0.25);
+    }
+    .btn-blue:hover:not(:disabled) {
+      filter: brightness(1.05);
+      transform: translateY(-2px);
+    }
+    .btn-blue:active:not(:disabled) {
+      box-shadow: 0 2px 0 #0284C7;
+      transform: translateY(5px);
+    }
+
+    .btn-yellow {
+      background: linear-gradient(180deg, #FDE047 0%, #FACC15 100%);
+      color: #713F12;
+      border: 3px solid #FEF9C3;
+      box-shadow: 0 7px 0 #CA8A04, 0 12px 20px rgba(202, 138, 4, 0.22);
+    }
+    .btn-yellow:hover:not(:disabled) {
+      filter: brightness(1.04);
+      transform: translateY(-2px);
+    }
+    .btn-yellow:active:not(:disabled) {
+      box-shadow: 0 2px 0 #CA8A04;
+      transform: translateY(5px);
+    }
+
+    .btn-green {
+      background: linear-gradient(180deg, #4ADE80 0%, #22C55E 100%);
+      color: white;
+      border: 3px solid #DCFCE7;
+      box-shadow: 0 7px 0 #15803D, 0 12px 20px rgba(21, 128, 61, 0.25);
+    }
+    .btn-green:hover:not(:disabled) {
+      filter: brightness(1.05);
+      transform: translateY(-2px);
+    }
+    .btn-green:active:not(:disabled) {
+      box-shadow: 0 2px 0 #15803D;
+      transform: translateY(5px);
+    }
+
+    .btn-purple {
+      background: linear-gradient(180deg, #C084FC 0%, #A855F7 100%);
+      color: white;
+      border: 3px solid #F3E8FF;
+      box-shadow: 0 7px 0 #7E22CE, 0 12px 20px rgba(126, 34, 206, 0.25);
+    }
+    .btn-purple:hover:not(:disabled) {
+      filter: brightness(1.05);
+      transform: translateY(-2px);
+    }
+    .btn-purple:active:not(:disabled) {
+      box-shadow: 0 2px 0 #7E22CE;
+      transform: translateY(5px);
+    }
+
+    /* Option Answer Card Styling */
+    .option-card {
+      background: #FFFFFF;
+      border: 3px solid #E2E8F0;
+      border-radius: 1.35rem;
+      box-shadow: 0 6px 0 #CBD5E1;
+      transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: pointer;
+    }
+
+    .option-card:hover:not(.disabled) {
+      border-color: #38BDF8;
+      background: #F0F9FF;
+      transform: translateY(-3px);
+      box-shadow: 0 9px 0 #7DD3FC;
+    }
+
+    .option-card:active:not(.disabled) {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 #7DD3FC;
+    }
+
+    .option-card.correct {
+      background: #DCFCE7 !important;
+      border-color: #22C55E !important;
+      box-shadow: 0 6px 0 #16A34A !important;
+      animation: popBounce 0.45s ease;
+    }
+
+    .option-card.wrong {
+      background: #FEE2E2 !important;
+      border-color: #EF4444 !important;
+      box-shadow: 0 6px 0 #DC2626 !important;
+      animation: wiggle 0.4s ease;
+    }
+
+    .option-card.dimmed {
+      opacity: 0.55;
+      cursor: default;
+    }
+
+    /* Animations */
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(3deg); }
+    }
+
+    @keyframes popBounce {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.06); }
+      70% { transform: scale(0.97); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes wiggle {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      50% { transform: translateX(8px); }
+      75% { transform: translateX(-5px); }
+    }
+
+    @keyframes starSpin {
+      0% { transform: scale(0.5) rotate(-30deg); opacity: 0; }
+      70% { transform: scale(1.2) rotate(10deg); opacity: 1; }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+
+    .animate-float {
+      animation: floatSlow 3.8s ease-in-out infinite;
+    }
+
+    .animate-pop {
+      animation: popBounce 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .star-earned {
+      animation: starSpin 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    /* Decorative Background Clouds & Shapes */
+    .bg-bubble {
+      position: fixed;
+      border-radius: 9999px;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.55;
+    }
+
+    /* Confetti Canvas */
+    #confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 50;
+    }
+  </style>
+</head>
+<body class="text-slate-800 flex flex-col items-center justify-between p-3 sm:p-5 md:p-6">
+
+  <!-- Decorative Floating Pastel Bubbles -->
+  <div class="bg-bubble w-48 h-48 bg-sky-200 -top-10 -left-10 blur-xl"></div>
+  <div class="bg-bubble w-64 h-64 bg-yellow-200 top-1/4 -right-16 blur-xl"></div>
+  <div class="bg-bubble w-56 h-56 bg-purple-200 bottom-10 -left-12 blur-xl"></div>
+  <div class="bg-bubble w-52 h-52 bg-emerald-200 -bottom-10 right-10 blur-xl"></div>
+
+  <!-- Confetti Canvas for Celebrations -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- ==========================================================================
+       TOP NAVIGATION & SOUND CONTROL BAR
+       ========================================================================== -->
+  <header class="relative z-10 w-full max-w-4xl flex items-center justify-between gap-2 mb-3 sm:mb-4">
+    <!-- Mini Brand Pill -->
+    <div class="flex items-center gap-2 bg-white/90 backdrop-blur px-3.5 py-2 rounded-full border-2 border-sky-200 shadow-sm">
+      <span class="text-xl sm:text-2xl">🚀</span>
+      <span class="font-bold text-sky-700 text-sm sm:text-base tracking-wide">ARABIC ADVENTURE</span>
+    </div>
+
+    <!-- Right Controls: Home & Sound Toggle -->
+    <div class="flex items-center gap-2">
+      <button id="home-btn" onclick="confirmReset()" class="hidden bg-white/90 hover:bg-yellow-100 text-slate-700 font-bold px-3.5 py-2 rounded-full border-2 border-yellow-300 shadow-sm text-xs sm:text-sm transition flex items-center gap-1.5" title="Restart Quiz">
+        <span>🏠</span>
+        <span class="hidden sm:inline">Home</span>
+      </button>
+
+      <button id="sound-toggle" onclick="toggleSound()" class="bg-white/90 hover:bg-purple-100 text-purple-700 font-bold px-3.5 py-2 rounded-full border-2 border-purple-200 shadow-sm text-xs sm:text-sm transition flex items-center gap-1.5" aria-label="Toggle Sound">
+        <span id="sound-icon" class="text-base sm:text-lg">🔊</span>
+        <span id="sound-label" class="hidden sm:inline">Sound On</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       MAIN GAME CONTAINER
+       ========================================================================== -->
+  <main class="relative z-10 w-full max-w-4xl flex-grow flex flex-col justify-center">
+
+    <!-- 1. WELCOME SCREEN -->
+    <section id="welcome-screen" class="clay-card p-6 sm:p-8 md:p-10 text-center">
+      <!-- Floating 3D Character Group Illustration -->
+      <div class="flex justify-center mb-4">
+        <div class="relative bg-gradient-to-b from-sky-100 via-yellow-50 to-emerald-100 p-4 sm:p-6 rounded-3xl border-4 border-white shadow-inner animate-float">
+          <!-- Cute 3D-Styled SVG Banner of Kids with Hobbies -->
+          <svg class="w-64 sm:w-80 h-36 sm:h-44 mx-auto" viewBox="0 0 360 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="skin1" cx="40%" cy="35%" r="65%">
+                <stop offset="0%" stop-color="#FFE4C4"/>
+                <stop offset="100%" stop-color="#F5B882"/>
+              </radialGradient>
+              <radialGradient id="ballGrad" cx="35%" cy="30%" r="70%">
+                <stop offset="0%" stop-color="#FFFFFF"/>
+                <stop offset="100%" stop-color="#CBD5E1"/>
+              </radialGradient>
+              <linearGradient id="shirtBlue" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#38BDF8"/>
+                <stop offset="100%" stop-color="#0284C7"/>
+              </linearGradient>
+              <linearGradient id="hijabPurple" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#C084FC"/>
+                <stop offset="100%" stop-color="#7E22CE"/>
+              </linearGradient>
+              <linearGradient id="shirtGreen" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#4ADE80"/>
+                <stop offset="100%" stop-color="#15803D"/>
+              </linearGradient>
+            </defs>
+
+            <!-- Soft Ground Shadow -->
+            <ellipse cx="180" cy="162" rx="150" ry="12" fill="#BAE6FD" opacity="0.7"/>
+
+            <!-- Left Kid: Boy Playing Football -->
+            <g transform="translate(30, 22)">
+              <!-- Peci Cap -->
+              <rect x="24" y="6" width="42" height="16" rx="6" fill="#1E293B"/>
+              <!-- Head -->
+              <circle cx="45" cy="36" r="22" fill="url(#skin1)"/>
+              <!-- Happy Eyes & Smile -->
+              <circle cx="38" cy="34" r="3" fill="#1E293B"/>
+              <circle cx="52" cy="34" r="3" fill="#1E293B"/>
+              <circle cx="39" cy="33" r="1" fill="#FFF"/>
+              <circle cx="53" cy="33" r="1" fill="#FFF"/>
+              <path d="M39 43 Q45 49 51 43" stroke="#9A3412" stroke-width="2.5" stroke-linecap="round"/>
+              <!-- Body -->
+              <rect x="26" y="58" width="38" height="44" rx="14" fill="url(#shirtBlue)"/>
+              <!-- Arms waving -->
+              <path d="M26 66 L10 52" stroke="url(#skin1)" stroke-width="9" stroke-linecap="round"/>
+              <path d="M64 66 L80 54" stroke="url(#skin1)" stroke-width="9" stroke-linecap="round"/>
+              <!-- Legs -->
+              <rect x="31" y="98" width="11" height="26" rx="5" fill="#1E3A8A"/>
+              <rect x="48" y="98" width="11" height="24" rx="5" fill="#1E3A8A" transform="rotate(-15 48 98)"/>
+              <!-- 3D Football -->
+              <circle cx="78" cy="122" r="15" fill="url(#ballGrad)" stroke="#64748B" stroke-width="1.5"/>
+              <polygon points="78,114 84,119 82,126 74,126 72,119" fill="#1E293B"/>
+            </g>
+
+            <!-- Center Kid: Girl Reading Arabic Book -->
+            <g transform="translate(132, 12)">
+              <!-- Hijab -->
+              <path d="M20 38 C20 12, 76 12, 76 38 L82 78 C82 86, 14 86, 14 78 Z" fill="url(#hijabPurple)"/>
+              <!-- Face -->
+              <circle cx="48" cy="40" r="21" fill="url(#skin1)"/>
+              <circle cx="41" cy="38" r="3" fill="#1E293B"/>
+              <circle cx="55" cy="38" r="3" fill="#1E293B"/>
+              <circle cx="35" cy="43" r="3.5" fill="#FDA4AF" opacity="0.7"/>
+              <circle cx="61" cy="43" r="3.5" fill="#FDA4AF" opacity="0.7"/>
+              <path d="M42 47 Q48 53 54 47" stroke="#9A3412" stroke-width="2.5" stroke-linecap="round"/>
+              <!-- Dress -->
+              <path d="M26 74 L70 74 L76 132 L20 132 Z" fill="#F472B6"/>
+              <!-- Open 3D Book -->
+              <path d="M22 86 L48 92 L48 118 L22 112 Z" fill="#FEF08A" stroke="#EAB308" stroke-width="2"/>
+              <path d="M74 86 L48 92 L48 118 L74 112 Z" fill="#FEF9C3" stroke="#EAB308" stroke-width="2"/>
+            </g>
+
+            <!-- Right Kid: Boy Painting -->
+            <g transform="translate(238, 22)">
+              <rect x="24" y="6" width="42" height="16" rx="6" fill="#1E293B"/>
+              <circle cx="45" cy="36" r="22" fill="url(#skin1)"/>
+              <circle cx="38" cy="34" r="3" fill="#1E293B"/>
+              <circle cx="52" cy="34" r="3" fill="#1E293B"/>
+              <path d="M39 43 Q45 49 51 43" stroke="#9A3412" stroke-width="2.5" stroke-linecap="round"/>
+              <rect x="26" y="58" width="38" height="44" rx="14" fill="url(#shirtGreen)"/>
+              <!-- Artist Palette -->
+              <ellipse cx="14" cy="84" rx="14" ry="10" fill="#FDE68A" stroke="#D97706" stroke-width="2"/>
+              <circle cx="10" cy="81" r="2.5" fill="#EF4444"/>
+              <circle cx="17" cy="80" r="2.5" fill="#3B82F6"/>
+              <circle cx="15" cy="87" r="2.5" fill="#22C55E"/>
+              <!-- Paintbrush -->
+              <line x1="62" y1="78" x2="84" y2="62" stroke="#92400E" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="86" cy="60" r="4" fill="#EC4899"/>
+              <!-- Legs -->
+              <rect x="31" y="98" width="11" height="26" rx="5" fill="#334155"/>
+              <rect x="48" y="98" width="11" height="26" rx="5" fill="#334155"/>
+            </g>
+
+            <!-- Floating Sparkle Stars -->
+            <text x="18" y="34" font-size="22">⭐</text>
+            <text x="322" y="32" font-size="22">🌟</text>
+            <text x="172" y="18" font-size="18">✨</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Main Title & Subtitle -->
+      <div class="inline-block bg-yellow-200 text-yellow-900 font-bold text-xs sm:text-sm px-4 py-1.5 rounded-full border-2 border-yellow-400 mb-2 shadow-sm">
+        GRADE 1 MI / SD • INTERACTIVE ARABIC GAME
+      </div>
+
+      <h1 class="text-3xl sm:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-sky-600 via-purple-600 to-emerald-600 tracking-tight mb-2 drop-shadow-sm">
+        ARABIC ADVENTURE
+      </h1>
+      <p class="text-lg sm:text-2xl font-semibold text-slate-600 mb-5">
+        Let's Explore My Hobby and Isim Isyarah!
+      </p>
+
+      <!-- Topic Badges -->
+      <div class="flex flex-wrap justify-center gap-3 mb-6">
+        <div class="bg-sky-100 border-2 border-sky-300 px-4 py-2 rounded-2xl flex items-center gap-2 shadow-sm">
+          <span class="text-2xl">⚽</span>
+          <div class="text-left">
+            <div class="text-xs font-bold text-sky-700 uppercase">Topic 1: My Hobby</div>
+            <div class="arabic-text text-xl font-bold text-sky-900">هِوَايَتِيْ</div>
+          </div>
+        </div>
+
+        <div class="bg-purple-100 border-2 border-purple-300 px-4 py-2 rounded-2xl flex items-center gap-2 shadow-sm">
+          <span class="text-2xl">👉</span>
+          <div class="text-left">
+            <div class="text-xs font-bold text-purple-700 uppercase">Topic 2: Demonstratives</div>
+            <div class="arabic-text text-xl font-bold text-purple-900">اِسْمُ الْإِشَارَةِ</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Optional Student Name Input -->
+      <div class="max-w-sm mx-auto mb-6">
+        <label for="student-name" class="block text-sm font-bold text-slate-600 mb-1.5">
+          What is your name, Explorer? (Optional)
+        </label>
+        <input
+          type="text"
+          id="student-name"
+          maxlength="24"
+          placeholder="Type your name here..."
+          class="w-full text-center text-lg font-bold text-slate-700 bg-sky-50/80 border-3 border-sky-300 focus:border-purple-400 focus:bg-white rounded-2xl px-4 py-3 outline-none transition shadow-inner"
+        />
+      </div>
+
+      <!-- 3-Part Overview Pills -->
+      <div class="grid grid-cols-3 gap-2 sm:gap-3 max-w-lg mx-auto mb-7 text-xs sm:text-sm">
+        <div class="bg-yellow-100 border-2 border-yellow-300 rounded-2xl p-2.5">
+          <div class="font-bold text-yellow-800">PART 1</div>
+          <div class="text-yellow-700">Multiple Choice</div>
+          <div class="text-[11px] font-semibold text-yellow-600">5 Questions</div>
+        </div>
+        <div class="bg-emerald-100 border-2 border-emerald-300 rounded-2xl p-2.5">
+          <div class="font-bold text-emerald-800">PART 2</div>
+          <div class="text-emerald-700">Match Pairs</div>
+          <div class="text-[11px] font-semibold text-emerald-600">5 Questions</div>
+        </div>
+        <div class="bg-purple-100 border-2 border-purple-300 rounded-2xl p-2.5">
+          <div class="font-bold text-purple-800">PART 3</div>
+          <div class="text-purple-700">Word Builder</div>
+          <div class="text-[11px] font-semibold text-purple-600">5 Questions</div>
+        </div>
+      </div>
+
+      <!-- Start Adventure Button -->
+      <button onclick="startQuiz()" class="btn-3d btn-green text-xl sm:text-2xl px-8 sm:px-12 py-4 inline-flex items-center gap-3">
+        <span>Start Adventure!</span>
+        <span class="text-2xl sm:text-3xl">🌟</span>
+      </button>
+    </section>
+
+    <!-- 2. ACTIVE QUIZ SCREEN -->
+    <section id="quiz-screen" class="hidden flex-col gap-4">
+      <!-- Top Progress & Part Status Card -->
+      <div class="bg-white/95 rounded-3xl p-3.5 sm:p-4 border-3 border-white shadow-md">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+          <!-- Part Badge -->
+          <span id="part-badge" class="px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-sky-100 text-sky-800 border-2 border-sky-300">
+            PART 1 • MULTIPLE CHOICE
+          </span>
+
+          <!-- Question Counter & Live Stars -->
+          <div class="flex items-center gap-3">
+            <span id="question-counter" class="text-sm sm:text-base font-bold text-slate-600">
+              Question 1 / 15
+            </span>
+            <div class="flex items-center gap-1 bg-yellow-100 px-3 py-1 rounded-full border-2 border-yellow-300">
+              <span>⭐</span>
+              <span id="live-score" class="font-bold text-yellow-800 text-sm sm:text-base">0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 15-Star Progress Track -->
+        <div class="w-full bg-slate-100 h-4 rounded-full p-1 border border-slate-200 overflow-hidden">
+          <div id="progress-bar" class="h-full rounded-full bg-gradient-to-r from-sky-400 via-yellow-400 to-emerald-400 transition-all duration-500" style="width: 6.66%;"></div>
+        </div>
+      </div>
+
+      <!-- Main Question Card -->
+      <div id="question-card" class="clay-card p-5 sm:p-7 md:p-8">
+        <!-- Part Instruction Banner -->
+        <div id="part-instruction" class="text-xs sm:text-sm font-bold uppercase tracking-wider text-purple-600 mb-2 flex items-center gap-1.5">
+          <span>🎯</span>
+          <span id="part-instruction-text">Choose the best answer!</span>
+        </div>
+
+        <!-- Question Layout: Illustration + Prompt -->
+        <div class="flex flex-col md:flex-row items-center gap-5 sm:gap-6 mb-6">
+          <!-- Visual Illustration Container -->
+          <div id="illustration-box" class="w-36 h-36 sm:w-44 sm:h-44 flex-shrink-0 bg-gradient-to-b from-sky-50 to-purple-50 rounded-3xl border-4 border-sky-200 shadow-inner flex items-center justify-center p-2">
+            <!-- Dynamic SVG injected here -->
+          </div>
+
+          <!-- Question Text & Arabic Prompt -->
+          <div class="flex-grow text-center md:text-left">
+            <h2 id="question-text" class="text-xl sm:text-2xl md:text-3xl font-bold text-slate-800 leading-snug mb-3">
+              Question prompt loads here...
+            </h2>
+
+            <!-- Optional Arabic Highlight Box (for Arabic word/sentence/letter prompt) -->
+            <div id="arabic-prompt-box" class="hidden inline-block bg-yellow-50 border-3 border-yellow-300 rounded-2xl px-5 py-2.5 shadow-sm">
+              <div id="arabic-prompt-text" class="arabic-text text-3xl sm:text-4xl font-bold text-slate-900">
+                كُرَةُ الْقَدَمِ
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Options Grid (4 Choices) -->
+        <div id="options-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
+          <!-- 4 Interactive Option Cards injected dynamically -->
+        </div>
+
+        <!-- Immediate Feedback & Next Button Banner -->
+        <div id="feedback-banner" class="hidden mt-6 p-4 sm:p-5 rounded-2xl border-3 transition-all">
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3 text-center sm:text-left">
+              <span id="feedback-emoji" class="text-4xl">🎉</span>
+              <div>
+                <h3 id="feedback-title" class="text-lg sm:text-xl font-bold">Awesome Job!</h3>
+                <p id="feedback-explanation" class="text-sm sm:text-base font-medium opacity-90">
+                  Explanation text here.
+                </p>
+              </div>
+            </div>
+
+            <button id="next-btn" onclick="nextQuestion()" class="btn-3d btn-blue px-6 py-3 text-lg whitespace-nowrap flex items-center gap-2">
+              <span id="next-btn-text">Next Question</span>
+              <span>➡️</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. FINAL CELEBRATION CERTIFICATE SCREEN -->
+    <section id="result-screen" class="hidden clay-card p-6 sm:p-8 md:p-10 text-center">
+      <div class="inline-block bg-purple-100 text-purple-800 font-bold text-xs sm:text-sm px-4 py-1.5 rounded-full border-2 border-purple-300 mb-3">
+        🏆 ADVENTURE COMPLETE!
+      </div>
+
+      <h2 id="congrats-heading" class="text-3xl sm:text-4xl font-bold text-slate-800 mb-2">
+        Amazing Work, Explorer!
+      </h2>
+      <p id="congrats-subtext" class="text-base sm:text-lg text-slate-600 mb-5">
+        You completed all 15 challenges in My Hobby & Isim Isyarah!
+      </p>
+
+      <!-- Big Star Rating Display -->
+      <div id="final-stars" class="flex justify-center gap-2 sm:gap-4 text-4xl sm:text-6xl my-4">
+        <span>⭐</span><span>⭐</span><span>⭐</span>
+      </div>
+
+      <!-- Score Pill -->
+      <div class="inline-block bg-gradient-to-r from-yellow-200 via-amber-100 to-yellow-200 border-4 border-yellow-400 rounded-3xl px-8 py-4 mb-6 shadow-md">
+        <div class="text-xs font-bold uppercase tracking-wider text-yellow-800">Total Score</div>
+        <div class="text-4xl sm:text-5xl font-bold text-yellow-900">
+          <span id="final-score-num">15</span> <span class="text-2xl text-yellow-700">/ 15</span>
+        </div>
+      </div>
+
+      <!-- Breakdown by Part -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-2xl mx-auto mb-7">
+        <div class="bg-sky-50 border-2 border-sky-200 rounded-2xl p-3.5">
+          <div class="text-xs font-bold text-sky-700 uppercase">Part 1: Multiple Choice</div>
+          <div id="part1-score" class="text-2xl font-bold text-sky-900 mt-1">5 / 5 ⭐</div>
+        </div>
+        <div class="bg-emerald-50 border-2 border-emerald-200 rounded-2xl p-3.5">
+          <div class="text-xs font-bold text-emerald-700 uppercase">Part 2: Match Pairs</div>
+          <div id="part2-score" class="text-2xl font-bold text-emerald-900 mt-1">5 / 5 ⭐</div>
+        </div>
+        <div class="bg-purple-50 border-2 border-purple-200 rounded-2xl p-3.5">
+          <div class="text-xs font-bold text-purple-700 uppercase">Part 3: Word Builder</div>
+          <div id="part3-score" class="text-2xl font-bold text-purple-900 mt-1">5 / 5 ⭐</div>
+        </div>
+      </div>
+
+      <!-- Play Again Button -->
+      <button onclick="restartQuiz()" class="btn-3d btn-yellow text-xl sm:text-2xl px-8 sm:px-10 py-4 inline-flex items-center gap-3">
+        <span>Play Again</span>
+        <span class="text-2xl">🔄</span>
+      </button>
+    </section>
+
+  </main>
+
+  <!-- ==========================================================================
+       CUSTOM RESET CONFIRMATION MODAL (No browser alert/confirm used)
+       ========================================================================== -->
+  <div id="reset-modal" class="hidden fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="clay-card max-w-sm w-full p-6 text-center animate-pop">
+      <div class="text-5xl mb-3">🤔</div>
+      <h3 class="text-2xl font-bold text-slate-800 mb-2">Back to Start?</h3>
+      <p class="text-slate-600 mb-6">Your current adventure stars will reset. Are you sure?</p>
+      <div class="flex justify-center gap-3">
+        <button onclick="closeResetModal()" class="btn-3d btn-blue px-5 py-2.5 text-base">Keep Playing</button>
+        <button onclick="restartQuiz()" class="btn-3d btn-yellow px-5 py-2.5 text-base">Yes, Restart</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="relative z-10 mt-4 text-center text-xs sm:text-sm font-semibold text-slate-500">
+    Arabic Adventure • Grade 1 MI / SD Learning Game
+  </footer>
+
+  <!-- ==========================================================================
+       JAVASCRIPT: 3D SVG ILLUSTRATIONS, SOUND EFFECTS, & 15-QUESTION ENGINE
+       ========================================================================== -->
+  <script>
+    /* --------------------------------------------------------------------------
+       A. WEB AUDIO API SOUND EFFECTS (Zero external audio URLs needed!)
+       -------------------------------------------------------------------------- */
+    let isMuted = false;
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function toggleSound() {
+      isMuted = !isMuted;
+      const icon = document.getElementById('sound-icon');
+      const label = document.getElementById('sound-label');
+      icon.textContent = isMuted ? '🔇' : '🔊';
+      label.textContent = isMuted ? 'Muted' : 'Sound On';
+      if (!isMuted) playPopSound();
+    }
+
+    function playPopSound() {
+      if (isMuted) return;
+      try {
+        initAudio();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(520, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(780, audioCtx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.09);
+      } catch (e) {}
+    }
+
+    function playCorrectSound() {
+      if (isMuted) return;
+      try {
+        initAudio();
+        const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+        notes.forEach((freq, idx) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'triangle';
+          const startTime = audioCtx.currentTime + idx * 0.09;
+          osc.frequency.setValueAtTime(freq, startTime);
+          gain.gain.setValueAtTime(0.22, startTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.25);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(startTime);
+          osc.stop(startTime + 0.26);
+        });
+      } catch (e) {}
+    }
+
+    function playWrongSound() {
+      if (isMuted) return;
+      try {
+        initAudio();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+        osc.frequency.linearRampToValueAtTime(210, audioCtx.currentTime + 0.25);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.28);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.3);
+      } catch (e) {}
+    }
+
+    function playFanfareSound() {
+      if (isMuted) return;
+      try {
+        initAudio();
+        const melody = [523.25, 659.25, 783.99, 659.25, 783.99, 1046.50];
+        const times = [0, 0.12, 0.24, 0.38, 0.50, 0.65];
+        melody.forEach((freq, i) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'triangle';
+          const t = audioCtx.currentTime + times[i];
+          osc.frequency.setValueAtTime(freq, t);
+          gain.gain.setValueAtTime(0.25, t);
+          gain.gain.exponentialRampToValueAtTime(0.01, t + 0.35);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(t);
+          osc.stop(t + 0.36);
+        });
+      } catch (e) {}
+    }
+
+    /* --------------------------------------------------------------------------
+       B. CUTE 3D-STYLED INLINE SVG ILLUSTRATIONS FOR HOBBIES & ISIM ISYARAH
+       -------------------------------------------------------------------------- */
+    const ILLUSTRATIONS = {
+      football: `
+        <svg viewBox="0 0 140 140" class="w-full h-full">
+          <circle cx="70" cy="70" r="60" fill="#BAE6FD" opacity="0.5"/>
+          <ellipse cx="70" cy="122" rx="42" ry="8" fill="#7DD3FC"/>
+          <!-- Boy Kicking Football -->
+          <rect x="46" y="14" width="34" height="13" rx="5" fill="#1E293B"/>
+          <circle cx="63" cy="40" r="19" fill="#FDBA74"/>
+          <circle cx="57" cy="38" r="2.8" fill="#1E293B"/>
+          <circle cx="69" cy="38" r="2.8" fill="#1E293B"/>
+          <path d="M58 46 Q63 51 68 46" stroke="#9A3412" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <rect x="46" y="59" width="34" height="36" rx="12" fill="#EF4444"/>
+          <text x="63" y="82" text-anchor="middle" fill="#FFF" font-weight="bold" font-size="14">10</text>
+          <rect x="50" y="93" width="10" height="24" rx="5" fill="#1E293B"/>
+          <rect x="66" y="91" width="10" height="22" rx="5" fill="#1E293B" transform="rotate(-25 66 91)"/>
+          <!-- 3D Soccer Ball -->
+          <circle cx="102" cy="106" r="17" fill="#FFFFFF" stroke="#334155" stroke-width="2"/>
+          <polygon points="102,97 109,102 106,111 98,111 95,102" fill="#1E293B"/>
+        </svg>`,
+
+      reading: `
+        <svg viewBox="0 0 140 140" class="w-full h-full">
+          <circle cx="70" cy="70" r="60" fill="#FEF08A" opacity="0.6"/>
+          <!-- Boy with Glasses Reading Book -->
+          <circle cx="70" cy="44" r="23" fill="#FDBA74"/>
+          <path d="M48 36 Q70 16 92 36" fill="#1E293B"/>
+          <!-- Cute Round Glasses -->
+          <circle cx="61" cy="44" r="7" fill="#FFF" stroke="#334155" stroke-width="2.5"/>
+          <circle cx="79" cy="44" r="7" fill="#FFF" stroke="#334155" stroke-width="2.5"/>
+          <line x1="68" y1="44" x2="72" y2="44" stroke="#334155" stroke-width="2.5"/>
+          <circle cx="61" cy="44" r="2.2" fill="#1E293B"/>
+          <circle cx="79" cy="44" r="2.2" fill="#1E293B"/>
+          <path d="M64 55 Q70 60 76 55" stroke="#9A3412" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <!-- Shirt -->
+          <rect x="46" y="68" width="48" height="44" rx="14" fill="#38BDF8"/>
+          <!-- Open Orange Book -->
+          <path d="M36 80 L70 88 L70 120 L36 112 Z" fill="#FB923C" stroke="#C2410C" stroke-width="2"/>
+          <path d="M104 80 L70 88 L70 120 L104 112 Z" fill="#FDBA74" stroke="#C2410C" stroke-width="2"/>
+          <line x1="44" y1="92" x2="62" y2="96" stroke="#FFF" stroke-width="2" stroke-linecap="round"/>
+          <line x1="78" y1="96" x2="96" y2="92" stroke="#FFF" stroke-width="2" stroke-linecap="round"/>
+        </svg>`,
+
+      drawing: `
+        <svg viewBox="0 0 140 140" class="w-full h-full">
+          <circle cx="70" cy="70" r="60" fill="#E9D5FF" opacity="0.6"/>
+          <!-- Canvas Easel -->
+          <line x1="92" y1="45" x2="82" y2="122" stroke="#92400E" stroke-width="4" stroke-linecap="round"/>
+          <line x1="112" y1="45" x2="122" y2="122" stroke="#92400E" stroke-width="4" stroke-linecap="round"/>
+          <rect x="80" y="36" width="44" height="52" rx="6" fill="#FFFFFF" stroke="#D97706" stroke-width="3"/>
+          <circle cx="102" cy="56" r="9" fill="#FACC15"/>
+          <path d="M86 78 L98 64 L108 74 L116 66 L120 78 Z" fill="#4ADE80"/>
+          <!-- Girl Artist -->
+          <path d="M22 46 C22 24, 64 24, 64 46 L68 76 L18 76 Z" fill="#EC4899"/>
+          <circle cx="43" cy="48" r="17" fill="#FDBA74"/>
+          <circle cx="38" cy="46" r="2.5" fill="#1E293B"/>
+          <circle cx="48" cy="46" r="2.5" fill="#1E293B"/>
+          <path d="M38 54 Q43 58 48 54" stroke="#9A3412" stroke-width="2" stroke-linecap="round" fill="none"/>
+          <rect x="26" y="68" width="34" height="44" rx="12" fill="#A855F7"/>
+          <!-- Paintbrush reaching canvas -->
+          <line x1="56" y1="78" x2="88" y2="62" stroke="#78350F" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="90" cy="61" r="4" fill="#EF4444"/>
+        </svg>`,
+
+      father: `
+        <svg viewBox="0 0 140 140" class="w-full h-full">
+          <circle cx="70" cy="70" r="60" fill="#BAE6FD" opacity="0.6"/>
+          <!-- Pointing Finger Badge -->
+          <circle cx="28" cy="36" r="18" fill="#FEF08A" stroke="#FACC15" stroke-width="2.5"/>
+          <text x="28" y="43" text-anchor="middle" font-size="22">👉</text>
+          <!-- Father Figure (أَبِيْ) -->
+          <rect x="52" y="18" width="38" height="15" rx="5" fill="#1E293B"/>
+          <circle cx="71" cy="47" r="21" fill="#FDBA74"/>
+          <circle cx="64" cy="44" r="2.8" fill="#1E293B"/>
+          <circle cx="78" cy="44" r="2.8" fill="#1E293B"/>
+          <!-- Neat Mustache & Smile -->
+          <path d="M64 52 Q71 49 78 52" stroke="#334155" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <path d="M65 56 Q71 61 77 56" stroke="#9A3412" stroke-width="2" stroke-linecap="round" fill="none"/>
+          <rect x="44" y="70" width="54" height="50" rx="16" fill="#0284C7"/>
+          <path d="M65 70 L71 84 L77 70 Z" fill="#FFFFFF"/>
+        </svg>`,
+
+      femaleStudent: `
+        <svg viewBox="0 0 140 140" class="w-full h-full">
+          <circle cx="70" cy="70" r="60" fill="#F3E8FF" opacity="0.7"/>
+          <!-- Distance Pointing Badge -->
+          <circle cx="110" cy="34" r="18" fill="#FEF08A" stroke="#FACC15" stroke-width="2.5"/>
+          <text x="110" y="41" text-anchor="middle" font-size="22">👈</text>
+          <!-- Female Student (طَالِبَةٌ) -->
+          <path d="M40 48 C40 20, 94 20, 94 48 L100 88 L34 88 Z" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+          <circle cx="67" cy="48" r="20" fill="#FDBA74"/>
+          <circle cx="60" cy="46" r="2.8" fill="#1E293B"/>
+          <circle cx="74" cy="46" r="2.8" fill="#1E293B"/>
+          <path d="M61 54 Q67 59 73 54" stroke="#9A3412" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <!-- School Uniform -->
+          <rect x="44" y="72" width="46" height="48" rx="14" fill="#DC2626"/>
+          <rect x="54" y="88" width="26" height="22" rx="4" fill="#FACC15"/>
+        </svg>`,
+
+      swimming: `
+        <svg viewBox="0 0 140 140" class="w-full h-full">
+          <circle cx="70" cy="70" r="60" fill="#BAE6FD" opacity="0.7"/>
+          <!-- Water Waves -->
+          <path d="M16 84 Q34 74 52 84 T88 84 T124 84 L124 114 Q70 132 16 114 Z" fill="#38BDF8"/>
+          <path d="M22 98 Q40 90 58 98 T94 98 T118 98" stroke="#E0F2FE" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <!-- Swimming Kid with Goggles -->
+          <circle cx="66" cy="58" r="20" fill="#FDBA74"/>
+          <path d="M47 50 Q66 34 85 50" fill="#0284C7"/>
+          <!-- Swimming Goggles -->
+          <rect x="52" y="51" width="12" height="8" rx="4" fill="#FEF08A" stroke="#1E293B" stroke-width="2"/>
+          <rect x="68" y="51" width="12" height="8" rx="4" fill="#FEF08A" stroke="#1E293B" stroke-width="2"/>
+          <path d="M60 66 Q66 71 72 66" stroke="#9A3412" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <!-- Splashing Arm -->
+          <path d="M86 76 Q104 60 112 72" stroke="#FDBA74" stroke-width="9" stroke-linecap="round" fill="none"/>
+        </svg>`,
+
+      singing: `
+        <svg viewBox="0 0 140 140" class="w-full h-full">
+          <circle cx="70" cy="70" r="60" fill="#FEF08A" opacity="0.65"/>
+          <!-- Musical Notes -->
+          <text x="22" y="42" font-size="22">🎵</text>
+          <text x="102" y="38" font-size="22">🎶</text>
+          <!-- Girl Singing -->
+          <path d="M44 46 C44 20, 96 20, 96 46 L102 84 L38 84 Z" fill="#38BDF8"/>
+          <circle cx="70" cy="48" r="20" fill="#FDBA74"/>
+          <circle cx="63" cy="45" r="2.8" fill="#1E293B"/>
+          <circle cx="77" cy="45" r="2.8" fill="#1E293B"/>
+          <ellipse cx="70" cy="56" rx="5" ry="6" fill="#EF4444"/>
+          <rect x="48" y="72" width="44" height="46" rx="14" fill="#F472B6"/>
+          <!-- Microphone -->
+          <line x1="88" y1="88" x2="78" y2="66" stroke="#334155" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="76" cy="62" r="7" fill="#94A3B8" stroke="#1E293B" stroke-width="2"/>
+        </svg>`,
+
+      running: `
+        <svg viewBox="0 0 140 140" class="w-full h-full">
+          <circle cx="70" cy="70" r="60" fill="#BBF7D0" opacity="0.65"/>
+          <!-- Speed Lines -->
+          <line x1="16" y1="54" x2="36" y2="54" stroke="#22C55E" stroke-width="4" stroke-linecap="round"/>
+          <line x1="12" y1="72" x2="32" y2="72" stroke="#22C55E" stroke-width="4" stroke-linecap="round"/>
+          <line x1="18" y1="90" x2="38" y2="90" stroke="#22C55E" stroke-width="4" stroke-linecap="round"/>
+          <!-- Boy Running -->
+          <rect x="56" y="16" width="32" height="12" rx="5" fill="#1E293B"/>
+          <circle cx="72" cy="40" r="18" fill="#FDBA74"/>
+          <circle cx="76" cy="38" r="2.8" fill="#1E293B"/>
+          <path d="M70 46 Q76 51 82 46" stroke="#9A3412" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <rect x="54" y="58" width="32" height="34" rx="12" fill="#22C55E" transform="rotate(10 70 75)"/>
+          <!-- Running Arms & Legs -->
+          <path d="M56 66 L40 78" stroke="#FDBA74" stroke-width="8" stroke-linecap="round"/>
+          <path d="M84 66 L102 58" stroke="#FDBA74" stroke-width="8" stroke-linecap="round"/>
+          <path d="M60 90 L44 114" stroke="#1E293B" stroke-width="10" stroke-linecap="round"/>
+          <path d="M78 90 L98 110" stroke="#1E293B" stroke-width="10" stroke-linecap="round"/>
+        </svg>`,
+
+      questionBoy: `
+        <svg viewBox="0 0 140 140" class="w-full h-full">
+          <circle cx="70" cy="70" r="60" fill="#BAE6FD" opacity="0.65"/>
+          <circle cx="106" cy="36" r="18" fill="#A855F7"/>
+          <text x="106" y="44" text-anchor="middle" fill="#FFF" font-weight="bold" font-size="24">?</text>
+          <!-- Boy / Uncle Character -->
+          <rect x="46" y="20" width="38" height="14" rx="5" fill="#1E293B"/>
+          <circle cx="65" cy="48" r="21" fill="#FDBA74"/>
+          <circle cx="58" cy="46" r="2.8" fill="#1E293B"/>
+          <circle cx="72" cy="46" r="2.8" fill="#1E293B"/>
+          <path d="M59 54 Q65 60 71 54" stroke="#9A3412" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <rect x="42" y="71" width="46" height="48" rx="15" fill="#38BDF8"/>
+        </svg>`,
+
+      questionGirl: `
+        <svg viewBox="0 0 140 140" class="w-full h-full">
+          <circle cx="70" cy="70" r="60" fill="#F3E8FF" opacity="0.75"/>
+          <circle cx="106" cy="36" r="18" fill="#EC4899"/>
+          <text x="106" y="44" text-anchor="middle" fill="#FFF" font-weight="bold" font-size="24">?</text>
+          <!-- Mother / Girl Character -->
+          <path d="M38 48 C38 20, 92 20, 92 48 L98 88 L32 88 Z" fill="#A855F7"/>
+          <circle cx="65" cy="48" r="20" fill="#FDBA74"/>
+          <circle cx="58" cy="46" r="2.8" fill="#1E293B"/>
+          <circle cx="72" cy="46" r="2.8" fill="#1E293B"/>
+          <path d="M59 54 Q65 60 71 54" stroke="#9A3412" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <rect x="42" y="72" width="46" height="48" rx="15" fill="#FACC15"/>
+        </svg>`,
+
+      sports: `
+        <svg viewBox="0 0 140 140" class="w-full h-full">
+          <circle cx="70" cy="70" r="60" fill="#BBF7D0" opacity="0.7"/>
+          <text x="70" y="64" text-anchor="middle" font-size="44">⚽🏀</text>
+          <text x="70" y="108" text-anchor="middle" font-size="38">🏅🎾</text>
+        </svg>`,
+
+      cooking: `
+        <svg viewBox="0 0 140 140" class="w-full h-full">
+          <circle cx="70" cy="70" r="60" fill="#FEF08A" opacity="0.7"/>
+          <!-- Chef Hat -->
+          <path d="M48 34 C42 22, 58 14, 70 20 C82 14, 98 22, 92 34 Z" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+          <rect x="52" y="30" width="36" height="10" rx="3" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+          <!-- Chef Face -->
+          <circle cx="70" cy="54" r="18" fill="#FDBA74"/>
+          <circle cx="64" cy="52" r="2.5" fill="#1E293B"/>
+          <circle cx="76" cy="52" r="2.5" fill="#1E293B"/>
+          <path d="M64 60 Q70 65 76 60" stroke="#9A3412" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <!-- Chef Coat -->
+          <rect x="46" y="72" width="48" height="36" rx="12" fill="#FFFFFF" stroke="#94A3B8" stroke-width="2"/>
+          <!-- Cooking Pan -->
+          <ellipse cx="70" cy="112" rx="32" ry="9" fill="#475569"/>
+          <rect x="96" y="109" width="26" height="6" rx="3" fill="#1E293B"/>
+          <text x="70" y="102" text-anchor="middle" font-size="18">🍳</text>
+        </svg>`,
+
+      sister: `
+        <svg viewBox="0 0 140 140" class="w-full h-full">
+          <circle cx="70" cy="70" r="60" fill="#F3E8FF" opacity="0.75"/>
+          <path d="M42 46 C42 18, 98 18, 98 46 L104 86 L36 86 Z" fill="#4ADE80"/>
+          <circle cx="70" cy="48" r="21" fill="#FDBA74"/>
+          <circle cx="63" cy="46" r="2.8" fill="#1E293B"/>
+          <circle cx="77" cy="46" r="2.8" fill="#1E293B"/>
+          <circle cx="56" cy="51" r="3" fill="#FDA4AF" opacity="0.8"/>
+          <circle cx="84" cy="51" r="3" fill="#FDA4AF" opacity="0.8"/>
+          <path d="M64 55 Q70 61 76 55" stroke="#9A3412" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <rect x="46" y="72" width="48" height="48" rx="15" fill="#EC4899"/>
+        </svg>`,
+
+      grandfather: `
+        <svg viewBox="0 0 140 140" class="w-full h-full">
+          <circle cx="70" cy="70" r="60" fill="#BAE6FD" opacity="0.65"/>
+          <!-- White Peci Cap -->
+          <rect x="48" y="18" width="44" height="15" rx="6" fill="#FFFFFF" stroke="#94A3B8" stroke-width="2"/>
+          <!-- Grandfather Face -->
+          <circle cx="70" cy="48" r="21" fill="#FDBA74"/>
+          <circle cx="63" cy="45" r="2.6" fill="#1E293B"/>
+          <circle cx="77" cy="45" r="2.6" fill="#1E293B"/>
+          <!-- White Beard -->
+          <path d="M52 54 Q70 76 88 54" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1.5"/>
+          <path d="M64 55 Q70 59 76 55" stroke="#9A3412" stroke-width="2" stroke-linecap="round" fill="none"/>
+          <!-- Traditional Shirt -->
+          <rect x="44" y="72" width="52" height="48" rx="15" fill="#D97706"/>
+        </svg>`
+    };
+
+    /* --------------------------------------------------------------------------
+       C. 15 STRUCTURED QUESTIONS (PART 1, PART 2, PART 3)
+       Derived directly from the Grade 1 Arabic Curriculum & Exam Paper
+       -------------------------------------------------------------------------- */
+    const QUESTIONS = [
+      // ==================== PART 1: MULTIPLE CHOICE (5 QUESTIONS) ====================
+      {
+        id: 1,
+        part: 1,
+        partTitle: "PART 1 • MULTIPLE CHOICE",
+        partInstruction: "Choose the correct English meaning!",
+        illustration: "football",
+        question: "What is the meaning of the Arabic word:",
+        arabicPrompt: "كُرَةُ الْقَدَمِ",
+        options: [
+          { label: "A", text: "Swimming", isArabic: false },
+          { label: "B", text: "Football", isArabic: false },
+          { label: "C", text: "Reading", isArabic: false },
+          { label: "D", text: "Drawing", isArabic: false }
+        ],
+        correctIndex: 1,
+        explanation: "كُرَةُ الْقَدَمِ (Kuratul Qadami) means Football! ⚽"
+      },
+      {
+        id: 2,
+        part: 1,
+        partTitle: "PART 1 • MULTIPLE CHOICE",
+        partInstruction: "Choose the correct Arabic vocabulary!",
+        illustration: "reading",
+        question: "What is the Arabic word for \"reading\"?",
+        arabicPrompt: null,
+        options: [
+          { label: "A", text: "رَسْمٌ", isArabic: true },
+          { label: "B", text: "قِرَاءَةٌ", isArabic: true },
+          { label: "C", text: "سِبَاحَةٌ", isArabic: true },
+          { label: "D", text: "غِنَاءٌ", isArabic: true }
+        ],
+        correctIndex: 1,
+        explanation: "قِرَاءَةٌ (Qira'atun) means Reading! 📖"
+      },
+      {
+        id: 3,
+        part: 1,
+        partTitle: "PART 1 • MULTIPLE CHOICE",
+        partInstruction: "Look closely at the picture and pick her hobby!",
+        illustration: "drawing",
+        question: "Look at the picture of a girl painting! What is her hobby?",
+        arabicPrompt: "مَا هِوَايَتُهَا؟",
+        options: [
+          { label: "A", text: "رَسْمٌ", isArabic: true },
+          { label: "B", text: "جَرْيٌ", isArabic: true },
+          { label: "C", text: "رَقْصٌ", isArabic: true },
+          { label: "D", text: "طَبْخٌ", isArabic: true }
+        ],
+        correctIndex: 0,
+        explanation: "رَسْمٌ (Rasmun) means Drawing / Painting! 🎨"
+      },
+      {
+        id: 4,
+        part: 1,
+        partTitle: "PART 1 • MULTIPLE CHOICE",
+        partInstruction: "Pick the right Isim Isyarah (Demonstrative Pronoun)!",
+        illustration: "father",
+        question: "Choose the correct Demonstrative Pronoun for a father (This is my father):",
+        arabicPrompt: "_______ أَبِيْ",
+        options: [
+          { label: "A", text: "هٰذِهِ", isArabic: true },
+          { label: "B", text: "تِلْكَ", isArabic: true },
+          { label: "C", text: "هٰذَا", isArabic: true },
+          { label: "D", text: "هِيَ", isArabic: true }
+        ],
+        correctIndex: 2,
+        explanation: "We use هٰذَا (Hadza - 'This') for masculine nouns like أَبِيْ (my father)!"
+      },
+      {
+        id: 5,
+        part: 1,
+        partTitle: "PART 1 • MULTIPLE CHOICE",
+        partInstruction: "Pick the right Isim Isyarah for pointing at a distance!",
+        illustration: "femaleStudent",
+        question: "Choose the correct Demonstrative Pronoun for a female student (That is a female student):",
+        arabicPrompt: "_______ طَالِبَةٌ",
+        options: [
+          { label: "A", text: "ذٰلِكَ", isArabic: true },
+          { label: "B", text: "هٰذَا", isArabic: true },
+          { label: "C", text: "هُوَ", isArabic: true },
+          { label: "D", text: "تِلْكَ", isArabic: true }
+        ],
+        correctIndex: 3,
+        explanation: "We use تِلْكَ (Tilka - 'That') for feminine nouns ending with ة like طَالِبَةٌ!"
+      },
+
+      // ==================== PART 2: MATCHING / PAIRING GAME (5 QUESTIONS) ====================
+      {
+        id: 6,
+        part: 2,
+        partTitle: "PART 2 • MATCH PAIRS",
+        partInstruction: "Match the Hobby Picture to its Arabic Word!",
+        illustration: "swimming",
+        question: "Match this Swimming picture to the correct Arabic word:",
+        arabicPrompt: "🏊 Swimming",
+        options: [
+          { label: "1", text: "سِبَاحَةٌ", isArabic: true },
+          { label: "2", text: "رَقْصٌ", isArabic: true },
+          { label: "3", text: "جَرْيٌ", isArabic: true },
+          { label: "4", text: "قِرَاءَةٌ", isArabic: true }
+        ],
+        correctIndex: 0,
+        explanation: "سِبَاحَةٌ (Sibahatun) matches Swimming! 🏊‍♂️"
+      },
+      {
+        id: 7,
+        part: 2,
+        partTitle: "PART 2 • MATCH PAIRS",
+        partInstruction: "Match the Hobby Picture to its Arabic Word!",
+        illustration: "singing",
+        question: "Match this Singing picture to the correct Arabic word:",
+        arabicPrompt: "🎤 Singing",
+        options: [
+          { label: "1", text: "طَبْخٌ", isArabic: true },
+          { label: "2", text: "غِنَاءٌ", isArabic: true },
+          { label: "3", text: "رَسْمٌ", isArabic: true },
+          { label: "4", text: "كُرَةُ الْقَدَمِ", isArabic: true }
+        ],
+        correctIndex: 1,
+        explanation: "غِنَاءٌ (Ghina'un) matches Singing! 🎤"
+      },
+      {
+        id: 8,
+        part: 2,
+        partTitle: "PART 2 • MATCH PAIRS",
+        partInstruction: "Match the Hobby Picture to its Arabic Word!",
+        illustration: "running",
+        question: "Match this Running picture to the correct Arabic word:",
+        arabicPrompt: "🏃 Running",
+        options: [
+          { label: "1", text: "جَرْيٌ", isArabic: true },
+          { label: "2", text: "سِبَاحَةٌ", isArabic: true },
+          { label: "3", text: "قِرَاءَةٌ", isArabic: true },
+          { label: "4", text: "غِنَاءٌ", isArabic: true }
+        ],
+        correctIndex: 0,
+        explanation: "جَرْيٌ (Jaryun) matches Running! 🏃‍♂️"
+      },
+      {
+        id: 9,
+        part: 2,
+        partTitle: "PART 2 • MATCH PAIRS",
+        partInstruction: "Match the Arabic Question with its correct Answer!",
+        illustration: "questionBoy",
+        question: "Match the question \"Who is this?\" (masculine) with the right Arabic answer:",
+        arabicPrompt: "مَنْ هٰذَا؟",
+        options: [
+          { label: "1", text: "هٰذِهِ أُمِّيْ", isArabic: true },
+          { label: "2", text: "هٰذَا عَمٌّ", isArabic: true },
+          { label: "3", text: "تِلْكَ طَالِبَةٌ", isArabic: true },
+          { label: "4", text: "هِيَ تِلْمِيْذَةٌ", isArabic: true }
+        ],
+        correctIndex: 1,
+        explanation: "مَنْ هٰذَا؟ asks about a male, so هٰذَا عَمٌّ (This is an uncle) is the match!"
+      },
+      {
+        id: 10,
+        part: 2,
+        partTitle: "PART 2 • MATCH PAIRS",
+        partInstruction: "Match the Arabic Question with its correct Answer!",
+        illustration: "questionGirl",
+        question: "Match the question \"Who is this?\" (feminine) with the right Arabic answer:",
+        arabicPrompt: "مَنْ هٰذِهِ؟",
+        options: [
+          { label: "1", text: "هٰذَا أَبِيْ", isArabic: true },
+          { label: "2", text: "ذٰلِكَ طَالِبٌ", isArabic: true },
+          { label: "3", text: "هٰذِهِ أُمٌّ", isArabic: true },
+          { label: "4", text: "هُوَ تِلْمِيْذٌ", isArabic: true }
+        ],
+        correctIndex: 2,
+        explanation: "مَنْ هٰذِهِ؟ asks about a female, so هٰذِهِ أُمٌّ (This is a mother) is the match!"
+      },
+
+      // ==================== PART 3: COMPLETE THE SENTENCE / WORD BUILDER (5 QUESTIONS) ====================
+      {
+        id: 11,
+        part: 3,
+        partTitle: "PART 3 • WORD BUILDER",
+        partInstruction: "Connect the separated Arabic letters into one word!",
+        illustration: "sports",
+        question: "Connect these Arabic letters to form the word for \"Sports\":",
+        arabicPrompt: "رِ – يَ – ا – ضَ – ةٌ = _______",
+        options: [
+          { label: "A", text: "رِيَاضَةٌ", isArabic: true },
+          { label: "B", text: "قِرَاءَةٌ", isArabic: true },
+          { label: "C", text: "سِبَاحَةٌ", isArabic: true },
+          { label: "D", text: "هِوَايَةٌ", isArabic: true }
+        ],
+        correctIndex: 0,
+        explanation: "رِ + يَ + ا + ضَ + ةٌ connects together to make رِيَاضَةٌ (Sports)!"
+      },
+      {
+        id: 12,
+        part: 3,
+        partTitle: "PART 3 • WORD BUILDER",
+        partInstruction: "Complete the Arabic sentence using the picture clue!",
+        illustration: "reading",
+        question: "Complete the sentence based on the picture (My hobby is reading):",
+        arabicPrompt: "هِوَايَتِيْ _______",
+        options: [
+          { label: "A", text: "رَسْمٌ", isArabic: true },
+          { label: "B", text: "قِرَاءَةٌ", isArabic: true },
+          { label: "C", text: "رَقْصٌ", isArabic: true },
+          { label: "D", text: "جَرْيٌ", isArabic: true }
+        ],
+        correctIndex: 1,
+        explanation: "هِوَايَتِيْ قِرَاءَةٌ means 'My hobby is reading'! 📚"
+      },
+      {
+        id: 13,
+        part: 3,
+        partTitle: "PART 3 • WORD BUILDER",
+        partInstruction: "Complete the Arabic sentence using the picture clue!",
+        illustration: "cooking",
+        question: "Complete the sentence based on the chef picture (His hobby is cooking):",
+        arabicPrompt: "هِوَايَتُهُ _______",
+        options: [
+          { label: "A", text: "طَبْخٌ", isArabic: true },
+          { label: "B", text: "غِنَاءٌ", isArabic: true },
+          { label: "C", text: "سِبَاحَةٌ", isArabic: true },
+          { label: "D", text: "رَسْمٌ", isArabic: true }
+        ],
+        correctIndex: 0,
+        explanation: "هِوَايَتُهُ طَبْخٌ means 'His hobby is cooking'! 👨‍🍳"
+      },
+      {
+        id: 14,
+        part: 3,
+        partTitle: "PART 3 • WORD BUILDER",
+        partInstruction: "Fill in the blank with the right Isim Isyarah!",
+        illustration: "sister",
+        question: "Complete the sentence for a sister (This is a sister):",
+        arabicPrompt: "_______ أُخْتٌ",
+        options: [
+          { label: "A", text: "هٰذَا", isArabic: true },
+          { label: "B", text: "ذٰلِكَ", isArabic: true },
+          { label: "C", text: "هٰذِهِ", isArabic: true },
+          { label: "D", text: "هُوَ", isArabic: true }
+        ],
+        correctIndex: 2,
+        explanation: "أُخْتٌ (sister) is feminine, so we complete it with هٰذِهِ أُخْتٌ!"
+      },
+      {
+        id: 15,
+        part: 3,
+        partTitle: "PART 3 • WORD BUILDER",
+        partInstruction: "Complete the final sentence about Grandfather!",
+        illustration: "grandfather",
+        question: "Complete the sentence (This is my grandfather, his hobby is drawing):",
+        arabicPrompt: "_______ جَدِّيْ، هِوَايَتُهُ رَسْمٌ",
+        options: [
+          { label: "A", text: "هٰذِهِ", isArabic: true },
+          { label: "B", text: "تِلْكَ", isArabic: true },
+          { label: "C", text: "هٰذَا", isArabic: true },
+          { label: "D", text: "هِيَ", isArabic: true }
+        ],
+        correctIndex: 2,
+        explanation: "جَدِّيْ (my grandfather) is masculine, so هٰذَا جَدِّيْ is the right start!"
+      }
+    ];
+
+    /* --------------------------------------------------------------------------
+       D. GAME STATE & QUIZ CONTROLLER
+       -------------------------------------------------------------------------- */
+    let currentIdx = 0;
+    let score = 0;
+    let partScores = { 1: 0, 2: 0, 3: 0 };
+    let answeredCurrent = false;
+    let studentName = "";
+
+    const welcomeScreen = document.getElementById('welcome-screen');
+    const quizScreen = document.getElementById('quiz-screen');
+    const resultScreen = document.getElementById('result-screen');
+    const homeBtn = document.getElementById('home-btn');
+
+    function startQuiz() {
+      playPopSound();
+      const nameInput = document.getElementById('student-name').value.trim();
+      studentName = nameInput || "Explorer";
+
+      currentIdx = 0;
+      score = 0;
+      partScores = { 1: 0, 2: 0, 3: 0 };
+      answeredCurrent = false;
+
+      welcomeScreen.classList.add('hidden');
+      resultScreen.classList.add('hidden');
+      quizScreen.classList.remove('hidden');
+      quizScreen.classList.add('flex');
+      homeBtn.classList.remove('hidden');
+
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      answeredCurrent = false;
+      const q = QUESTIONS[currentIdx];
+
+      // Update Header Progress
+      const partBadge = document.getElementById('part-badge');
+      partBadge.textContent = q.partTitle;
+      if (q.part === 1) {
+        partBadge.className = "px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-yellow-100 text-yellow-800 border-2 border-yellow-300";
+      } else if (q.part === 2) {
+        partBadge.className = "px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-emerald-100 text-emerald-800 border-2 border-emerald-300";
+      } else {
+        partBadge.className = "px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-purple-100 text-purple-800 border-2 border-purple-300";
+      }
+
+      document.getElementById('question-counter').textContent = `Question ${currentIdx + 1} / ${QUESTIONS.length}`;
+      document.getElementById('live-score').textContent = score;
+      document.getElementById('progress-bar').style.width = `${((currentIdx + 1) / QUESTIONS.length) * 100}%`;
+
+      // Update Instruction & Illustration
+      document.getElementById('part-instruction-text').textContent = q.partInstruction;
+      document.getElementById('illustration-box').innerHTML = ILLUSTRATIONS[q.illustration] || ILLUSTRATIONS.football;
+      document.getElementById('question-text').textContent = q.question;
+
+      // Arabic Prompt Box
+      const arabicBox = document.getElementById('arabic-prompt-box');
+      const arabicText = document.getElementById('arabic-prompt-text');
+      if (q.arabicPrompt) {
+        arabicBox.classList.remove('hidden');
+        arabicText.textContent = q.arabicPrompt;
+        // Adjust direction if prompt contains English emoji/word
+        if (/[A-Za-z]/.test(q.arabicPrompt)) {
+          arabicText.classList.remove('arabic-text');
+          arabicText.classList.add('text-2xl', 'sm:text-3xl');
+        } else {
+          arabicText.classList.add('arabic-text');
+          arabicText.classList.remove('text-2xl', 'sm:text-3xl');
+        }
+      } else {
+        arabicBox.classList.add('hidden');
+      }
+
+      // Render 4 Option Cards
+      const grid = document.getElementById('options-grid');
+      grid.innerHTML = "";
+
+      const badgeColors = [
+        "bg-sky-100 text-sky-700 border-sky-300",
+        "bg-yellow-100 text-yellow-800 border-yellow-300",
+        "bg-emerald-100 text-emerald-700 border-emerald-300",
+        "bg-purple-100 text-purple-700 border-purple-300"
+      ];
+
+      q.options.forEach((opt, index) => {
+        const btn = document.createElement('button');
+        btn.type = "button";
+        btn.className = "option-card p-4 sm:p-5 flex items-center justify-between gap-3 text-left w-full";
+        btn.onclick = () => selectAnswer(index, btn);
+
+        const textClass = opt.isArabic
+          ? "arabic-text text-2xl sm:text-3xl font-bold text-slate-800 flex-grow text-center"
+          : "text-lg sm:text-xl font-bold text-slate-800 flex-grow text-center";
+
+        btn.innerHTML = `
+          <span class="w-10 h-10 rounded-xl border-2 ${badgeColors[index]} font-bold text-lg flex items-center justify-center flex-shrink-0">
+            ${opt.label}
+          </span>
+          <span class="${textClass}">${opt.text}</span>
+          <span class="w-6 text-xl status-icon"></span>
+        `;
+        grid.appendChild(btn);
+      });
+
+      // Hide Feedback Banner & Animate Card Entry
+      document.getElementById('feedback-banner').classList.add('hidden');
+      const card = document.getElementById('question-card');
+      card.classList.remove('animate-pop');
+      void card.offsetWidth; // trigger reflow
+      card.classList.add('animate-pop');
+    }
+
+    function selectAnswer(selectedIndex, selectedBtn) {
+      if (answeredCurrent) return;
+      answeredCurrent = true;
+
+      const q = QUESTIONS[currentIdx];
+      const isCorrect = selectedIndex === q.correctIndex;
+      const allCards = document.querySelectorAll('#options-grid .option-card');
+
+      allCards.forEach((card, idx) => {
+        card.classList.add('disabled');
+        const iconSpan = card.querySelector('.status-icon');
+        if (idx === q.correctIndex) {
+          card.classList.add('correct');
+          iconSpan.textContent = "✅";
+        } else if (idx === selectedIndex && !isCorrect) {
+          card.classList.add('wrong');
+          iconSpan.textContent = "❌";
+        } else {
+          card.classList.add('dimmed');
+        }
+      });
+
+      const banner = document.getElementById('feedback-banner');
+      const emoji = document.getElementById('feedback-emoji');
+      const title = document.getElementById('feedback-title');
+      const explanation = document.getElementById('feedback-explanation');
+      const nextBtnText = document.getElementById('next-btn-text');
+
+      if (isCorrect) {
+        score++;
+        partScores[q.part]++;
+        document.getElementById('live-score').textContent = score;
+        playCorrectSound();
+
+        banner.className = "mt-6 p-4 sm:p-5 rounded-2xl border-3 bg-emerald-50 border-emerald-400 text-emerald-900 animate-pop";
+        emoji.textContent = "🌟";
+        title.textContent = "Mumtaz! Excellent Job!";
+      } else {
+        playWrongSound();
+        banner.className = "mt-6 p-4 sm:p-5 rounded-2xl border-3 bg-amber-50 border-amber-400 text-amber-900 animate-pop";
+        emoji.textContent = "💡";
+        title.textContent = "Good Try! Let's Learn:";
+      }
+
+      explanation.textContent = q.explanation;
+      nextBtnText.textContent = currentIdx === QUESTIONS.length - 1 ? "See My Stars!" : "Next Question";
+      banner.classList.remove('hidden');
+    }
+
+    function nextQuestion() {
+      playPopSound();
+      if (currentIdx < QUESTIONS.length - 1) {
+        currentIdx++;
+        renderQuestion();
+      } else {
+        showResults();
+      }
+    }
+
+    function showResults() {
+      quizScreen.classList.add('hidden');
+      quizScreen.classList.remove('flex');
+      resultScreen.classList.remove('hidden');
+      resultScreen.classList.add('animate-pop');
+
+      document.getElementById('congrats-heading').textContent = `Amazing Work, ${studentName}!`;
+      document.getElementById('final-score-num').textContent = score;
+      document.getElementById('part1-score').textContent = `${partScores[1]} / 5 ⭐`;
+      document.getElementById('part2-score').textContent = `${partScores[2]} / 5 ⭐`;
+      document.getElementById('part3-score').textContent = `${partScores[3]} / 5 ⭐`;
+
+      // Calculate 1 to 3 big trophy stars
+      const starContainer = document.getElementById('final-stars');
+      let starCount = 1;
+      if (score >= 12) starCount = 3;
+      else if (score >= 7) starCount = 2;
+
+      starContainer.innerHTML = "";
+      for (let i = 0; i < 3; i++) {
+        const span = document.createElement('span');
+        span.textContent = i < starCount ? "⭐" : "☆";
+        span.className = i < starCount ? "star-earned inline-block" : "text-slate-300 inline-block";
+        span.style.animationDelay = `${i * 0.18}s`;
+        starContainer.appendChild(span);
+      }
+
+      playFanfareSound();
+      launchConfetti();
+    }
+
+    function confirmReset() {
+      playPopSound();
+      document.getElementById('reset-modal').classList.remove('hidden');
+    }
+
+    function closeResetModal() {
+      playPopSound();
+      document.getElementById('reset-modal').classList.add('hidden');
+    }
+
+    function restartQuiz() {
+      playPopSound();
+      document.getElementById('reset-modal').classList.add('hidden');
+      quizScreen.classList.add('hidden');
+      quizScreen.classList.remove('flex');
+      resultScreen.classList.add('hidden');
+      homeBtn.classList.add('hidden');
+      welcomeScreen.classList.remove('hidden');
+    }
+
+    /* --------------------------------------------------------------------------
+       E. CELEBRATION CONFETTI ANIMATION
+       -------------------------------------------------------------------------- */
+    function launchConfetti() {
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const colors = ['#38BDF8', '#FACC15', '#4ADE80', '#A855F7', '#F472B6'];
+      const pieces = Array.from({ length: 85 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height - canvas.height,
+        w: Math.random() * 10 + 6,
+        h: Math.random() * 6 + 4,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        speedY: Math.random() * 3 + 2,
+        speedX: Math.random() * 2 - 1,
+        angle: Math.random() * 360,
+        spin: Math.random() * 6 - 3
+      }));
+
+      let frames = 0;
+      function updateConfetti() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        pieces.forEach(p => {
+          p.y += p.speedY;
+          p.x += p.speedX;
+          p.angle += p.spin;
+
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate((p.angle * Math.PI) / 180);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+          ctx.restore();
+        });
+
+        frames++;
+        if (frames < 180) {
+          requestAnimationFrame(updateConfetti);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+      requestAnimationFrame(updateConfetti);
+    }
+
+    window.addEventListener('resize', () => {
+      const canvas = document.getElementById('confetti-canvas');
+      if (canvas) {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+    });
+  </script>
+</body>
+</html>
