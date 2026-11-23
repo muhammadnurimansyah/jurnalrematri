@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade 1 Primary Science Assessment - Cambridge ICP Style</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Fredoka & Nunito for kid-friendly readability -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti for Celebration -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #f0fdf4 0%, #e0f2fe 50%, #fef9c3 100%);
+            min-height: 100vh;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        h1, h2, h3, .font-display {
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        /* Custom subtle animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+        .node-active {
+            animation: pulse-ring 1.5s infinite;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* SVG Line styling */
+        .match-line {
+            stroke-linecap: round;
+            transition: stroke-width 0.2s ease;
+        }
+        .match-line:hover {
+            stroke-width: 7;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased pb-16">
+
+    <!-- Top School / Cambridge ICP Style Header -->
+    <header class="bg-white/90 backdrop-blur-md border-b-4 border-emerald-500 shadow-sm sticky top-0 z-40">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <!-- Cute Science Emblem SVG -->
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center text-white shadow-md shrink-0">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-extrabold uppercase tracking-wider bg-amber-100 text-amber-800 px-2.5 py-0.5 rounded-full border border-amber-300">Cambridge Primary / ICP</span>
+                        <span class="text-xs font-bold text-emerald-700 hidden sm:inline">Grade 1 Science</span>
+                    </div>
+                    <h1 class="text-lg sm:text-xl font-bold text-slate-800 leading-tight">Primary Science Interactive Assessment</h1>
+                </div>
+            </div>
+
+            <!-- Live Progress Pill (Visible during Quiz) -->
+            <div id="header-progress-container" class="hidden items-center gap-3 bg-slate-100 px-3.5 py-2 rounded-2xl border border-slate-200">
+                <div class="text-right">
+                    <div class="text-xs font-bold text-slate-500" id="header-student-info">Student</div>
+                    <div class="text-sm font-extrabold text-emerald-600"><span id="answered-count">0</span> / 15 Answered</div>
+                </div>
+                <div class="w-20 sm:w-28 h-3 bg-slate-200 rounded-full overflow-hidden">
+                    <div id="header-progress-bar" class="h-full bg-gradient-to-r from-emerald-400 to-teal-500 transition-all duration-300 rounded-full" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-5xl mx-auto px-4 pt-6 sm:pt-8">
+
+        <!-- ========================================================= -->
+        <!-- SCREEN 1: WELCOME & STUDENT IDENTITY                      -->
+        <!-- ========================================================= -->
+        <section id="welcome-screen" class="max-w-2xl mx-auto">
+            <div class="bg-white rounded-3xl shadow-xl border-2 border-emerald-100 overflow-hidden">
+                <!-- Banner -->
+                <div class="bg-gradient-to-r from-emerald-500 via-teal-500 to-sky-500 p-6 sm:p-8 text-white text-center relative overflow-hidden">
+                    <div class="flex justify-center gap-4 text-4xl sm:text-5xl mb-3 animate-float">
+                        <span>☀️</span>
+                        <span>🧪</span>
+                        <span>👀</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-bold mb-1">Welcome, Young Scientist!</h2>
+                    <p class="text-emerald-50 text-sm sm:text-base font-medium">Primary Science Assessment • Grade 1</p>
+                </div>
+
+                <!-- Topics Overview -->
+                <div class="p-6 sm:p-8 space-y-6">
+                    <div class="grid grid-cols-3 gap-3 text-center">
+                        <div class="bg-amber-50 border-2 border-amber-200 rounded-2xl p-3">
+                            <div class="text-2xl sm:text-3xl mb-1">🌞</div>
+                            <div class="font-display font-bold text-amber-900 text-sm sm:text-base">The Sun</div>
+                            <div class="text-xs text-amber-700 font-semibold">Light & Health</div>
+                        </div>
+                        <div class="bg-sky-50 border-2 border-sky-200 rounded-2xl p-3">
+                            <div class="text-2xl sm:text-3xl mb-1">🧱</div>
+                            <div class="font-display font-bold text-sky-900 text-sm sm:text-base">Materials</div>
+                            <div class="text-xs text-sky-700 font-semibold">Surface & Properties</div>
+                        </div>
+                        <div class="bg-rose-50 border-2 border-rose-200 rounded-2xl p-3">
+                            <div class="text-2xl sm:text-3xl mb-1">🖐️</div>
+                            <div class="font-display font-bold text-rose-900 text-sm sm:text-base">Body Parts</div>
+                            <div class="text-xs text-rose-700 font-semibold">Senses & Care</div>
+                        </div>
+                    </div>
+
+                    <!-- Exam Structure Info -->
+                    <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200 space-y-2 text-sm">
+                        <div class="font-bold text-slate-700 flex items-center gap-2">
+                            <span>📋</span> Assessment Structure (15 Questions):
+                        </div>
+                        <ul class="space-y-1.5 text-slate-600 pl-6 list-disc font-medium">
+                            <li><strong>Part A (No. 1–5):</strong> Multiple Choice (Choose 1 best answer)</li>
+                            <li><strong>Part B (No. 6–10):</strong> Complex Multiple Choice (Choose more than 1 answer)</li>
+                            <li><strong>Part C (No. 11–15):</strong> Matching Game (Draw lines to connect pairs!)</li>
+                        </ul>
+                    </div>
+
+                    <!-- Student Form -->
+                    <form id="start-form" class="space-y-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div class="sm:col-span-2">
+                                <label for="student-name" class="block text-sm font-bold text-slate-700 mb-1">Student's Full Name *</label>
+                                <input type="text" id="student-name" required placeholder="e.g., Aisyah Putri"
+                                    class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none font-bold text-slate-800 transition">
+                            </div>
+                            <div>
+                                <label for="student-class" class="block text-sm font-bold text-slate-700 mb-1">Class / Grade *</label>
+                                <select id="student-class"
+                                    class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none font-bold text-slate-800 bg-white transition">
+                                    <option value="Grade 1 ICP A">1 ICP A</option>
+                                    <option value="Grade 1 ICP B">1 ICP B</option>
+                                    <option value="Grade 1 ICP C">1 ICP C</option>
+                                    <option value="Grade 1 ICP D">1 ICP D</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div id="form-error" class="hidden text-rose-600 text-sm font-bold bg-rose-50 border border-rose-200 px-4 py-2 rounded-xl">
+                            Please enter your name before starting the test!
+                        </div>
+
+                        <button type="submit"
+                            class="w-full py-4 px-6 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-display font-bold text-xl rounded-2xl shadow-lg shadow-emerald-200 transform transition active:scale-[0.98] flex items-center justify-center gap-3 cursor-pointer">
+                            <span>Start Science Quiz</span>
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- SCREEN 2: QUIZ INTERFACE                                  -->
+        <!-- ========================================================= -->
+        <section id="quiz-screen" class="hidden space-y-8">
+
+            <!-- Quick Question Navigator Bar -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+                    <span class="text-xs font-extrabold uppercase tracking-wider text-slate-500">Question Navigator (Click to jump)</span>
+                    <div class="flex items-center gap-3 text-xs font-bold">
+                        <span class="flex items-center gap-1 text-slate-500"><span class="w-3 h-3 rounded-full bg-slate-200 inline-block"></span> Unanswered</span>
+                        <span class="flex items-center gap-1 text-emerald-700"><span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span> Answered</span>
+                    </div>
+                </div>
+                <div id="question-nav-pills" class="flex flex-wrap gap-1.5 sm:gap-2">
+                    <!-- Pills 1 to 15 generated via JS -->
+                </div>
+            </div>
+
+            <!-- ===================================================== -->
+            <!-- SECTION A: MULTIPLE CHOICE (Questions 1 - 5)          -->
+            <!-- ===================================================== -->
+            <div class="space-y-5">
+                <div class="bg-gradient-to-r from-sky-500 to-blue-600 text-white rounded-2xl p-4 sm:px-6 shadow-md flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-extrabold uppercase tracking-widest bg-white/20 px-2.5 py-0.5 rounded-full">Part A • 5 Questions</span>
+                        <h2 class="text-xl sm:text-2xl font-bold mt-1">Multiple Choice</h2>
+                        <p class="text-sky-100 text-sm">Read carefully and choose <strong>one (1)</strong> correct answer!</p>
+                    </div>
+                    <div class="text-4xl hidden sm:block">🎯</div>
+                </div>
+
+                <div id="mc-questions-container" class="space-y-5">
+                    <!-- Rendered dynamically -->
+                </div>
+            </div>
+
+            <!-- ===================================================== -->
+            <!-- SECTION B: COMPLEX MULTIPLE CHOICE (Questions 6 - 10) -->
+            <!-- ===================================================== -->
+            <div class="space-y-5 pt-4">
+                <div class="bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-2xl p-4 sm:px-6 shadow-md flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-extrabold uppercase tracking-widest bg-white/20 px-2.5 py-0.5 rounded-full">Part B • 5 Questions</span>
+                        <h2 class="text-xl sm:text-2xl font-bold mt-1">Complex Multiple Choice</h2>
+                        <p class="text-purple-100 text-sm">Carefully check <strong>more than one (2 or 3)</strong> correct answers!</p>
+                    </div>
+                    <div class="text-4xl hidden sm:block">☑️</div>
+                </div>
+
+                <div id="cmc-questions-container" class="space-y-5">
+                    <!-- Rendered dynamically -->
+                </div>
+            </div>
+
+            <!-- ===================================================== -->
+            <!-- SECTION C: MATCHING DRAW-A-LINE (Questions 11 - 15)   -->
+            <!-- ===================================================== -->
+            <div id="section-matching" class="space-y-5 pt-4">
+                <div class="bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-2xl p-4 sm:px-6 shadow-md flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                        <span class="text-xs font-extrabold uppercase tracking-widest bg-white/20 px-2.5 py-0.5 rounded-full">Part C • Questions 11 – 15</span>
+                        <h2 class="text-xl sm:text-2xl font-bold mt-1">Matching: Draw a Line!</h2>
+                        <p class="text-amber-50 text-sm">Drag from a left dot to a right dot (or tap a left dot, then tap a right dot) to connect!</p>
+                    </div>
+                    <button type="button" id="reset-lines-btn"
+                        class="bg-white text-orange-600 hover:bg-orange-50 font-bold text-sm px-4 py-2.5 rounded-xl shadow flex items-center gap-2 transition active:scale-95 cursor-pointer">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                        <span>Clear All Lines</span>
+                    </button>
+                </div>
+
+                <!-- Interactive Matching Board Card -->
+                <div class="bg-white rounded-3xl p-4 sm:p-6 md:p-8 shadow-md border-2 border-amber-200 relative">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-100">
+                        <div class="text-sm font-bold text-slate-600 flex items-center gap-2">
+                            <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-amber-100 text-amber-700 font-extrabold text-xs">💡</span>
+                            <span>Tip: Click a colored line or dot to remove a single connection.</span>
+                        </div>
+                        <span id="matching-status-badge" class="text-xs font-extrabold px-3 py-1 rounded-full bg-amber-100 text-amber-800">
+                            0 / 5 Lines Connected
+                        </span>
+                    </div>
+
+                    <!-- Matching Arena (Relative container holding Left Column, SVG Overlay, Right Column) -->
+                    <div id="matching-arena" class="relative grid grid-cols-12 gap-2 sm:gap-6 items-center py-2 touch-none">
+                        
+                        <!-- SVG Canvas Overlay for Drawing Lines -->
+                        <svg id="matching-svg" class="absolute inset-0 w-full h-full pointer-events-none z-20" style="overflow: visible;">
+                            <!-- Permanent lines group -->
+                            <g id="lines-layer" class="pointer-events-auto"></g>
+                            <!-- Active dragging preview line -->
+                            <line id="preview-line" x1="0" y1="0" x2="0" y2="0" stroke="#f59e0b" stroke-width="4" stroke-dasharray="8,6" stroke-linecap="round" class="hidden" />
+                        </svg>
+
+                        <!-- Left Column (Questions 11 - 15) -->
+                        <div id="matching-left-col" class="col-span-5 flex flex-col justify-between gap-3 sm:gap-4 z-10">
+                            <!-- Left items populated via JS -->
+                        </div>
+
+                        <!-- Center Spacer for Lines -->
+                        <div class="col-span-2"></div>
+
+                        <!-- Right Column (Shuffled Targets) -->
+                        <div id="matching-right-col" class="col-span-5 flex flex-col justify-between gap-3 sm:gap-4 z-10">
+                            <!-- Right items populated via JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Assessment Bar -->
+            <div class="bg-white rounded-3xl p-6 shadow-lg border-2 border-emerald-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-800">Ready to finish your Science test?</h3>
+                    <p class="text-sm text-slate-500 font-medium" id="submit-helper-text">Make sure you have answered all 15 questions!</p>
+                </div>
+                <button type="button" id="submit-quiz-btn"
+                    class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-display font-bold text-lg rounded-2xl shadow-lg shadow-emerald-200 transition transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
+                    <span>Submit My Answers</span>
+                    <span class="text-xl">🚀</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- CUSTOM CONFIRMATION MODAL (No browser confirm/alert!)     -->
+        <!-- ========================================================= -->
+        <div id="confirm-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl border-2 border-amber-200 text-center space-y-5 animate-bounce-once">
+                <div class="w-16 h-16 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-3xl mx-auto">
+                    🤔
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-slate-800">Some Questions Are Unanswered!</h3>
+                    <p class="text-slate-600 text-sm mt-2" id="modal-unanswered-msg">
+                        You have answered X out of 15 questions. Do you still want to submit now?
+                    </p>
+                </div>
+                <div class="flex gap-3">
+                    <button type="button" id="modal-cancel-btn"
+                        class="flex-1 py-3 px-4 rounded-xl border-2 border-slate-200 font-bold text-slate-700 hover:bg-slate-50 transition cursor-pointer">
+                        Keep Working
+                    </button>
+                    <button type="button" id="modal-confirm-btn"
+                        class="flex-1 py-3 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-600 font-bold text-white shadow-md transition cursor-pointer">
+                        Submit Anyway
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- SCREEN 3: REPORT CARD & DETAILED ANSWER REVIEW            -->
+        <!-- ========================================================= -->
+        <section id="result-screen" class="hidden space-y-8">
+            <!-- Score Summary Card -->
+            <div class="bg-white rounded-3xl shadow-xl border-2 border-emerald-200 overflow-hidden">
+                <div class="bg-gradient-to-r from-emerald-500 via-teal-500 to-sky-500 p-6 sm:p-8 text-white text-center">
+                    <div id="result-trophy" class="text-6xl mb-2">🏆</div>
+                    <span class="inline-block bg-white/20 text-xs font-extrabold uppercase tracking-widest px-3 py-1 rounded-full mb-2">Official Science Report Card</span>
+                    <h2 class="text-2xl sm:text-3xl font-bold" id="result-student-name">Student Name</h2>
+                    <p class="text-emerald-50 font-semibold" id="result-student-class">Grade 1 ICP</p>
+                </div>
+
+                <div class="p-6 sm:p-8">
+                    <!-- Big Score & Stars -->
+                    <div class="flex flex-col md:flex-row items-center justify-around gap-6 pb-6 border-b border-slate-100">
+                        <div class="text-center">
+                            <div class="text-xs font-extrabold uppercase tracking-wider text-slate-400 mb-1">Final Score</div>
+                            <div class="text-5xl sm:text-6xl font-display font-bold text-emerald-600" id="result-percentage">100</div>
+                            <div class="text-sm font-bold text-slate-500 mt-1"><span id="result-raw-score">15</span> / 15 Points Correct</div>
+                        </div>
+
+                        <div class="text-center max-w-sm">
+                            <div id="result-stars" class="text-3xl sm:text-4xl tracking-widest mb-2">⭐⭐⭐⭐⭐</div>
+                            <div id="result-badge-title" class="text-xl font-bold text-slate-800">Super Science Star!</div>
+                            <p id="result-feedback-msg" class="text-sm text-slate-600 mt-1">Amazing job! You understand The Sun, Materials, and Parts of the Body wonderfully!</p>
+                        </div>
+                    </div>
+
+                    <!-- Section Breakdown -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6">
+                        <div class="bg-sky-50 border border-sky-200 rounded-2xl p-4 text-center">
+                            <div class="text-xs font-extrabold text-sky-700 uppercase">Part A: Multiple Choice</div>
+                            <div class="text-2xl font-display font-bold text-sky-900 mt-1"><span id="score-part-a">0</span> / 5</div>
+                        </div>
+                        <div class="bg-purple-50 border border-purple-200 rounded-2xl p-4 text-center">
+                            <div class="text-xs font-extrabold text-purple-700 uppercase">Part B: Complex MC</div>
+                            <div class="text-2xl font-display font-bold text-purple-900 mt-1"><span id="score-part-b">0</span> / 5</div>
+                        </div>
+                        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-center">
+                            <div class="text-xs font-extrabold text-amber-700 uppercase">Part C: Matching Lines</div>
+                            <div class="text-2xl font-display font-bold text-amber-900 mt-1"><span id="score-part-c">0</span> / 5</div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 flex justify-center">
+                        <button type="button" id="retake-quiz-btn"
+                            class="px-6 py-3 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-2xl shadow transition flex items-center gap-2 cursor-pointer">
+                            <span>🔄 Try Again / Retake Quiz</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Answer Key & Review -->
+            <div class="space-y-4">
+                <h3 class="text-xl sm:text-2xl font-bold text-slate-800 flex items-center gap-2">
+                    <span>📝</span> Detailed Answer Review
+                </h3>
+                <div id="review-container" class="space-y-4">
+                    <!-- Review cards injected via JS -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ========================================================= -->
+    <!-- JAVASCRIPT APPLICATION LOGIC                              -->
+    <!-- ========================================================= -->
+    <script>
+        // ==========================================
+        // 1. QUESTION BANK (15 Grade 1 ICP Questions)
+        // ==========================================
+        const multipleChoiceQuestions = [
+            {
+                id: 1,
+                topic: "The Sun",
+                topicIcon: "☀️",
+                topicColor: "amber",
+                illustration: "🌅🦴",
+                question: "Sunlight is very important for all living things. Getting gentle morning sunlight helps the human body to...",
+                options: [
+                    { key: "A", text: "Produce Vitamin D for strong bones" },
+                    { key: "B", text: "Breathe underwater like a fish" },
+                    { key: "C", text: "Make green chlorophyll in our skin" },
+                    { key: "D", text: "Turn our hair into bright yellow" }
+                ],
+                correct: "A",
+                explanation: "Morning sunlight helps our skin produce Vitamin D, which keeps our bones and teeth strong and healthy!"
+            },
+            {
+                id: 2,
+                topic: "Materials",
+                topicIcon: "🧱",
+                topicColor: "sky",
+                illustration: "🌧️🧥",
+                question: "When it rains, people wear a raincoat to keep their clothes dry. Most raincoats are made of plastic because plastic is...",
+                options: [
+                    { key: "A", text: "Heavy and rough" },
+                    { key: "B", text: "Waterproof and light" },
+                    { key: "C", text: "Easy to tear like paper" },
+                    { key: "D", text: "Absorbs lots of rainwater" }
+                ],
+                correct: "B",
+                explanation: "Plastic is waterproof (does not let water pass through) and lightweight, making it perfect for raincoats."
+            },
+            {
+                id: 3,
+                topic: "Parts of the Body",
+                topicIcon: "👂",
+                topicColor: "rose",
+                illustration: "🎵🔔",
+                question: "We have five sense organs to learn about the world around us. Which part of our body do we use to hear music and birds singing?",
+                options: [
+                    { key: "A", text: "Eyes" },
+                    { key: "B", text: "Nose" },
+                    { key: "C", text: "Ears" },
+                    { key: "D", text: "Tongue" }
+                ],
+                correct: "C",
+                explanation: "Our ears are the sense organs for hearing sounds like music, voices, and birds singing."
+            },
+            {
+                id: 4,
+                topic: "The Sun",
+                topicIcon: "☀️",
+                topicColor: "amber",
+                illustration: "😎🧢",
+                question: "Too much bright midday sunlight can hurt our eyes and burn our skin. How can we protect our eyes when going outside on a sunny day?",
+                options: [
+                    { key: "A", text: "Look directly at the bright Sun" },
+                    { key: "B", text: "Wear sunglasses and a sun hat" },
+                    { key: "C", text: "Wear heavy winter ice skates" },
+                    { key: "D", text: "Stay under the hot sun all afternoon" }
+                ],
+                correct: "B",
+                explanation: "Wearing sunglasses and a wide sun hat protects our eyes from bright harmful sun rays."
+            },
+            {
+                id: 5,
+                topic: "Materials",
+                topicIcon: "🧱",
+                topicColor: "sky",
+                illustration: "🪞🪵",
+                question: "Different objects have different surfaces when we touch them. Which of the following objects has a SMOOTH surface?",
+                options: [
+                    { key: "A", text: "Rough tree bark" },
+                    { key: "B", text: "Sandpaper" },
+                    { key: "C", text: "A glass mirror" },
+                    { key: "D", text: "A bumpy stone road" }
+                ],
+                correct: "C",
+                explanation: "A glass mirror feels flat, even, and smooth when touched, unlike sandpaper or tree bark which feel rough."
+            }
+        ];
+
+        const complexMCQuestions = [
+            {
+                id: 6,
+                topic: "The Sun",
+                topicIcon: "☀️",
+                topicColor: "amber",
+                illustration: "👕🌾🌱",
+                question: "The Sun is a wonderful gift of nature. What are the benefits of the Sun for living things on Earth?",
+                hint: "Choose 3 correct answers",
+                statements: [
+                    { key: "1", text: "Helps wet clothes and paddy dry faster" },
+                    { key: "2", text: "Helps green plants make their own food (photosynthesis)" },
+                    { key: "3", text: "Gives light and warmth so Earth is not dark and freezing" },
+                    { key: "4", text: "Makes rivers full of plastic trash" }
+                ],
+                correct: ["1", "2", "3"],
+                explanation: "Sunlight dries clothes/paddy, helps plants grow through photosynthesis, and provides light and warmth."
+            },
+            {
+                id: 7,
+                topic: "Materials",
+                topicIcon: "🧱",
+                topicColor: "sky",
+                illustration: "🍼💧",
+                question: "Students bring drinking water bottles to school every day. Which properties make plastic a good material for a water bottle?",
+                hint: "Choose 3 correct answers",
+                statements: [
+                    { key: "1", text: "Light (easy for children to carry)" },
+                    { key: "2", text: "Waterproof (holds water without leaking)" },
+                    { key: "3", text: "Not easily broken when dropped" },
+                    { key: "4", text: "Very heavy and fragile like thin glass" }
+                ],
+                correct: ["1", "2", "3"],
+                explanation: "Plastic water bottles are lightweight, waterproof, and durable (do not break easily if dropped)."
+            },
+            {
+                id: 8,
+                topic: "Parts of the Body",
+                topicIcon: "🖐️",
+                topicColor: "rose",
+                illustration: "✍️⚽🚶",
+                question: "Our hands and legs help us do many activities every day. Which activities use our hands or legs properly?",
+                hint: "Choose 3 correct answers",
+                statements: [
+                    { key: "1", text: "Using hands to hold a pencil and write neatly" },
+                    { key: "2", text: "Using legs and feet to walk, run, and kick a ball" },
+                    { key: "3", text: "Using hands to eat food with a spoon" },
+                    { key: "4", text: "Using ears to smell delicious flowers" }
+                ],
+                correct: ["1", "2", "3"],
+                explanation: "Hands are used for holding pencils and spoons, while legs/feet are used for walking and kicking."
+            },
+            {
+                id: 9,
+                topic: "The Sun",
+                topicIcon: "☀️",
+                topicColor: "amber",
+                illustration: "🧴☂️👕",
+                question: "Read the actions below! Which actions protect our skin and body from too much hot sunlight?",
+                hint: "Choose 3 correct answers",
+                statements: [
+                    { key: "1", text: "Apply sunscreen lotion on our skin" },
+                    { key: "2", text: "Wear a jacket or long-sleeved clothes" },
+                    { key: "3", text: "Use an umbrella when walking in the hot sun" },
+                    { key: "4", text: "Sunbathe at noon without any protection" }
+                ],
+                correct: ["1", "2", "3"],
+                explanation: "Sunscreen, long-sleeved clothes, and umbrellas protect our skin from sunburn."
+            },
+            {
+                id: 10,
+                topic: "Materials & Body Care",
+                topicIcon: "🪥",
+                topicColor: "emerald",
+                illustration: "🪥🧼🍎",
+                question: "We must take good care of our body parts every day using safe everyday objects. Which habits keep our body clean and healthy?",
+                hint: "Choose 3 correct answers",
+                statements: [
+                    { key: "1", text: "Brushing teeth twice a day with a plastic toothbrush" },
+                    { key: "2", text: "Washing hands with clean water and soap before eating" },
+                    { key: "3", text: "Eating healthy fruits and vegetables" },
+                    { key: "4", text: "Rubbing our eyes with dirty hands" }
+                ],
+                correct: ["1", "2", "3"],
+                explanation: "Brushing teeth, washing hands with soap, and eating healthy food keep our body parts healthy!"
+            }
+        ];
+
+        // Section C: Matching Items (Questions 11 - 15)
+        const matchingLeftItems = [
+            {
+                qNum: 11,
+                id: "L1",
+                topic: "The Sun",
+                icon: "🌅",
+                text: "Morning sunlight",
+                matchId: "R3",
+                explanation: "Morning sunlight helps our body produce Vitamin D."
+            },
+            {
+                qNum: 12,
+                id: "L2",
+                topic: "Materials",
+                icon: "☂️",
+                text: "Raincoat & umbrella",
+                matchId: "R1",
+                explanation: "Raincoats and umbrellas are made of waterproof plastic to keep us dry."
+            },
+            {
+                qNum: 13,
+                id: "L3",
+                topic: "Materials",
+                icon: "🪵",
+                text: "Sandpaper & tree bark",
+                matchId: "R5",
+                explanation: "Sandpaper and tree bark feel bumpy and have a rough surface."
+            },
+            {
+                qNum: 14,
+                id: "L4",
+                topic: "Body Parts",
+                icon: "👀",
+                text: "Our eyes",
+                matchId: "R2",
+                explanation: "We use our eyes to see colors, shapes, and read books."
+            },
+            {
+                qNum: 15,
+                id: "L5",
+                topic: "Body Parts",
+                icon: "👃",
+                text: "Our nose",
+                matchId: "R4",
+                explanation: "We use our nose to breathe and smell flowers or delicious food."
+            }
+        ];
+
+        // Shuffled order for right column
+        const matchingRightItems = [
+            { id: "R1", icon: "💧", text: "Made of waterproof plastic" },
+            { id: "R2", icon: "🎨", text: "Used for seeing colors and shapes" },
+            { id: "R3", icon: "🦴", text: "Helps our body make Vitamin D" },
+            { id: "R4", icon: "🌸", text: "Used for smelling flowers and food" },
+            { id: "R5", icon: "🪨", text: "Have a rough surface" }
+        ];
+
+        const lineColors = ["#ef4444", "#3b82f6", "#10b981", "#8b5cf6", "#f59e0b"];
+
+        // ==========================================
+        // 2. STATE MANAGEMENT
+        // ==========================================
+        const state = {
+            studentName: "",
+            studentClass: "",
+            mcAnswers: {},       // { 1: "A", 2: "B", ... }
+            cmcAnswers: {},      // { 6: ["1", "2"], ... }
+            connections: {},     // { "L1": "R3", ... }
+            selectedLeftId: null,
+            isDragging: false,
+            dragStartLeftId: null
+        };
+
+        // ==========================================
+        // 3. INITIALIZATION & RENDERING
+        // ==========================================
+        document.addEventListener("DOMContentLoaded", () => {
+            renderQuestionNavigator();
+            renderMCQuestions();
+            renderCMCQuestions();
+            renderMatchingBoard();
+            setupEventListeners();
+        });
+
+        function renderQuestionNavigator() {
+            const container = document.getElementById("question-nav-pills");
+            container.innerHTML = "";
+            for (let i = 1; i <= 15; i++) {
+                const btn = document.createElement("button");
+                btn.type = "button";
+                btn.id = `nav-pill-${i}`;
+                btn.textContent = i;
+                btn.className = "w-8 h-8 sm:w-9 sm:h-9 rounded-xl font-display font-bold text-sm bg-slate-100 text-slate-600 border-2 border-slate-200 hover:border-emerald-400 transition cursor-pointer";
+                btn.addEventListener("click", () => {
+                    const target = i <= 10 ? document.getElementById(`question-card-${i}`) : document.getElementById("section-matching");
+                    if (target) {
+                        target.scrollIntoView({ behavior: "smooth", block: "center" });
+                    }
+                });
+                container.appendChild(btn);
+            }
+        }
+
+        function renderMCQuestions() {
+            const container = document.getElementById("mc-questions-container");
+            container.innerHTML = multipleChoiceQuestions.map(q => `
+                <div id="question-card-${q.id}" class="bg-white rounded-3xl p-5 sm:p-6 shadow-sm border-2 border-slate-200 hover:border-sky-200 transition">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="w-8 h-8 rounded-xl bg-sky-500 text-white font-display font-bold flex items-center justify-center shadow-sm">${q.id}</span>
+                            <span class="text-xs font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-${q.topicColor}-100 text-${q.topicColor}-800 border border-${q.topicColor}-200">
+                                ${q.topicIcon} ${q.topic}
+                            </span>
+                        </div>
+                        <span class="text-2xl bg-slate-50 px-3 py-1 rounded-xl border border-slate-100">${q.illustration}</span>
+                    </div>
+
+                    <p class="text-base sm:text-lg font-bold text-slate-800 mb-4 leading-relaxed">${q.question}</p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        ${q.options.map(opt => `
+                            <button type="button"
+                                data-qid="${q.id}"
+                                data-key="${opt.key}"
+                                class="mc-option-btn text-left p-3.5 sm:p-4 rounded-2xl border-2 border-slate-200 bg-slate-50/60 hover:bg-sky-50 hover:border-sky-300 transition flex items-center gap-3 cursor-pointer group">
+                                <span class="opt-badge w-8 h-8 rounded-xl bg-white border-2 border-slate-300 group-hover:border-sky-400 font-display font-bold text-slate-700 flex items-center justify-center shrink-0 transition">
+                                    ${opt.key}
+                                </span>
+                                <span class="font-bold text-slate-700 text-sm sm:text-base">${opt.text}</span>
+                            </button>
+                        `).join("")}
+                    </div>
+                </div>
+            `).join("");
+
+            // Attach listeners
+            document.querySelectorAll(".mc-option-btn").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    const qid = parseInt(btn.dataset.qid);
+                    const key = btn.dataset.key;
+                    state.mcAnswers[qid] = key;
+                    updateMCUI(qid);
+                    updateProgress();
+                });
+            });
+        }
+
+        function updateMCUI(qid) {
+            const selectedKey = state.mcAnswers[qid];
+            document.querySelectorAll(`.mc-option-btn[data-qid="${qid}"]`).forEach(btn => {
+                const isSelected = btn.dataset.key === selectedKey;
+                const badge = btn.querySelector(".opt-badge");
+                if (isSelected) {
+                    btn.className = "mc-option-btn text-left p-3.5 sm:p-4 rounded-2xl border-2 border-sky-500 bg-sky-50 shadow-sm transition flex items-center gap-3 cursor-pointer";
+                    badge.className = "opt-badge w-8 h-8 rounded-xl bg-sky-500 border-2 border-sky-500 font-display font-bold text-white flex items-center justify-center shrink-0 transition";
+                } else {
+                    btn.className = "mc-option-btn text-left p-3.5 sm:p-4 rounded-2xl border-2 border-slate-200 bg-slate-50/60 hover:bg-sky-50 hover:border-sky-300 transition flex items-center gap-3 cursor-pointer group";
+                    badge.className = "opt-badge w-8 h-8 rounded-xl bg-white border-2 border-slate-300 group-hover:border-sky-400 font-display font-bold text-slate-700 flex items-center justify-center shrink-0 transition";
+                }
+            });
+        }
+
+        function renderCMCQuestions() {
+            const container = document.getElementById("cmc-questions-container");
+            container.innerHTML = complexMCQuestions.map(q => `
+                <div id="question-card-${q.id}" class="bg-white rounded-3xl p-5 sm:p-6 shadow-sm border-2 border-slate-200 hover:border-purple-200 transition">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="w-8 h-8 rounded-xl bg-purple-600 text-white font-display font-bold flex items-center justify-center shadow-sm">${q.id}</span>
+                            <span class="text-xs font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-${q.topicColor}-100 text-${q.topicColor}-800 border border-${q.topicColor}-200">
+                                ${q.topicIcon} ${q.topic}
+                            </span>
+                            <span class="text-xs font-extrabold px-3 py-1 rounded-full bg-purple-100 text-purple-800 border border-purple-200">
+                                ✨ ${q.hint}
+                            </span>
+                        </div>
+                        <span class="text-2xl bg-slate-50 px-3 py-1 rounded-xl border border-slate-100">${q.illustration}</span>
+                    </div>
+
+                    <p class="text-base sm:text-lg font-bold text-slate-800 mb-4 leading-relaxed">${q.question}</p>
+
+                    <div class="space-y-2.5">
+                        ${q.statements.map(st => `
+                            <button type="button"
+                                data-qid="${q.id}"
+                                data-key="${st.key}"
+                                class="cmc-option-btn w-full text-left p-3.5 sm:p-4 rounded-2xl border-2 border-slate-200 bg-slate-50/60 hover:bg-purple-50 hover:border-purple-300 transition flex items-center gap-3.5 cursor-pointer">
+                                <span class="cmc-checkbox w-6 h-6 rounded-lg border-2 border-slate-300 bg-white flex items-center justify-center shrink-0 transition">
+                                    <svg class="w-4 h-4 text-white hidden" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </span>
+                                <span class="font-bold text-slate-700 text-sm sm:text-base">${st.text}</span>
+                            </button>
+                        `).join("")}
+                    </div>
+                </div>
+            `).join("");
+
+            document.querySelectorAll(".cmc-option-btn").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    const qid = parseInt(btn.dataset.qid);
+                    const key = btn.dataset.key;
+                    if (!state.cmcAnswers[qid]) state.cmcAnswers[qid] = [];
+
+                    const idx = state.cmcAnswers[qid].indexOf(key);
+                    if (idx > -1) {
+                        state.cmcAnswers[qid].splice(idx, 1);
+                    } else {
+                        state.cmcAnswers[qid].push(key);
+                    }
+                    updateCMCUI(qid);
+                    updateProgress();
+                });
+            });
+        }
+
+        function updateCMCUI(qid) {
+            const selectedArr = state.cmcAnswers[qid] || [];
+            document.querySelectorAll(`.cmc-option-btn[data-qid="${qid}"]`).forEach(btn => {
+                const isChecked = selectedArr.includes(btn.dataset.key);
+                const box = btn.querySelector(".cmc-checkbox");
+                const icon = box.querySelector("svg");
+                if (isChecked) {
+                    btn.className = "cmc-option-btn w-full text-left p-3.5 sm:p-4 rounded-2xl border-2 border-purple-500 bg-purple-50 shadow-sm transition flex items-center gap-3.5 cursor-pointer";
+                    box.className = "cmc-checkbox w-6 h-6 rounded-lg border-2 border-purple-600 bg-purple-600 flex items-center justify-center shrink-0 transition";
+                    icon.classList.remove("hidden");
+                } else {
+                    btn.className = "cmc-option-btn w-full text-left p-3.5 sm:p-4 rounded-2xl border-2 border-slate-200 bg-slate-50/60 hover:bg-purple-50 hover:border-purple-300 transition flex items-center gap-3.5 cursor-pointer";
+                    box.className = "cmc-checkbox w-6 h-6 rounded-lg border-2 border-slate-300 bg-white flex items-center justify-center shrink-0 transition";
+                    icon.classList.add("hidden");
+                }
+            });
+        }
+
+        // ==========================================
+        // 4. INTERACTIVE DRAW-A-LINE MATCHING BOARD
+        // ==========================================
+        function renderMatchingBoard() {
+            const leftCol = document.getElementById("matching-left-col");
+            const rightCol = document.getElementById("matching-right-col");
+
+            leftCol.innerHTML = matchingLeftItems.map((item, idx) => `
+                <div id="left-card-${item.id}" data-left-id="${item.id}"
+                    class="match-left-card relative bg-amber-50/80 hover:bg-amber-100/80 border-2 border-amber-200 rounded-2xl p-3 sm:p-4 pr-7 sm:pr-8 flex items-center gap-2.5 shadow-sm transition cursor-pointer">
+                    <span class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-amber-500 text-white font-display font-bold text-xs sm:text-sm flex items-center justify-center shrink-0">
+                        ${item.qNum}
+                    </span>
+                    <span class="text-xl sm:text-2xl shrink-0">${item.icon}</span>
+                    <div class="min-w-0">
+                        <div class="text-[10px] font-extrabold uppercase text-amber-700 tracking-wider">${item.topic}</div>
+                        <div class="font-bold text-slate-800 text-xs sm:text-sm md:text-base leading-snug">${item.text}</div>
+                    </div>
+                    <!-- Connection Anchor Dot on Right Edge -->
+                    <button type="button" id="dot-${item.id}" data-left-id="${item.id}" aria-label="Connect ${item.text}"
+                        class="left-dot absolute -right-3.5 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white border-4 border-amber-500 shadow-md hover:scale-125 transition z-30 cursor-grab active:cursor-grabbing flex items-center justify-center">
+                        <span class="w-2 h-2 rounded-full bg-amber-500 pointer-events-none"></span>
+                    </button>
+                </div>
+            `).join("");
+
+            rightCol.innerHTML = matchingRightItems.map(item => `
+                <div id="right-card-${item.id}" data-right-id="${item.id}"
+                    class="match-right-card relative bg-sky-50/80 hover:bg-sky-100/80 border-2 border-sky-200 rounded-2xl p-3 sm:p-4 pl-7 sm:pl-8 flex items-center gap-2.5 shadow-sm transition cursor-pointer">
+                    <!-- Connection Anchor Dot on Left Edge -->
+                    <button type="button" id="dot-${item.id}" data-right-id="${item.id}" aria-label="Target ${item.text}"
+                        class="right-dot absolute -left-3.5 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white border-4 border-sky-500 shadow-md hover:scale-125 transition z-30 cursor-pointer flex items-center justify-center">
+                        <span class="w-2 h-2 rounded-full bg-sky-500 pointer-events-none"></span>
+                    </button>
+                    <span class="text-xl sm:text-2xl shrink-0">${item.icon}</span>
+                    <div class="font-bold text-slate-800 text-xs sm:text-sm md:text-base leading-snug">${item.text}</div>
+                </div>
+            `).join("");
+
+            attachMatchingEvents();
+        }
+
+        function attachMatchingEvents() {
+            const arena = document.getElementById("matching-arena");
+            const previewLine = document.getElementById("preview-line");
+
+            // Start drag or click on Left Card / Dot
+            document.querySelectorAll(".match-left-card, .left-dot").forEach(el => {
+                el.addEventListener("pointerdown", (e) => {
+                    e.stopPropagation();
+                    const leftId = el.dataset.leftId;
+
+                    // If already connected and user just taps it without dragging, toggle/select
+                    state.isDragging = true;
+                    state.dragStartLeftId = leftId;
+                    state.selectedLeftId = leftId;
+                    highlightActiveLeft(leftId);
+
+                    const startPos = getDotCenter(`dot-${leftId}`);
+                    previewLine.setAttribute("x1", startPos.x);
+                    previewLine.setAttribute("y1", startPos.y);
+                    previewLine.setAttribute("x2", startPos.x);
+                    previewLine.setAttribute("y2", startPos.y);
+                    previewLine.classList.remove("hidden");
+                });
+            });
+
+            // Pointer move inside window while dragging
+            window.addEventListener("pointermove", (e) => {
+                if (!state.isDragging || !state.dragStartLeftId) return;
+                const arenaRect = arena.getBoundingClientRect();
+                const x = e.clientX - arenaRect.left;
+                const y = e.clientY - arenaRect.top;
+                previewLine.setAttribute("x2", x);
+                previewLine.setAttribute("y2", y);
+            });
+
+            // Pointer up anywhere: check if dropped over a right card/dot
+            window.addEventListener("pointerup", (e) => {
+                if (!state.isDragging) return;
+                state.isDragging = false;
+                previewLine.classList.add("hidden");
+
+                // Find element underneath pointer
+                const elemBelow = document.elementFromPoint(e.clientX, e.clientY);
+                const rightTarget = elemBelow ? elemBelow.closest("[data-right-id]") : null;
+
+                if (rightTarget && state.dragStartLeftId) {
+                    const rightId = rightTarget.dataset.rightId;
+                    connectNodes(state.dragStartLeftId, rightId);
+                    state.selectedLeftId = null;
+                    highlightActiveLeft(null);
+                }
+                state.dragStartLeftId = null;
+            });
+
+            // Support Two-Tap mode (Click left, then click right)
+            document.querySelectorAll(".match-right-card, .right-dot").forEach(el => {
+                el.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    const rightId = el.dataset.rightId;
+                    if (state.selectedLeftId) {
+                        connectNodes(state.selectedLeftId, rightId);
+                        state.selectedLeftId = null;
+                        highlightActiveLeft(null);
+                    } else {
+                        // If user taps an already-connected right item, disconnect it for convenience
+                        const existingLeft = Object.keys(state.connections).find(k => state.connections[k] === rightId);
+                        if (existingLeft) {
+                            delete state.connections[existingLeft];
+                            drawAllConnections();
+                            updateProgress();
+                        }
+                    }
+                });
+            });
+
+            // Reset button
+            document.getElementById("reset-lines-btn").addEventListener("click", () => {
+                state.connections = {};
+                state.selectedLeftId = null;
+                highlightActiveLeft(null);
+                drawAllConnections();
+                updateProgress();
+            });
+
+            // Recalculate SVG line positions on resize
+            window.addEventListener("resize", () => {
+                drawAllConnections();
+            });
+        }
+
+        function highlightActiveLeft(leftId) {
+            document.querySelectorAll(".left-dot").forEach(dot => {
+                if (dot.dataset.leftId === leftId) {
+                    dot.classList.add("node-active", "scale-125");
+                } else {
+                    dot.classList.remove("node-active", "scale-125");
+                }
+            });
+        }
+
+        function connectNodes(leftId, rightId) {
+            // Ensure 1-to-1 mapping: remove any previous connection using rightId
+            Object.keys(state.connections).forEach(existingLeft => {
+                if (state.connections[existingLeft] === rightId) {
+                    delete state.connections[existingLeft];
+                }
+            });
+            state.connections[leftId] = rightId;
+            drawAllConnections();
+            updateProgress();
+        }
+
+        function getDotCenter(dotId) {
+            const arena = document.getElementById("matching-arena");
+            const dot = document.getElementById(dotId);
+            if (!arena || !dot) return { x: 0, y: 0 };
+
+            const arenaRect = arena.getBoundingClientRect();
+            const dotRect = dot.getBoundingClientRect();
+
+            return {
+                x: (dotRect.left - arenaRect.left) + dotRect.width / 2,
+                y: (dotRect.top - arenaRect.top) + dotRect.height / 2
+            };
+        }
+
+        function drawAllConnections() {
+            const linesLayer = document.getElementById("lines-layer");
+            linesLayer.innerHTML = "";
+
+            const leftIds = matchingLeftItems.map(i => i.id);
+
+            Object.entries(state.connections).forEach(([leftId, rightId]) => {
+                const start = getDotCenter(`dot-${leftId}`);
+                const end = getDotCenter(`dot-${rightId}`);
+                const colorIdx = leftIds.indexOf(leftId) % lineColors.length;
+                const strokeColor = lineColors[colorIdx];
+
+                // Create smooth cubic bezier curve
+                const midX = (start.x + end.x) / 2;
+                const pathData = `M ${start.x} ${start.y} C ${midX} ${start.y}, ${midX} ${end.y}, ${end.x} ${end.y}`;
+
+                const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                path.setAttribute("d", pathData);
+                path.setAttribute("stroke", strokeColor);
+                path.setAttribute("stroke-width", "5");
+                path.setAttribute("fill", "none");
+                path.setAttribute("class", "match-line");
+                path.setAttribute("title", "Click to remove this line");
+
+                // Allow clicking a line to delete it
+                path.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    delete state.connections[leftId];
+                    drawAllConnections();
+                    updateProgress();
+                });
+
+                linesLayer.appendChild(path);
+            });
+
+            // Update matching badge
+            const count = Object.keys(state.connections).length;
+            const badge = document.getElementById("matching-status-badge");
+            badge.textContent = `${count} / 5 Lines Connected`;
+            if (count === 5) {
+                badge.className = "text-xs font-extrabold px-3 py-1 rounded-full bg-emerald-100 text-emerald-800";
+            } else {
+                badge.className = "text-xs font-extrabold px-3 py-1 rounded-full bg-amber-100 text-amber-800";
+            }
+        }
+
+        // ==========================================
+        // 5. PROGRESS TRACKING & NAVIGATION
+        // ==========================================
+        function getAnsweredStatus() {
+            const status = {};
+            // Q1 - Q5
+            for (let i = 1; i <= 5; i++) {
+                status[i] = Boolean(state.mcAnswers[i]);
+            }
+            // Q6 - Q10
+            for (let i = 6; i <= 10; i++) {
+                status[i] = Array.isArray(state.cmcAnswers[i]) && state.cmcAnswers[i].length > 0;
+            }
+            // Q11 - Q15 (L1 - L5)
+            matchingLeftItems.forEach(item => {
+                status[item.qNum] = Boolean(state.connections[item.id]);
+            });
+            return status;
+        }
+
+        function updateProgress() {
+            const status = getAnsweredStatus();
+            let totalAnswered = 0;
+
+            for (let i = 1; i <= 15; i++) {
+                const pill = document.getElementById(`nav-pill-${i}`);
+                if (status[i]) {
+                    totalAnswered++;
+                    pill.className = "w-8 h-8 sm:w-9 sm:h-9 rounded-xl font-display font-bold text-sm bg-emerald-500 text-white border-2 border-emerald-600 shadow-sm transition cursor-pointer";
+                } else {
+                    pill.className = "w-8 h-8 sm:w-9 sm:h-9 rounded-xl font-display font-bold text-sm bg-slate-100 text-slate-600 border-2 border-slate-200 hover:border-emerald-400 transition cursor-pointer";
+                }
+            }
+
+            document.getElementById("answered-count").textContent = totalAnswered;
+            const pct = Math.round((totalAnswered / 15) * 100);
+            document.getElementById("header-progress-bar").style.width = `${pct}%`;
+
+            const helper = document.getElementById("submit-helper-text");
+            if (totalAnswered === 15) {
+                helper.textContent = "Awesome! All 15 questions are answered. Ready to submit!";
+                helper.className = "text-sm text-emerald-600 font-bold";
+            } else {
+                helper.textContent = `You have completed ${totalAnswered} of 15 questions.`;
+                helper.className = "text-sm text-slate-500 font-medium";
+            }
+        }
+
+        // ==========================================
+        // 6. FORM SUBMISSION & SCORING ENGINE
+        // ==========================================
+        function setupEventListeners() {
+            // Start Quiz Form
+            document.getElementById("start-form").addEventListener("submit", (e) => {
+                e.preventDefault();
+                const nameInput = document.getElementById("student-name").value.trim();
+                const classInput = document.getElementById("student-class").value;
+                const errorBox = document.getElementById("form-error");
+
+                if (!nameInput) {
+                    errorBox.classList.remove("hidden");
+                    return;
+                }
+                errorBox.classList.add("hidden");
+
+                state.studentName = nameInput;
+                state.studentClass = classInput;
+
+                document.getElementById("header-student-info").textContent = `${state.studentName} • ${state.studentClass}`;
+                document.getElementById("header-progress-container").classList.remove("hidden");
+                document.getElementById("header-progress-container").classList.add("flex");
+
+                document.getElementById("welcome-screen").classList.add("hidden");
+                document.getElementById("quiz-screen").classList.remove("hidden");
+                window.scrollTo({ top: 0, behavior: "smooth" });
+                setTimeout(drawAllConnections, 100);
+            });
+
+            // Submit Quiz Button
+            document.getElementById("submit-quiz-btn").addEventListener("click", () => {
+                const status = getAnsweredStatus();
+                const answeredCount = Object.values(status).filter(Boolean).length;
+
+                if (answeredCount < 15) {
+                    document.getElementById("modal-unanswered-msg").textContent =
+                        `You have answered ${answeredCount} out of 15 questions. Do you still want to submit your test now?`;
+                    document.getElementById("confirm-modal").classList.remove("hidden");
+                } else {
+                    gradeAndShowResults();
+                }
+            });
+
+            // Modal Buttons
+            document.getElementById("modal-cancel-btn").addEventListener("click", () => {
+                document.getElementById("confirm-modal").classList.add("hidden");
+            });
+            document.getElementById("modal-confirm-btn").addEventListener("click", () => {
+                document.getElementById("confirm-modal").classList.add("hidden");
+                gradeAndShowResults();
+            });
+
+            // Retake Quiz Button
+            document.getElementById("retake-quiz-btn").addEventListener("click", () => {
+                state.mcAnswers = {};
+                state.cmcAnswers = {};
+                state.connections = {};
+                state.selectedLeftId = null;
+
+                multipleChoiceQuestions.forEach(q => updateMCUI(q.id));
+                complexMCQuestions.forEach(q => updateCMCUI(q.id));
+                drawAllConnections();
+                updateProgress();
+
+                document.getElementById("result-screen").classList.add("hidden");
+                document.getElementById("quiz-screen").classList.remove("hidden");
+                window.scrollTo({ top: 0, behavior: "smooth" });
+                setTimeout(drawAllConnections, 100);
+            });
+        }
+
+        function gradeAndShowResults() {
+            let partAScore = 0;
+            let partBScore = 0;
+            let partCScore = 0;
+            const reviewHTML = [];
+
+            // 1. Grade Part A (Multiple Choice)
+            multipleChoiceQuestions.forEach(q => {
+                const userAns = state.mcAnswers[q.id] || null;
+                const isCorrect = userAns === q.correct;
+                if (isCorrect) partAScore++;
+
+                const userText = userAns
+                    ? `${userAns}. ${q.options.find(o => o.key === userAns)?.text}`
+                    : "Not answered";
+                const correctObj = q.options.find(o => o.key === q.correct);
+                const correctText = `${correctObj.key}. ${correctObj.text}`;
+
+                reviewHTML.push(buildReviewCard({
+                    qNum: q.id,
+                    partLabel: "Part A • Multiple Choice",
+                    topic: q.topic,
+                    question: q.question,
+                    isCorrect,
+                    userAnswerDisplay: userText,
+                    correctAnswerDisplay: correctText,
+                    explanation: q.explanation
+                }));
+            });
+
+            // 2. Grade Part B (Complex Multiple Choice)
+            complexMCQuestions.forEach(q => {
+                const userArr = (state.cmcAnswers[q.id] || []).slice().sort();
+                const corrArr = q.correct.slice().sort();
+                const isCorrect = userArr.length === corrArr.length && userArr.every((val, idx) => val === corrArr[idx]);
+                if (isCorrect) partBScore++;
+
+                const userText = userArr.length > 0
+                    ? userArr.map(k => q.statements.find(s => s.key === k)?.text).join(" | ")
+                    : "Not answered";
+                const correctText = corrArr.map(k => q.statements.find(s => s.key === k)?.text).join(" | ");
+
+                reviewHTML.push(buildReviewCard({
+                    qNum: q.id,
+                    partLabel: "Part B • Complex Multiple Choice",
+                    topic: q.topic,
+                    question: q.question,
+                    isCorrect,
+                    userAnswerDisplay: userText,
+                    correctAnswerDisplay: correctText,
+                    explanation: q.explanation
+                }));
+            });
+
+            // 3. Grade Part C (Matching Draw-a-Line)
+            matchingLeftItems.forEach(item => {
+                const userRightId = state.connections[item.id] || null;
+                const isCorrect = userRightId === item.matchId;
+                if (isCorrect) partCScore++;
+
+                const userRightObj = matchingRightItems.find(r => r.id === userRightId);
+                const corrRightObj = matchingRightItems.find(r => r.id === item.matchId);
+
+                reviewHTML.push(buildReviewCard({
+                    qNum: item.qNum,
+                    partLabel: "Part C • Draw-a-Line Matching",
+                    topic: item.topic,
+                    question: `Match: "${item.icon} ${item.text}"`,
+                    isCorrect,
+                    userAnswerDisplay: userRightObj ? `${userRightObj.icon} ${userRightObj.text}` : "No line drawn",
+                    correctAnswerDisplay: `${corrRightObj.icon} ${corrRightObj.text}`,
+                    explanation: item.explanation
+                }));
+            });
+
+            const totalCorrect = partAScore + partBScore + partCScore;
+            const percentage = Math.round((totalCorrect / 15) * 100);
+
+            // Populate Report Card
+            document.getElementById("result-student-name").textContent = state.studentName;
+            document.getElementById("result-student-class").textContent = state.studentClass;
+            document.getElementById("result-percentage").textContent = percentage;
+            document.getElementById("result-raw-score").textContent = totalCorrect;
+            document.getElementById("score-part-a").textContent = partAScore;
+            document.getElementById("score-part-b").textContent = partBScore;
+            document.getElementById("score-part-c").textContent = partCScore;
+
+            const trophyEl = document.getElementById("result-trophy");
+            const starsEl = document.getElementById("result-stars");
+            const titleEl = document.getElementById("result-badge-title");
+            const msgEl = document.getElementById("result-feedback-msg");
+
+            if (percentage >= 85) {
+                trophyEl.textContent = "🏆";
+                starsEl.textContent = "⭐⭐⭐⭐⭐";
+                titleEl.textContent = "Outstanding Science Champion!";
+                msgEl.textContent = "Brilliant work! You mastered The Sun, Materials, and Parts of the Body!";
+                triggerConfetti();
+            } else if (percentage >= 65) {
+                trophyEl.textContent = "🎖️";
+                starsEl.textContent = "⭐⭐⭐⭐";
+                titleEl.textContent = "Great Job, Young Scientist!";
+                msgEl.textContent = "Well done! Review the explanations below to get a perfect score next time.";
+                triggerConfetti();
+            } else {
+                trophyEl.textContent = "🌱";
+                starsEl.textContent = "⭐⭐⭐";
+                titleEl.textContent = "Keep Learning & Exploring!";
+                msgEl.textContent = "Good effort! Check the helpful explanations below and try again!";
+            }
+
+            document.getElementById("review-container").innerHTML = reviewHTML.join("");
+
+            // Switch screens
+            document.getElementById("quiz-screen").classList.add("hidden");
+            document.getElementById("result-screen").classList.remove("hidden");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        function buildReviewCard({ qNum, partLabel, topic, question, isCorrect, userAnswerDisplay, correctAnswerDisplay, explanation }) {
+            const borderClass = isCorrect ? "border-emerald-300 bg-white" : "border-rose-300 bg-rose-50/30";
+            const statusBadge = isCorrect
+                ? `<span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 font-extrabold text-xs">✅ Correct (+1 pt)</span>`
+                : `<span class="px-3 py-1 rounded-full bg-rose-100 text-rose-800 font-extrabold text-xs">❌ Incorrect (0 pt)</span>`;
+
+            return `
+                <div class="rounded-3xl p-5 sm:p-6 border-2 ${borderClass} shadow-sm space-y-3">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex items-center gap-2">
+                            <span class="w-8 h-8 rounded-xl ${isCorrect ? 'bg-emerald-500' : 'bg-rose-500'} text-white font-display font-bold flex items-center justify-center">${qNum}</span>
+                            <span class="text-xs font-extrabold uppercase text-slate-500">${partLabel} • ${topic}</span>
+                        </div>
+                        ${statusBadge}
+                    </div>
+
+                    <p class="font-bold text-slate-800 text-base">${question}</p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                        <div class="p-3 rounded-2xl ${isCorrect ? 'bg-emerald-50 border border-emerald-200 text-emerald-900' : 'bg-rose-50 border border-rose-200 text-rose-900'}">
+                            <div class="text-xs font-extrabold uppercase opacity-75 mb-0.5">Your Answer:</div>
+                            <div class="font-bold">${userAnswerDisplay}</div>
+                        </div>
+                        <div class="p-3 rounded-2xl bg-sky-50 border border-sky-200 text-sky-900">
+                            <div class="text-xs font-extrabold uppercase opacity-75 mb-0.5">Correct Answer:</div>
+                            <div class="font-bold">${correctAnswerDisplay}</div>
+                        </div>
+                    </div>
+
+                    <div class="text-xs sm:text-sm bg-amber-50/80 border border-amber-200 text-amber-950 p-3 rounded-2xl font-medium">
+                        <strong>💡 Science Tip:</strong> ${explanation}
+                    </div>
+                </div>
+            `;
+        }
+
+        function triggerConfetti() {
+            if (typeof confetti === "function") {
+                confetti({
+                    particleCount: 90,
+                    spread: 75,
+                    origin: { y: 0.6 }
+                });
+            }
+        }
+    </script>
+</body>
+</html>

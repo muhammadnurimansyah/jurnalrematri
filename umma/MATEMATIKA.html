@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grade 1 ICP Math Adventure Quiz</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Fredoka & Nunito for playful, highly legible children's typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: linear-gradient(135deg, #e0f2fe 0%, #fef9c3 50%, #fce7f3 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    h1, h2, h3, .font-display {
+      font-family: 'Fredoka', sans-serif;
+    }
+    /* Playful 3D tactile buttons */
+    .btn-3d {
+      transition: all 0.15s ease;
+      box-shadow: 0 5px 0 rgba(0, 0, 0, 0.18);
+    }
+    .btn-3d:active:not(:disabled) {
+      transform: translateY(4px);
+      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.18);
+    }
+    /* Floating subtle animation */
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+    }
+    .animate-float {
+      animation: floatSlow 3.5s ease-in-out infinite;
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.88); opacity: 0; }
+      70% { transform: scale(1.03); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .animate-pop {
+      animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+    /* Custom pulse for interactive SVG hotspots */
+    .svg-interactive {
+      cursor: pointer;
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+    .svg-interactive:hover {
+      filter: brightness(1.06) drop-shadow(0 4px 6px rgba(0,0,0,0.15));
+    }
+    /* Prevent accidental text selection during line drawing */
+    .no-select {
+      user-select: none;
+      -webkit-user-select: none;
+    }
+  </style>
+</head>
+<body class="text-slate-800 selection:bg-amber-200">
+
+  <!-- Confetti Canvas for Celebration -->
+  <canvas id="confetti-canvas" class="fixed inset-0 pointer-events-none z-50"></canvas>
+
+  <!-- Main App Wrapper -->
+  <div class="max-w-4xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
+
+    <!-- Top Navigation / Header Bar -->
+    <header class="bg-white/90 backdrop-blur-md rounded-3xl p-4 sm:px-6 shadow-lg border-2 border-sky-200 flex flex-wrap items-center justify-between gap-3 mb-6">
+      <div class="flex items-center gap-3">
+        <!-- School / Math Star Emblem SVG -->
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-lime-400 to-emerald-600 flex items-center justify-center text-white shadow-md shrink-0">
+          <svg class="w-8 h-8" viewBox="0 0 64 64" fill="none">
+            <polygon points="32,4 56,18 56,46 32,60 8,46 8,18" fill="#bef264" stroke="#fef08a" stroke-width="3"/>
+            <path d="M20 26 C26 22, 32 26, 32 26 C32 26, 38 22, 44 26 L44 42 C38 38, 32 42, 32 42 C32 42, 26 38, 20 42 Z" fill="#ffffff" stroke="#047857" stroke-width="2.5"/>
+            <circle cx="32" cy="17" r="3" fill="#047857"/>
+          </svg>
+        </div>
+        <div>
+          <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-600 bg-emerald-100 px-2.5 py-0.5 rounded-full">Grade 1 ICP • Holistic Assessment 2</span>
+          <h1 class="text-lg sm:text-xl font-bold text-slate-800 leading-tight mt-0.5">Math Explorer Quiz</h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Live Score Badge -->
+        <div id="header-score-box" class="hidden items-center gap-1.5 bg-amber-100 border-2 border-amber-300 px-3.5 py-1.5 rounded-2xl font-display font-bold text-amber-800">
+          <span>⭐</span>
+          <span id="live-score">0</span>
+          <span class="text-xs font-normal text-amber-700">pts</span>
+        </div>
+
+        <!-- Sound Toggle Button -->
+        <button id="sound-toggle" onclick="toggleSound()" title="Toggle Sound Effects" class="p-2.5 rounded-2xl bg-sky-100 hover:bg-sky-200 text-sky-700 border-2 border-sky-300 transition cursor-pointer">
+          <span id="sound-icon" class="text-lg">🔊</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ==================== SCREEN 1: WELCOME SCREEN ==================== -->
+    <section id="welcome-screen" class="bg-white rounded-3xl p-6 sm:p-10 shadow-xl border-4 border-sky-300 text-center animate-pop">
+      <div class="inline-block bg-amber-100 text-amber-800 font-bold text-xs sm:text-sm px-4 py-1.5 rounded-full border border-amber-300 mb-4">
+        Cambridge Assessment International Education • Grade 1 ICP
+      </div>
+
+      <h2 class="text-3xl sm:text-4xl font-bold text-slate-800 mb-3">
+        Welcome to the <span class="text-sky-600">Fun Math</span> Challenge! 🚀
+      </h2>
+      <p class="text-slate-600 max-w-xl mx-auto text-base sm:text-lg mb-6">
+        Test your skills in <strong>Numbering</strong>, <strong>Measurement</strong>, <strong>Geometry</strong>, and <strong>Making Sentences</strong> with interactive pictures and line-matching puzzles!
+      </p>
+
+      <!-- 4 Topic Pills -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl mx-auto mb-7">
+        <div class="bg-blue-50 border-2 border-blue-200 rounded-2xl p-3">
+          <div class="text-2xl mb-1">🔢</div>
+          <div class="font-display font-bold text-blue-800 text-sm">Numbering</div>
+          <div class="text-xs text-blue-600">Place Value & Ops</div>
+        </div>
+        <div class="bg-emerald-50 border-2 border-emerald-200 rounded-2xl p-3">
+          <div class="text-2xl mb-1">⚖️</div>
+          <div class="font-display font-bold text-emerald-800 text-sm">Measurement</div>
+          <div class="text-xs text-emerald-600">Length, Weight, Rp</div>
+        </div>
+        <div class="bg-purple-50 border-2 border-purple-200 rounded-2xl p-3">
+          <div class="text-2xl mb-1">📐</div>
+          <div class="font-display font-bold text-purple-800 text-sm">Geometry</div>
+          <div class="text-xs text-purple-600">2D Shapes & Perimeter</div>
+        </div>
+        <div class="bg-rose-50 border-2 border-rose-200 rounded-2xl p-3">
+          <div class="text-2xl mb-1">💬</div>
+          <div class="font-display font-bold text-rose-800 text-sm">Sentences</div>
+          <div class="text-xs text-rose-600">Venn & Conclusions</div>
+        </div>
+      </div>
+
+      <!-- Quiz Structure Overview -->
+      <div class="bg-slate-50 rounded-2xl p-4 max-w-xl mx-auto mb-7 border border-slate-200 text-left">
+        <h3 class="font-display font-bold text-slate-700 text-sm uppercase tracking-wider mb-2.5 text-center">Quiz Mission Map (15 Questions Total)</h3>
+        <div class="space-y-2 text-sm">
+          <div class="flex items-center justify-between bg-white p-2.5 rounded-xl border border-slate-200">
+            <span class="font-bold text-sky-700">Part 1: Multiple Choice</span>
+            <span class="bg-sky-100 text-sky-800 font-bold px-2.5 py-0.5 rounded-lg text-xs">5 Questions</span>
+          </div>
+          <div class="flex items-center justify-between bg-white p-2.5 rounded-xl border border-slate-200">
+            <span class="font-bold text-purple-700">Part 2: Complex Multiple Choice (Pick &gt; 1)</span>
+            <span class="bg-purple-100 text-purple-800 font-bold px-2.5 py-0.5 rounded-lg text-xs">5 Questions</span>
+          </div>
+          <div class="flex items-center justify-between bg-white p-2.5 rounded-xl border border-slate-200">
+            <span class="font-bold text-amber-700">Part 3: Draw-a-Line Money Matching</span>
+            <span class="bg-amber-100 text-amber-800 font-bold px-2.5 py-0.5 rounded-lg text-xs">5 Pairs</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Optional Student Name Input -->
+      <div class="max-w-sm mx-auto mb-6">
+        <label for="student-name" class="block text-sm font-bold text-slate-700 mb-1.5">Enter Your Name (for your Certificate):</label>
+        <input id="student-name" type="text" placeholder="e.g., Aisyah / Raka / Budi" class="w-full px-4 py-3 rounded-2xl border-2 border-sky-300 focus:border-sky-500 focus:outline-none text-center font-bold text-slate-800 bg-sky-50/50" />
+      </div>
+
+      <button onclick="startQuiz()" class="btn-3d bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-display font-bold text-xl px-10 py-4 rounded-2xl cursor-pointer inline-flex items-center gap-2">
+        <span>Start Math Adventure</span>
+        <span>🎯</span>
+      </button>
+    </section>
+
+    <!-- ==================== SCREEN 2: ACTIVE QUIZ (PARTS 1 & 2) ==================== -->
+    <section id="quiz-screen" class="hidden">
+      <!-- Section Tabs & Progress Bar -->
+      <div class="bg-white rounded-3xl p-4 sm:p-5 shadow-md border-2 border-slate-200 mb-5">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div class="flex items-center gap-2">
+            <span id="part-badge" class="bg-sky-500 text-white font-display font-bold text-xs sm:text-sm px-3 py-1 rounded-xl">Part 1: Multiple Choice</span>
+            <span id="topic-badge" class="bg-amber-100 text-amber-800 font-bold text-xs px-2.5 py-1 rounded-xl border border-amber-300">Measurement</span>
+          </div>
+          <span id="question-counter" class="font-display font-bold text-slate-600 text-sm sm:text-base">Question 1 of 15</span>
+        </div>
+
+        <!-- Visual Progress Track -->
+        <div class="w-full h-3.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
+          <div id="progress-bar" class="h-full bg-gradient-to-r from-sky-400 via-emerald-400 to-amber-400 transition-all duration-500 rounded-full" style="width: 6.6%"></div>
+        </div>
+      </div>
+
+      <!-- Question Card -->
+      <div id="question-card" class="bg-white rounded-3xl p-5 sm:p-8 shadow-xl border-4 border-sky-200 animate-pop">
+        <!-- Question Text -->
+        <div class="mb-5">
+          <h2 id="question-text" class="text-xl sm:text-2xl font-bold text-slate-800 leading-snug"></h2>
+          <p id="question-hint" class="text-sm font-semibold text-purple-600 mt-1.5 hidden"></p>
+        </div>
+
+        <!-- Interactive SVG Illustration Container -->
+        <div id="illustration-container" class="mb-6 bg-slate-50 rounded-2xl p-3 sm:p-5 border-2 border-dashed border-sky-200 flex flex-col items-center justify-center overflow-hidden">
+          <!-- Dynamic SVG injected here -->
+        </div>
+
+        <!-- Answer Options Grid -->
+        <div id="options-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-6">
+          <!-- Dynamic Buttons / Checkboxes injected here -->
+        </div>
+
+        <!-- Instant Feedback Banner -->
+        <div id="feedback-box" class="hidden rounded-2xl p-4 mb-5 border-2 animate-pop">
+          <div class="flex items-start gap-3">
+            <span id="feedback-icon" class="text-2xl shrink-0">🎉</span>
+            <div>
+              <h4 id="feedback-title" class="font-display font-bold text-base sm:text-lg"></h4>
+              <p id="feedback-explanation" class="text-sm mt-0.5"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Footer -->
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-100">
+          <div class="text-xs text-slate-400 font-semibold" id="interactive-tip">💡 Tap or click on the picture elements to explore!</div>
+          <div class="flex items-center gap-3 ml-auto">
+            <button id="check-complex-btn" onclick="checkComplexAnswer()" class="hidden btn-3d bg-purple-600 hover:bg-purple-700 text-white font-display font-bold px-6 py-3 rounded-2xl cursor-pointer">
+              Check My Answers ✓
+            </button>
+            <button id="next-btn" onclick="nextQuestion()" class="hidden btn-3d bg-sky-500 hover:bg-sky-600 text-white font-display font-bold px-7 py-3 rounded-2xl cursor-pointer flex items-center gap-2">
+              <span id="next-btn-text">Next Question</span>
+              <span>➔</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SCREEN 3: PART 3 LINE-DRAWING MATCHING ==================== -->
+    <section id="matching-screen" class="hidden animate-pop">
+      <!-- Progress Header -->
+      <div class="bg-white rounded-3xl p-4 sm:p-5 shadow-md border-2 border-amber-300 mb-5">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div class="flex items-center gap-2">
+            <span class="bg-amber-500 text-white font-display font-bold text-xs sm:text-sm px-3 py-1 rounded-xl">Part 3: Line-Drawing Matching</span>
+            <span class="bg-emerald-100 text-emerald-800 font-bold text-xs px-2.5 py-1 rounded-xl border border-emerald-300">Money & Prices</span>
+          </div>
+          <span class="font-display font-bold text-slate-600 text-sm sm:text-base">Questions 11 – 15 of 15</span>
+        </div>
+        <div class="w-full h-3.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
+          <div class="h-full bg-gradient-to-r from-sky-400 via-emerald-400 to-amber-400 rounded-full" style="width: 100%"></div>
+        </div>
+      </div>
+
+      <!-- Matching Board Card -->
+      <div class="bg-white rounded-3xl p-4 sm:p-7 shadow-xl border-4 border-amber-300 no-select">
+        <div class="text-center mb-4">
+          <h2 class="text-2xl sm:text-3xl font-bold text-slate-800">Draw Lines to Match Money & Prices! 💵✏️</h2>
+          <p class="text-slate-600 text-sm sm:text-base mt-1">
+            <strong>Drag a line</strong> from a Rupiah money box on the left to the matching price tag on the right (or tap a left box, then tap a right box)!
+          </p>
+        </div>
+
+        <!-- Interactive Matching Arena with SVG Overlay -->
+        <div id="matching-arena" class="relative grid grid-cols-11 gap-2 sm:gap-4 items-center my-4 py-2">
+          <!-- SVG Canvas Layer for Drawn Lines -->
+          <svg id="matching-svg" class="absolute inset-0 w-full h-full pointer-events-none z-20" style="overflow: visible;"></svg>
+
+          <!-- Left Column: Rupiah Banknote Pairs (5 columns wide) -->
+          <div id="left-items-col" class="col-span-5 flex flex-col gap-3 sm:gap-4 z-10">
+            <!-- Populated by JS -->
+          </div>
+
+          <!-- Center Spacer for Lines (1 column wide) -->
+          <div class="col-span-1"></div>
+
+          <!-- Right Column: Priced Objects (5 columns wide) -->
+          <div id="right-items-col" class="col-span-5 flex flex-col gap-3 sm:gap-4 z-10">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Matching Feedback Banner -->
+        <div id="matching-feedback" class="hidden rounded-2xl p-4 my-4 border-2 animate-pop"></div>
+
+        <!-- Controls -->
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-200">
+          <div class="flex items-center gap-2">
+            <button id="clear-lines-btn" onclick="clearAllLines()" class="btn-3d bg-slate-200 hover:bg-slate-300 text-slate-700 font-display font-bold px-4 py-2.5 rounded-2xl text-sm cursor-pointer">
+              🔄 Clear Lines
+            </button>
+            <span id="match-count-label" class="text-sm font-bold text-slate-500">0 / 5 lines drawn</span>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <button id="check-matches-btn" onclick="checkMatchingAnswers()" class="btn-3d bg-emerald-500 hover:bg-emerald-600 text-white font-display font-bold px-6 py-3 rounded-2xl cursor-pointer">
+              Check All Matches ✓
+            </button>
+            <button id="finish-quiz-btn" onclick="showResults()" class="hidden btn-3d bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-display font-bold px-7 py-3 rounded-2xl cursor-pointer">
+              See My Certificate 🏆
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SCREEN 4: FINAL SCORE CERTIFICATE ==================== -->
+    <section id="result-screen" class="hidden bg-white rounded-3xl p-6 sm:p-10 shadow-2xl border-4 border-amber-400 text-center animate-pop relative overflow-hidden">
+      <!-- Decorative Corner Ribbons -->
+      <div class="inline-flex items-center gap-2 bg-amber-100 text-amber-800 font-bold text-xs sm:text-sm px-4 py-1.5 rounded-full border border-amber-300 mb-3">
+        <span>🌟</span>
+        <span>SECOND HOLISTIC ASSESSMENT CERTIFICATE</span>
+        <span>🌟</span>
+      </div>
+
+      <h2 class="text-3xl sm:text-4xl font-bold text-slate-800 mb-1">
+        Great Job, <span id="cert-student-name" class="text-emerald-600">Math Star</span>! 🎉
+      </h2>
+      <p id="cert-subtitle" class="text-slate-600 text-base sm:text-lg mb-6">You completed the Grade 1 ICP Math Adventure!</p>
+
+      <!-- Big Score Circle -->
+      <div class="w-40 h-40 mx-auto rounded-full bg-gradient-to-br from-amber-300 via-yellow-400 to-orange-400 p-2 shadow-xl mb-6 animate-float">
+        <div class="w-full h-full bg-white rounded-full flex flex-col items-center justify-center">
+          <span class="text-xs font-extrabold uppercase tracking-wider text-slate-400">Final Score</span>
+          <span id="final-score-num" class="text-4xl sm:text-5xl font-display font-bold text-slate-800">100</span>
+          <span id="final-correct-count" class="text-xs font-bold text-emerald-600 mt-0.5">15 / 15 Correct</span>
+        </div>
+      </div>
+
+      <!-- Topic Mastery Breakdown -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl mx-auto mb-8 text-left" id="topic-breakdown">
+        <!-- Populated dynamically -->
+      </div>
+
+      <button onclick="restartQuiz()" class="btn-3d bg-gradient-to-r from-sky-500 to-indigo-500 hover:from-sky-600 hover:to-indigo-600 text-white font-display font-bold text-lg px-8 py-4 rounded-2xl cursor-pointer inline-flex items-center gap-2">
+        <span>🔁</span>
+        <span>Play Quiz Again</span>
+      </button>
+    </section>
+
+  </div>
+
+  <script>
+    // =========================================================================
+    // 1. WEB AUDIO SOUND EFFECTS (Zero external audio URLs)
+    // =========================================================================
+    let soundEnabled = true;
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+
+    function playTone(freq, type, duration, delay = 0) {
+      if (!soundEnabled) return;
+      try {
+        if (!audioCtx) audioCtx = new AudioCtx();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime + delay);
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime + delay);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + delay + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(audioCtx.currentTime + delay);
+        osc.stop(audioCtx.currentTime + delay + duration);
+      } catch (e) { /* Ignore audio block if any */ }
+    }
+
+    function playSound(kind) {
+      if (kind === 'click') playTone(520, 'sine', 0.08);
+      if (kind === 'connect') { playTone(440, 'triangle', 0.1); playTone(660, 'triangle', 0.14, 0.07); }
+      if (kind === 'correct') {
+        playTone(523.25, 'sine', 0.15, 0);
+        playTone(659.25, 'sine', 0.15, 0.1);
+        playTone(783.99, 'sine', 0.25, 0.2);
+      }
+      if (kind === 'wrong') {
+        playTone(260, 'sawtooth', 0.18, 0);
+        playTone(210, 'sawtooth', 0.24, 0.14);
+      }
+      if (kind === 'fanfare') {
+        [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => playTone(f, 'triangle', 0.28, i * 0.12));
+      }
+    }
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      document.getElementById('sound-icon').textContent = soundEnabled ? '🔊' : '🔇';
+    }
+
+    // =========================================================================
+    // 2. CUSTOM INTERACTIVE SVG GENERATORS (Based on Soal AH 2 MATH.docx)
+    // =========================================================================
+    function getBanknoteSVG(amount) {
+      const themes = {
+        2000:  { bg: '#cbd5e1', border: '#64748b', accent: '#94a3b8', label: '2000', text: 'DUA RIBU RUPIAH' },
+        5000:  { bg: '#fed7aa', border: '#c2410c', accent: '#fdba74', label: '5000', text: 'LIMA RIBU RUPIAH' },
+        10000: { bg: '#e9d5ff', border: '#7e22ce', accent: '#d8b4fe', label: '10000', text: 'SEPULUH RIBU RUPIAH' },
+        20000: { bg: '#bbf7d0', border: '#15803d', accent: '#86efac', label: '20000', text: 'DUA PULUH RIBU RUPIAH' }
+      };
+      const t = themes[amount];
+      return `
+        <svg viewBox="0 0 150 72" class="w-24 sm:w-28 h-auto rounded-lg shadow-sm border" style="border-color:${t.border}">
+          <rect width="150" height="72" rx="6" fill="${t.bg}"/>
+          <rect x="6" y="6" width="138" height="60" rx="4" fill="none" stroke="${t.border}" stroke-width="1.5" stroke-dasharray="4 2"/>
+          <circle cx="105" cy="38" r="20" fill="${t.accent}" opacity="0.7"/>
+          <!-- Stylized Portrait Silhouette -->
+          <circle cx="105" cy="32" r="8" fill="${t.border}" opacity="0.55"/>
+          <path d="M91 54 C91 44, 119 44, 119 54" fill="${t.border}" opacity="0.55"/>
+          <text x="12" y="25" font-family="Fredoka, sans-serif" font-weight="700" font-size="16" fill="${t.border}">Rp ${t.label}</text>
+          <text x="12" y="40" font-family="Nunito, sans-serif" font-weight="800" font-size="6.5" fill="${t.border}">${t.text}</text>
+          <rect x="12" y="48" width="52" height="10" rx="3" fill="#ffffff" opacity="0.75"/>
+          <text x="16" y="55.5" font-family="Nunito, sans-serif" font-weight="800" font-size="7" fill="#1e293b">INDONESIA</text>
+        </svg>
+      `;
+    }
+
+    const SVG_ILLUSTRATIONS = {
+      // Q1: Red Ribbon (140 cm) + Blue Ribbon (127 cm) with ruler
+      ribbons: () => `
+        <div class="w-full max-w-lg">
+          <svg viewBox="0 0 460 150" class="w-full h-auto">
+            <!-- Red Ribbon -->
+            <g class="svg-interactive" onclick="highlightNote('note-q1', 'Red Ribbon = 140 cm')">
+              <rect x="20" y="20" width="210" height="28" rx="6" fill="#ef4444" stroke="#b91c1c" stroke-width="2"/>
+              <polygon points="230,20 245,34 230,48" fill="#dc2626"/>
+              <text x="125" y="39" text-anchor="middle" fill="white" font-family="Fredoka" font-weight="700" font-size="14">Red Ribbon: 140 cm</text>
+            </g>
+            <!-- Blue Ribbon -->
+            <g class="svg-interactive" onclick="highlightNote('note-q1', 'Blue Ribbon = 127 cm')">
+              <rect x="245" y="20" width="185" height="28" rx="6" fill="#3b82f6" stroke="#1d4ed8" stroke-width="2"/>
+              <polygon points="430,20 445,34 430,48" fill="#2563eb"/>
+              <text x="338" y="39" text-anchor="middle" fill="white" font-family="Fredoka" font-weight="700" font-size="14">Blue Ribbon: 127 cm</text>
+            </g>
+            <!-- Total Bracket -->
+            <path d="M20 58 L20 68 L440 68 L440 58" fill="none" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="230" y1="68" x2="230" y2="78" stroke="#475569" stroke-width="2.5"/>
+            <rect x="145" y="78" width="170" height="26" rx="13" fill="#fef08a" stroke="#eab308" stroke-width="2"/>
+            <text x="230" y="95" text-anchor="middle" fill="#854d0e" font-family="Fredoka" font-weight="700" font-size="13">Total = 140 + 127 = ? cm</text>
+            <!-- Ruler Graphic -->
+            <rect x="20" y="115" width="420" height="24" rx="4" fill="#fde047" stroke="#ca8a04" stroke-width="2"/>
+            <g stroke="#854d0e" stroke-width="1.5">
+              ${Array.from({length: 21}, (_, i) => `<line x1="${30 + i*20}" y1="115" x2="${30 + i*20}" y2="${i%2===0 ? 128 : 122}"/>`).join('')}
+            </g>
+          </svg>
+          <div id="note-q1" class="text-center text-xs font-bold text-sky-700 mt-1">Click either ribbon to inspect its length!</div>
+        </div>
+      `,
+
+      // Q2: Sandra's Money (Rp 20.000) minus Milk (Rp 5.000) & Chocolate (Rp 3.000)
+      sandraMoney: () => `
+        <div class="flex flex-col items-center gap-3 w-full">
+          <div class="flex flex-wrap items-center justify-center gap-4">
+            <div class="bg-emerald-50 border-2 border-emerald-300 rounded-2xl p-3 text-center">
+              <div class="text-xs font-bold text-emerald-700 mb-1">Sandra's Money</div>
+              ${getBanknoteSVG(20000)}
+              <div class="font-display font-bold text-emerald-800 text-sm mt-1">Rp 20.000</div>
+            </div>
+            <div class="text-2xl font-display font-bold text-slate-400">➖</div>
+            <!-- Milk & Chocolate SVG -->
+            <div class="flex items-center gap-3 bg-rose-50 border-2 border-rose-200 rounded-2xl p-3">
+              <div class="text-center">
+                <svg viewBox="0 0 60 70" class="w-12 h-14 mx-auto">
+                  <rect x="14" y="20" width="32" height="44" rx="4" fill="#ffffff" stroke="#0284c7" stroke-width="2.5"/>
+                  <polygon points="14,20 30,8 46,20" fill="#38bdf8" stroke="#0284c7" stroke-width="2"/>
+                  <rect x="14" y="34" width="32" height="16" fill="#bae6fd"/>
+                  <text x="30" y="45" text-anchor="middle" font-size="8" font-weight="800" fill="#0369a1">MILK</text>
+                </svg>
+                <span class="text-xs font-bold text-rose-700 block">Rp 5.000</span>
+              </div>
+              <div class="text-lg font-bold text-rose-400">+</div>
+              <div class="text-center">
+                <svg viewBox="0 0 60 70" class="w-12 h-14 mx-auto">
+                  <rect x="15" y="12" width="30" height="50" rx="4" fill="#78350f" stroke="#451a03" stroke-width="2"/>
+                  <line x1="30" y1="12" x2="30" y2="42" stroke="#92400e" stroke-width="2"/>
+                  <line x1="15" y1="27" x2="45" y2="27" stroke="#92400e" stroke-width="2"/>
+                  <rect x="13" y="38" width="34" height="26" rx="2" fill="#ef4444" stroke="#b91c1c" stroke-width="1.5"/>
+                  <text x="30" y="54" text-anchor="middle" font-size="7" font-weight="800" fill="#fef08a">CHOCO</text>
+                </svg>
+                <span class="text-xs font-bold text-rose-700 block">Rp 3.000</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `,
+
+      // Q3: Rectangle Perimeter (L = 5 cm, w = 3 cm)
+      perimeterRect: () => `
+        <svg viewBox="0 0 340 165" class="w-full max-w-sm h-auto">
+          <defs>
+            <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+              <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+            </pattern>
+          </defs>
+          <rect x="70" y="35" width="180" height="100" rx="6" fill="url(#grid)" stroke="#6366f1" stroke-width="4"/>
+          <rect x="70" y="35" width="180" height="100" rx="6" fill="#818cf8" fill-opacity="0.18"/>
+          <!-- Top & Bottom L = 5 cm -->
+          <rect x="122" y="10" width="76" height="22" rx="8" fill="#4f46e5"/>
+          <text x="160" y="25" text-anchor="middle" fill="white" font-family="Fredoka" font-weight="700" font-size="12">L = 5 cm</text>
+          <text x="160" y="153" text-anchor="middle" fill="#4f46e5" font-family="Fredoka" font-weight="700" font-size="12">L = 5 cm</text>
+          <!-- Left & Right w = 3 cm -->
+          <rect x="256" y="74" width="74" height="22" rx="8" fill="#ec4899"/>
+          <text x="293" y="89" text-anchor="middle" fill="white" font-family="Fredoka" font-weight="700" font-size="12">w = 3 cm</text>
+          <text x="35" y="89" text-anchor="middle" fill="#ec4899" font-family="Fredoka" font-weight="700" font-size="12">w = 3 cm</text>
+        </svg>
+      `,
+
+      // Q4: Number Words Board (Items 1 to 6 from doc)
+      numberWords: () => `
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 w-full max-w-lg text-sm">
+          <div class="bg-white px-3.5 py-2 rounded-xl border-2 border-sky-200 font-bold flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-sky-500 text-white text-xs flex items-center justify-center">1</span>
+            <span>67 = <em class="text-sky-700 not-italic">sixty seven</em></span>
+          </div>
+          <div class="bg-white px-3.5 py-2 rounded-xl border-2 border-sky-200 font-bold flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-sky-500 text-white text-xs flex items-center justify-center">2</span>
+            <span>53 = <em class="text-sky-700 not-italic">five three</em></span>
+          </div>
+          <div class="bg-white px-3.5 py-2 rounded-xl border-2 border-sky-200 font-bold flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-sky-500 text-white text-xs flex items-center justify-center">3</span>
+            <span>91 = <em class="text-sky-700 not-italic">ninety one</em></span>
+          </div>
+          <div class="bg-white px-3.5 py-2 rounded-xl border-2 border-sky-200 font-bold flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-sky-500 text-white text-xs flex items-center justify-center">4</span>
+            <span>88 = <em class="text-sky-700 not-italic">eight eight</em></span>
+          </div>
+          <div class="bg-white px-3.5 py-2 rounded-xl border-2 border-sky-200 font-bold flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-sky-500 text-white text-xs flex items-center justify-center">5</span>
+            <span>72 = <em class="text-sky-700 not-italic">seventy two</em></span>
+          </div>
+          <div class="bg-white px-3.5 py-2 rounded-xl border-2 border-sky-200 font-bold flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-sky-500 text-white text-xs flex items-center justify-center">6</span>
+            <span>49 = <em class="text-sky-700 not-italic">forty nine</em></span>
+          </div>
+        </div>
+      `,
+
+      // Q5: Santi's Stationery Shopping (2 pencils, 2 erasers, 1 ruler, 1 notebook)
+      stationery: () => `
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full max-w-xl">
+          <div class="bg-white p-2.5 rounded-2xl border-2 border-amber-200 text-center">
+            <div class="text-2xl">✏️✏️</div>
+            <div class="font-bold text-xs text-slate-700 mt-1">2 Pencils</div>
+            <div class="text-xs font-extrabold text-amber-600">Rp 2.000 each</div>
+          </div>
+          <div class="bg-white p-2.5 rounded-2xl border-2 border-pink-200 text-center">
+            <div class="text-2xl">🧼🧼</div>
+            <div class="font-bold text-xs text-slate-700 mt-1">2 Erasers</div>
+            <div class="text-xs font-extrabold text-pink-600">Rp 3.000 each</div>
+          </div>
+          <div class="bg-white p-2.5 rounded-2xl border-2 border-sky-200 text-center">
+            <div class="text-2xl">📏</div>
+            <div class="font-bold text-xs text-slate-700 mt-1">1 Ruler</div>
+            <div class="text-xs font-extrabold text-sky-600">Rp 5.000</div>
+          </div>
+          <div class="bg-white p-2.5 rounded-2xl border-2 border-emerald-200 text-center">
+            <div class="text-2xl">📓</div>
+            <div class="font-bold text-xs text-slate-700 mt-1">1 Notebook</div>
+            <div class="text-xs font-extrabold text-emerald-600">Rp 5.000</div>
+          </div>
+        </div>
+      `,
+
+      // Q6: Three Balance Scales (2 Apples = 3 Bananas; 2 Apples < 1 Pineapple; 2 Apples > 2 Zalaccas)
+      balanceScales: () => `
+        <div class="w-full">
+          <svg viewBox="0 0 660 185" class="w-full h-auto">
+            <!-- SCALE 1: Level (2 Apples = 3 Bananas) -->
+            <g transform="translate(15, 10)" class="svg-interactive" onclick="highlightNote('scale-note', 'Scale 1 is LEVEL: 2 Apples = 3 Bananas!')">
+              <rect x="5" y="0" width="190" height="155" rx="14" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+              <text x="100" y="20" text-anchor="middle" font-family="Fredoka" font-weight="700" font-size="12" fill="#475569">Scale 1: Balanced</text>
+              <!-- Stand -->
+              <polygon points="85,140 115,140 105,85 95,85" fill="#1e3a5f"/>
+              <rect x="75" y="138" width="50" height="7" rx="3" fill="#0f172a"/>
+              <!-- Level Beam -->
+              <line x1="35" y1="85" x2="165" y2="85" stroke="#1e3a5f" stroke-width="5" stroke-linecap="round"/>
+              <circle cx="100" cy="85" r="6" fill="#38bdf8" stroke="#1e3a5f" stroke-width="2"/>
+              <!-- Left Pan + 2 Red Apples -->
+              <path d="M18 75 Q35 88 52 75 Z" fill="#facc15" stroke="#ca8a04" stroke-width="1.5"/>
+              <circle cx="29" cy="66" r="9" fill="#dc2626"/>
+              <path d="M29 57 Q33 51 36 56" fill="#16a34a"/>
+              <circle cx="43" cy="66" r="9" fill="#ef4444"/>
+              <path d="M43 57 Q47 51 50 56" fill="#16a34a"/>
+              <!-- Right Pan + 3 Yellow Bananas -->
+              <path d="M148 75 Q165 88 182 75 Z" fill="#facc15" stroke="#ca8a04" stroke-width="1.5"/>
+              <path d="M153 60 Q162 74 175 62" fill="none" stroke="#eab308" stroke-width="5" stroke-linecap="round"/>
+              <path d="M156 55 Q165 69 178 57" fill="none" stroke="#facc15" stroke-width="5" stroke-linecap="round"/>
+            </g>
+
+            <!-- SCALE 2: Tilted Right (2 Apples higher/lighter, 1 Pineapple lower/heavier) -->
+            <g transform="translate(235, 10)" class="svg-interactive" onclick="highlightNote('scale-note', 'Scale 2 tilts DOWN on the Pineapple: 1 Pineapple is HEAVIER than 2 Apples!')">
+              <rect x="5" y="0" width="190" height="155" rx="14" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+              <text x="100" y="20" text-anchor="middle" font-family="Fredoka" font-weight="700" font-size="12" fill="#475569">Scale 2: Tilted Right</text>
+              <polygon points="85,140 115,140 105,85 95,85" fill="#1e3a5f"/>
+              <rect x="75" y="138" width="50" height="7" rx="3" fill="#0f172a"/>
+              <!-- Tilted Beam (Left up y=72, Right down y=98) -->
+              <line x1="35" y1="72" x2="165" y2="98" stroke="#1e3a5f" stroke-width="5" stroke-linecap="round"/>
+              <circle cx="100" cy="85" r="6" fill="#38bdf8" stroke="#1e3a5f" stroke-width="2"/>
+              <!-- Left Pan (Higher) + 2 Apples -->
+              <path d="M18 62 Q35 75 52 62 Z" fill="#facc15" stroke="#ca8a04" stroke-width="1.5"/>
+              <circle cx="29" cy="53" r="9" fill="#dc2626"/>
+              <circle cx="43" cy="53" r="9" fill="#ef4444"/>
+              <!-- Right Pan (Lower) + 1 Pineapple -->
+              <path d="M148 88 Q165 101 182 88 Z" fill="#facc15" stroke="#ca8a04" stroke-width="1.5"/>
+              <ellipse cx="165" cy="72" rx="12" ry="16" fill="#f59e0b" stroke="#b45309" stroke-width="1.5"/>
+              <path d="M158 57 L154 44 L163 54 L165 40 L168 54 L176 44 L171 57 Z" fill="#16a34a"/>
+            </g>
+
+            <!-- SCALE 3: Tilted Left (2 Apples lower/heavier, 2 Zalaccas higher/lighter) -->
+            <g transform="translate(455, 10)" class="svg-interactive" onclick="highlightNote('scale-note', 'Scale 3 tilts UP on Zalacca: 2 Zalaccas are LIGHTER than 2 Apples!')">
+              <rect x="5" y="0" width="190" height="155" rx="14" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+              <text x="100" y="20" text-anchor="middle" font-family="Fredoka" font-weight="700" font-size="12" fill="#475569">Scale 3: Tilted Left</text>
+              <polygon points="85,140 115,140 105,85 95,85" fill="#1e3a5f"/>
+              <rect x="75" y="138" width="50" height="7" rx="3" fill="#0f172a"/>
+              <!-- Tilted Beam (Left down y=98, Right up y=72) -->
+              <line x1="35" y1="98" x2="165" y2="72" stroke="#1e3a5f" stroke-width="5" stroke-linecap="round"/>
+              <circle cx="100" cy="85" r="6" fill="#38bdf8" stroke="#1e3a5f" stroke-width="2"/>
+              <!-- Left Pan (Lower) + 2 Apples -->
+              <path d="M18 88 Q35 101 52 88 Z" fill="#facc15" stroke="#ca8a04" stroke-width="1.5"/>
+              <circle cx="29" cy="79" r="9" fill="#dc2626"/>
+              <circle cx="43" cy="79" r="9" fill="#ef4444"/>
+              <!-- Right Pan (Higher) + 2 Brown Zalaccas -->
+              <path d="M148 62 Q165 75 182 62 Z" fill="#facc15" stroke="#ca8a04" stroke-width="1.5"/>
+              <path d="M158 44 Q150 56 158 61 Q166 56 158 44 Z" fill="#78350f" stroke="#451a03" stroke-width="1.2"/>
+              <path d="M172 44 Q164 56 172 61 Q180 56 172 44 Z" fill="#92400e" stroke="#451a03" stroke-width="1.2"/>
+            </g>
+          </svg>
+          <div id="scale-note" class="text-center text-xs font-bold text-indigo-700 mt-1">Click any balance scale to see what is heavier or lighter!</div>
+        </div>
+      `,
+
+      // Q7: Venn Diagram (Math: 8, Both: 7, English: 5)
+      vennDiagram: () => `
+        <div class="w-full max-w-md">
+          <svg viewBox="0 0 380 210" class="w-full h-auto">
+            <rect x="8" y="8" width="364" height="194" rx="16" fill="#ffffff" stroke="#1e3a8a" stroke-width="3"/>
+            <text x="115" y="34" text-anchor="middle" font-family="Fredoka" font-weight="700" font-size="18" fill="#1d4ed8">Math</text>
+            <text x="265" y="34" text-anchor="middle" font-family="Fredoka" font-weight="700" font-size="18" fill="#be185d">English</text>
+
+            <!-- Math Circle -->
+            <circle cx="145" cy="115" r="72" fill="#3b82f6" fill-opacity="0.22" stroke="#1d4ed8" stroke-width="3"
+              class="svg-interactive" onclick="highlightNote('venn-note', 'Left region = 8 students like ONLY Math (Total Math = 8 + 7 = 15)')"/>
+            <!-- English Circle -->
+            <circle cx="235" cy="115" r="72" fill="#ec4899" fill-opacity="0.22" stroke="#be185d" stroke-width="3"
+              class="svg-interactive" onclick="highlightNote('venn-note', 'Right region = 5 students like ONLY English (Total English = 7 + 5 = 12)')"/>
+
+            <!-- Numbers -->
+            <text x="112" y="122" text-anchor="middle" font-family="Fredoka" font-weight="700" font-size="26" fill="#1e3a8a" pointer-events="none">8</text>
+            <text x="190" y="122" text-anchor="middle" font-family="Fredoka" font-weight="700" font-size="26" fill="#6d28d9"
+              class="svg-interactive" onclick="highlightNote('venn-note', 'Middle overlap = 7 students like BOTH Math and English!')">7</text>
+            <text x="268" y="122" text-anchor="middle" font-family="Fredoka" font-weight="700" font-size="26" fill="#9d174d" pointer-events="none">5</text>
+          </svg>
+          <div id="venn-note" class="text-center text-xs font-bold text-purple-700 mt-1">Click the circles or numbers in the Venn diagram to inspect!</div>
+        </div>
+      `,
+
+      // Q8: Rocket/Robot Composite 2D Shapes (3 triangles, 4 circles, 1 square, 2 rectangles, 2 parallelograms, 1 trapezoid)
+      compositeShapes: () => `
+        <div class="w-full max-w-md">
+          <svg viewBox="0 0 360 250" class="w-full h-auto">
+            <!-- Top Triangle (Nose) -->
+            <polygon points="180,15 115,80 245,80" fill="#fde047" stroke="#1e293b" stroke-width="3"
+              class="svg-interactive" onclick="highlightNote('shape-note', 'Top nose = Triangle (1 of 3 triangles)')"/>
+            <!-- Circle inside Nose -->
+            <circle cx="192" cy="52" r="12" fill="#38bdf8" stroke="#1e293b" stroke-width="2.5"
+              class="svg-interactive" onclick="highlightNote('shape-note', 'Window = Circle (1 of 4 circles)')"/>
+
+            <!-- Center Square -->
+            <rect x="140" y="80" width="80" height="80" fill="#a5f3fc" stroke="#1e293b" stroke-width="3"
+              class="svg-interactive" onclick="highlightNote('shape-note', 'Center body = 1 Square!')"/>
+
+            <!-- Left & Right Vertical Rectangles -->
+            <rect x="115" y="80" width="25" height="80" fill="#c4b5fd" stroke="#1e293b" stroke-width="3"
+              class="svg-interactive" onclick="highlightNote('shape-note', 'Side booster = Rectangle (2 rectangles total)')"/>
+            <rect x="220" y="80" width="25" height="80" fill="#c4b5fd" stroke="#1e293b" stroke-width="3"
+              class="svg-interactive" onclick="highlightNote('shape-note', 'Side booster = Rectangle (2 rectangles total)')"/>
+
+            <!-- Left & Right Wing Triangles -->
+            <polygon points="115,80 65,135 115,135" fill="#fca5a5" stroke="#1e293b" stroke-width="3"
+              class="svg-interactive" onclick="highlightNote('shape-note', 'Upper wing = Triangle (3 triangles total)')"/>
+            <polygon points="245,80 295,135 245,135" fill="#fca5a5" stroke="#1e293b" stroke-width="3"
+              class="svg-interactive" onclick="highlightNote('shape-note', 'Upper wing = Triangle (3 triangles total)')"/>
+
+            <!-- Left & Right Lower Parallelograms -->
+            <polygon points="65,135 115,135 102,175 52,175" fill="#fdba74" stroke="#1e293b" stroke-width="3"
+              class="svg-interactive" onclick="highlightNote('shape-note', 'Lower wing = Parallelogram (2 parallelograms total)')"/>
+            <polygon points="245,135 295,135 308,175 258,175" fill="#fdba74" stroke="#1e293b" stroke-width="3"
+              class="svg-interactive" onclick="highlightNote('shape-note', 'Lower wing = Parallelogram (2 parallelograms total)')"/>
+
+            <!-- Bottom Trapezoid -->
+            <polygon points="140,160 220,160 252,235 108,235" fill="#86efac" stroke="#1e293b" stroke-width="3.5"
+              class="svg-interactive" onclick="highlightNote('shape-note', 'Bottom base = 1 Trapezoid!')"/>
+
+            <!-- 3 Circles inside Trapezoid -->
+            <circle cx="145" cy="212" r="11" fill="#f472b6" stroke="#1e293b" stroke-width="2.5"
+              class="svg-interactive" onclick="highlightNote('shape-note', 'Bottom thruster = Circle (4 circles total)')"/>
+            <circle cx="180" cy="212" r="11" fill="#f472b6" stroke="#1e293b" stroke-width="2.5"
+              class="svg-interactive" onclick="highlightNote('shape-note', 'Bottom thruster = Circle (4 circles total)')"/>
+            <circle cx="215" cy="212" r="11" fill="#f472b6" stroke="#1e293b" stroke-width="2.5"
+              class="svg-interactive" onclick="highlightNote('shape-note', 'Bottom thruster = Circle (4 circles total)')"/>
+          </svg>
+          <div id="shape-note" class="text-center text-xs font-bold text-emerald-700 mt-1">Tap any colored shape on the rocket to identify its name!</div>
+        </div>
+      `,
+
+      // Q9: Wooden Tables measured with Handspans (Table A = 4 handspans, Table B = 5 handspans)
+      tablesHandspans: () => `
+        <div class="w-full max-w-xl">
+          <svg viewBox="0 0 540 185" class="w-full h-auto">
+            <!-- TABLE A (4 Handspans) -->
+            <g transform="translate(10, 10)" class="svg-interactive" onclick="highlightNote('table-note', 'Table A measures 4 handspans across!')">
+              <rect x="0" y="0" width="235" height="165" rx="14" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+              <!-- Table A Drawing -->
+              <rect x="22" y="26" width="190" height="14" rx="3" fill="#d97706" stroke="#78350f" stroke-width="2"/>
+              <rect x="32" y="40" width="170" height="22" fill="#b45309" stroke="#78350f" stroke-width="2"/>
+              <rect x="34" y="62" width="14" height="72" fill="#92400e" stroke="#451a03" stroke-width="2"/>
+              <rect x="186" y="62" width="14" height="72" fill="#92400e" stroke="#451a03" stroke-width="2"/>
+              <!-- 4 Handspans -->
+              ${[32, 76, 120, 164].map(x => `
+                <g transform="translate(${x}, 24)">
+                  <circle cx="18" cy="22" r="11" fill="#fdba74" stroke="#c2410c" stroke-width="1.3"/>
+                  <rect x="8" y="6" width="4" height="14" rx="2" fill="#fdba74" stroke="#c2410c" stroke-width="1"/>
+                  <rect x="13" y="3" width="4" height="16" rx="2" fill="#fdba74" stroke="#c2410c" stroke-width="1"/>
+                  <rect x="18" y="4" width="4" height="15" rx="2" fill="#fdba74" stroke="#c2410c" stroke-width="1"/>
+                  <rect x="23" y="7" width="4" height="13" rx="2" fill="#fdba74" stroke="#c2410c" stroke-width="1"/>
+                </g>
+              `).join('')}
+              <rect x="65" y="136" width="105" height="22" rx="11" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+              <text x="117" y="151" text-anchor="middle" font-family="Fredoka" font-weight="700" font-size="13" fill="#92400e">Table A (4 hands)</text>
+            </g>
+
+            <!-- TABLE B (5 Handspans) -->
+            <g transform="translate(260, 10)" class="svg-interactive" onclick="highlightNote('table-note', 'Table B measures 5 handspans across!')">
+              <rect x="0" y="0" width="270" height="165" rx="14" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+              <!-- Table B Drawing -->
+              <rect x="18" y="26" width="234" height="14" rx="3" fill="#d97706" stroke="#78350f" stroke-width="2"/>
+              <rect x="28" y="40" width="214" height="22" fill="#b45309" stroke="#78350f" stroke-width="2"/>
+              <rect x="32" y="62" width="14" height="72" fill="#92400e" stroke="#451a03" stroke-width="2"/>
+              <rect x="224" y="62" width="14" height="72" fill="#92400e" stroke="#451a03" stroke-width="2"/>
+              <rect x="46" y="102" width="178" height="10" fill="#b45309" stroke="#78350f" stroke-width="1.5"/>
+              <!-- 5 Handspans -->
+              ${[24, 69, 114, 159, 204].map(x => `
+                <g transform="translate(${x}, 24)">
+                  <circle cx="18" cy="22" r="11" fill="#fdba74" stroke="#c2410c" stroke-width="1.3"/>
+                  <rect x="8" y="6" width="4" height="14" rx="2" fill="#fdba74" stroke="#c2410c" stroke-width="1"/>
+                  <rect x="13" y="3" width="4" height="16" rx="2" fill="#fdba74" stroke="#c2410c" stroke-width="1"/>
+                  <rect x="18" y="4" width="4" height="15" rx="2" fill="#fdba74" stroke="#c2410c" stroke-width="1"/>
+                  <rect x="23" y="7" width="4" height="13" rx="2" fill="#fdba74" stroke="#c2410c" stroke-width="1"/>
+                </g>
+              `).join('')}
+              <rect x="80" y="136" width="110" height="22" rx="11" fill="#dcfce7" stroke="#22c55e" stroke-width="1.5"/>
+              <text x="135" y="151" text-anchor="middle" font-family="Fredoka" font-weight="700" font-size="13" fill="#166534">Table B (5 hands)</text>
+            </g>
+          </svg>
+          <div id="table-note" class="text-center text-xs font-bold text-amber-700 mt-1">Count the handspans on Table A and Table B!</div>
+        </div>
+      `,
+
+      // Q10: Comparing Expressions A = 87 - 34 and B = 46 + 13
+      compareAB: () => `
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-md">
+          <div class="bg-sky-50 border-2 border-sky-300 rounded-2xl p-4 text-center">
+            <span class="inline-block bg-sky-600 text-white font-display font-bold text-xs px-3 py-0.5 rounded-full mb-2">Card A</span>
+            <div class="font-display font-bold text-2xl sm:text-3xl text-slate-800">87 − 34</div>
+            <div class="text-xs text-slate-500 mt-1">8 tens − 3 tens, 7 ones − 4 ones</div>
+          </div>
+          <div class="bg-amber-50 border-2 border-amber-300 rounded-2xl p-4 text-center">
+            <span class="inline-block bg-amber-600 text-white font-display font-bold text-xs px-3 py-0.5 rounded-full mb-2">Card B</span>
+            <div class="font-display font-bold text-2xl sm:text-3xl text-slate-800">46 + 13</div>
+            <div class="text-xs text-slate-500 mt-1">4 tens + 1 ten, 6 ones + 3 ones</div>
+          </div>
+        </div>
+      `
+    };
+
+    function highlightNote(id, text) {
+      playSound('click');
+      const el = document.getElementById(id);
+      if (el) {
+        el.textContent = '✨ ' + text;
+        el.classList.add('scale-105');
+        setTimeout(() => el.classList.remove('scale-105'), 200);
+      }
+    }
+
+    // =========================================================================
+    // 3. QUIZ QUESTIONS DATA (10 Questions for Parts 1 & 2)
+    // =========================================================================
+    const quizQuestions = [
+      // --- PART 1: 5 MULTIPLE CHOICE QUESTIONS ---
+      {
+        part: 1,
+        topic: 'Measurement',
+        type: 'single',
+        question: '1. My sister buys 140 cm of red ribbon and also 127 cm of blue ribbon. What is the total length of the ribbon?',
+        illustration: 'ribbons',
+        options: ['260 cm', '267 cm', '167 cm', '240 cm'],
+        correct: [1],
+        explanation: '140 cm + 127 cm = 267 cm! (100 + 100 = 200, 40 + 20 = 60, 0 + 7 = 7 → 267 cm).'
+      },
+      {
+        part: 1,
+        topic: 'Measurement',
+        type: 'single',
+        question: '2. Sandra has Rp 20.000. She bought milk for Rp 5.000 and a bar of chocolate for Rp 3.000. How much money does Sandra have left?',
+        illustration: 'sandraMoney',
+        options: ['Rp 10.000', 'Rp 11.000', 'Rp 12.000', 'Rp 14.000'],
+        correct: [2],
+        explanation: 'Total spent = Rp 5.000 + Rp 3.000 = Rp 8.000. Money left = Rp 20.000 − Rp 8.000 = Rp 12.000.'
+      },
+      {
+        part: 1,
+        topic: 'Geometry',
+        type: 'single',
+        question: '3. Look at the following picture (Length L = 5 cm, width w = 3 cm). What is the perimeter of the rectangle?',
+        illustration: 'perimeterRect',
+        options: ['15 cm', '16 cm', '18 cm', '9 cm'],
+        correct: [1],
+        explanation: 'Perimeter is the total distance around all 4 sides: 5 cm + 3 cm + 5 cm + 3 cm = 16 cm!'
+      },
+      {
+        part: 1,
+        topic: 'Numbering',
+        type: 'single',
+        question: '4. Read the number names in the box below! Which ones are written correctly?',
+        illustration: 'numberWords',
+        options: ['1 – 3 – 5', '2 – 3 – 5', '1 – 5 – 6', '3 – 4 – 6'],
+        correct: [2],
+        explanation: '(1) 67 = sixty seven, (5) 72 = seventy two, and (6) 49 = forty nine are written properly!'
+      },
+      {
+        part: 1,
+        topic: 'Measurement',
+        type: 'single',
+        question: '5. Santi buys 2 pencils (Rp 2.000 each), 2 erasers (Rp 3.000 each), 1 ruler (Rp 5.000), and 1 notebook (Rp 5.000). How much money does Santi have to pay in total?',
+        illustration: 'stationery',
+        options: ['Rp 15.000', 'Rp 18.000', 'Rp 20.000', 'Rp 22.000'],
+        correct: [2],
+        explanation: '2 pencils (Rp 4.000) + 2 erasers (Rp 6.000) + 1 ruler (Rp 5.000) + 1 notebook (Rp 5.000) = Rp 20.000!'
+      },
+
+      // --- PART 2: 5 COMPLEX MULTIPLE CHOICE QUESTIONS (CHOOSE > 1) ---
+      {
+        part: 2,
+        topic: 'Measurement',
+        type: 'complex',
+        question: '6. Look at the three balance scales! Which statements are TRUE?',
+        hint: '✨ Complex Multiple Choice: Select MORE THAN 1 correct answer, then click "Check My Answers".',
+        illustration: 'balanceScales',
+        options: [
+          'The weight of bananas is lighter than the pineapple',
+          'The weight of zalacca is the heaviest',
+          'The weight of the pineapple is the heaviest',
+          'The weight of the pineapple is lighter than zalacca'
+        ],
+        correct: [0, 2],
+        explanation: '3 bananas = 2 apples, and 2 apples are lighter than the pineapple, so bananas are lighter than the pineapple, and the pineapple is the heaviest!'
+      },
+      {
+        part: 2,
+        topic: 'Making Sentences',
+        type: 'complex',
+        question: '7. Look at the Venn diagram! Which sentences are TRUE based on the graph?',
+        hint: '✨ Complex Multiple Choice: Select MORE THAN 1 correct sentence.',
+        illustration: 'vennDiagram',
+        options: [
+          'There are 7 students who like both Math and English',
+          'There are 8 students who like ONLY Math',
+          'There are 12 students in total who like English',
+          'There are 8 students who like English'
+        ],
+        correct: [0, 1, 2],
+        explanation: '7 students are in the middle (both subjects), 8 students like only Math, and 7 + 5 = 12 students like English in total!'
+      },
+      {
+        part: 2,
+        topic: 'Geometry',
+        type: 'complex',
+        question: '8. Examine the number of 2D flat shapes in the rocket picture! Which sentences are TRUE?',
+        hint: '✨ Complex Multiple Choice: Select MORE THAN 1 correct sentence.',
+        illustration: 'compositeShapes',
+        options: [
+          'There are 4 circles in the picture',
+          'There are 3 triangles in the picture',
+          'There are 5 squares in the picture',
+          'There is 1 trapezoid at the bottom'
+        ],
+        correct: [0, 1, 3],
+        explanation: 'The rocket has 4 circles (1 window + 3 thrusters), 3 triangles (1 nose + 2 wings), 1 center square, and 1 green trapezoid base!'
+      },
+      {
+        part: 2,
+        topic: 'Making Sentences',
+        type: 'complex',
+        question: '9. Look at the picture of Table A and Table B measured with handspans! Which conclusion sentences are TRUE?',
+        hint: '✨ Complex Multiple Choice: Select MORE THAN 1 correct sentence.',
+        illustration: 'tablesHandspans',
+        options: [
+          'Table A is 4 handspans long',
+          'Table B is 5 handspans long',
+          'Table A is longer than Table B',
+          'Table B is longer than Table A'
+        ],
+        correct: [0, 1, 3],
+        explanation: 'Table A measures 4 handspans and Table B measures 5 handspans, so we conclude that Table B is longer than Table A!'
+      },
+      {
+        part: 2,
+        topic: 'Numbering',
+        type: 'complex',
+        question: '10. Solve A = 87 − 34 and B = 46 + 13. Which mathematical sentences are TRUE?',
+        hint: '✨ Complex Multiple Choice: Select MORE THAN 1 correct sentence.',
+        illustration: 'compareAB',
+        options: [
+          'The result of A is 53',
+          'The result of B is 59',
+          'A is greater than B (A > B)',
+          'A is smaller than B (A < B)'
+        ],
+        correct: [0, 1, 3],
+        explanation: 'A = 87 − 34 = 53, and B = 46 + 13 = 59. Since 53 is less than 59, A is smaller than B (A < B)!'
+      }
+    ];
+
+    // =========================================================================
+    // 4. QUIZ STATE & NAVIGATION (PARTS 1 & 2)
+    // =========================================================================
+    let currentQIndex = 0;
+    let totalScore = 0;
+    let topicStats = {
+      'Numbering': { earned: 0, total: 2 },
+      'Measurement': { earned: 0, total: 9 }, // 4 in Part 1/2 + 5 pairs in Part 3
+      'Geometry': { earned: 0, total: 2 },
+      'Making Sentences': { earned: 0, total: 2 }
+    };
+    let selectedComplexIndices = new Set();
+    let questionAnswered = false;
+
+    function startQuiz() {
+      playSound('connect');
+      document.getElementById('welcome-screen').classList.add('hidden');
+      document.getElementById('quiz-screen').classList.remove('hidden');
+      document.getElementById('header-score-box').classList.remove('hidden');
+      document.getElementById('header-score-box').classList.add('flex');
+      currentQIndex = 0;
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      questionAnswered = false;
+      selectedComplexIndices.clear();
+      const q = quizQuestions[currentQIndex];
+
+      // Update Header Badges & Progress
+      const partBadge = document.getElementById('part-badge');
+      if (q.part === 1) {
+        partBadge.textContent = 'Part 1: Multiple Choice';
+        partBadge.className = 'bg-sky-500 text-white font-display font-bold text-xs sm:text-sm px-3 py-1 rounded-xl';
+      } else {
+        partBadge.textContent = 'Part 2: Complex Multiple Choice';
+        partBadge.className = 'bg-purple-600 text-white font-display font-bold text-xs sm:text-sm px-3 py-1 rounded-xl';
+      }
+
+      document.getElementById('topic-badge').textContent = q.topic;
+      document.getElementById('question-counter').textContent = `Question ${currentQIndex + 1} of 15`;
+      document.getElementById('progress-bar').style.width = `${((currentQIndex + 1) / 15) * 100}%`;
+
+      // Question text & hint
+      document.getElementById('question-text').textContent = q.question;
+      const hintEl = document.getElementById('question-hint');
+      if (q.hint) {
+        hintEl.textContent = q.hint;
+        hintEl.classList.remove('hidden');
+      } else {
+        hintEl.classList.add('hidden');
+      }
+
+      // Render SVG Illustration
+      document.getElementById('illustration-container').innerHTML = SVG_ILLUSTRATIONS[q.illustration]();
+
+      // Render Options
+      const optionsContainer = document.getElementById('options-container');
+      optionsContainer.innerHTML = '';
+      const letters = ['A', 'B', 'C', 'D'];
+
+      q.options.forEach((optText, idx) => {
+        const btn = document.createElement('button');
+        btn.id = `opt-btn-${idx}`;
+        btn.type = 'button';
+        btn.className = 'option-card w-full text-left p-4 rounded-2xl border-2 border-slate-200 bg-white hover:border-sky-400 hover:bg-sky-50/60 transition flex items-center gap-3.5 cursor-pointer shadow-sm';
+
+        const indicator = q.type === 'single'
+          ? `<span id="opt-badge-${idx}" class="w-9 h-9 rounded-xl bg-sky-100 text-sky-700 font-display font-bold flex items-center justify-center shrink-0">${letters[idx]}</span>`
+          : `<span id="opt-badge-${idx}" class="w-8 h-8 rounded-lg border-2 border-purple-300 bg-purple-50 text-purple-700 font-bold flex items-center justify-center shrink-0"></span>`;
+
+        btn.innerHTML = `${indicator}<span class="font-bold text-slate-700 text-sm sm:text-base leading-snug">${optText}</span>`;
+
+        btn.onclick = () => handleOptionSelect(idx);
+        optionsContainer.appendChild(btn);
+      });
+
+      // Reset Feedback & Action Buttons
+      document.getElementById('feedback-box').classList.add('hidden');
+      document.getElementById('next-btn').classList.add('hidden');
+      const checkBtn = document.getElementById('check-complex-btn');
+      if (q.type === 'complex') {
+        checkBtn.classList.remove('hidden');
+        checkBtn.disabled = false;
+      } else {
+        checkBtn.classList.add('hidden');
+      }
+
+      // Re-trigger card entrance animation
+      const card = document.getElementById('question-card');
+      card.classList.remove('animate-pop');
+      void card.offsetWidth;
+      card.classList.add('animate-pop');
+    }
+
+    function handleOptionSelect(idx) {
+      if (questionAnswered) return;
+      const q = quizQuestions[currentQIndex];
+
+      if (q.type === 'single') {
+        questionAnswered = true;
+        const isCorrect = q.correct.includes(idx);
+        evaluateOptionsStyling(q, [idx]);
+        showFeedback(isCorrect, q.explanation);
+        if (isCorrect) {
+          addScore(1, q.topic);
+          playSound('correct');
+        } else {
+          playSound('wrong');
+        }
+        revealNextButton();
+      } else {
+        // Toggle checkbox selection for Complex Multiple Choice
+        playSound('click');
+        const btn = document.getElementById(`opt-btn-${idx}`);
+        const badge = document.getElementById(`opt-badge-${idx}`);
+        if (selectedComplexIndices.has(idx)) {
+          selectedComplexIndices.delete(idx);
+          btn.classList.remove('border-purple-500', 'bg-purple-50');
+          btn.classList.add('border-slate-200', 'bg-white');
+          badge.textContent = '';
+          badge.classList.remove('bg-purple-600', 'text-white', 'border-purple-600');
+        } else {
+          selectedComplexIndices.add(idx);
+          btn.classList.remove('border-slate-200', 'bg-white');
+          btn.classList.add('border-purple-500', 'bg-purple-50');
+          badge.textContent = '✓';
+          badge.classList.add('bg-purple-600', 'text-white', 'border-purple-600');
+        }
+      }
+    }
+
+    function checkComplexAnswer() {
+      if (questionAnswered) return;
+      const q = quizQuestions[currentQIndex];
+      if (selectedComplexIndices.size === 0) {
+        const fb = document.getElementById('feedback-box');
+        fb.className = 'rounded-2xl p-4 mb-5 border-2 border-amber-300 bg-amber-50 text-amber-800 animate-pop';
+        document.getElementById('feedback-icon').textContent = '☝️';
+        document.getElementById('feedback-title').textContent = 'Pick at least 1 answer first!';
+        document.getElementById('feedback-explanation').textContent = 'Remember: Complex Multiple Choice questions have more than 1 true statement.';
+        fb.classList.remove('hidden');
+        playSound('wrong');
+        return;
+      }
+
+      questionAnswered = true;
+      document.getElementById('check-complex-btn').classList.add('hidden');
+
+      const chosen = Array.from(selectedComplexIndices).sort();
+      const expected = [...q.correct].sort();
+      const isExactMatch = chosen.length === expected.length && chosen.every((val, i) => val === expected[i]);
+
+      evaluateOptionsStyling(q, chosen);
+      showFeedback(isExactMatch, q.explanation);
+
+      if (isExactMatch) {
+        addScore(1, q.topic);
+        playSound('correct');
+      } else {
+        playSound('wrong');
+      }
+      revealNextButton();
+    }
+
+    function evaluateOptionsStyling(q, chosenArray) {
+      q.options.forEach((_, idx) => {
+        const btn = document.getElementById(`opt-btn-${idx}`);
+        const badge = document.getElementById(`opt-badge-${idx}`);
+        btn.disabled = true;
+        btn.classList.remove('hover:border-sky-400', 'hover:bg-sky-50/60', 'border-purple-500', 'bg-purple-50');
+
+        const isRight = q.correct.includes(idx);
+        const wasPicked = chosenArray.includes(idx);
+
+        if (isRight) {
+          btn.classList.add('border-emerald-500', 'bg-emerald-50');
+          badge.className = 'w-9 h-9 rounded-xl bg-emerald-500 text-white font-display font-bold flex items-center justify-center shrink-0';
+          badge.textContent = '✓';
+        } else if (wasPicked && !isRight) {
+          btn.classList.add('border-rose-500', 'bg-rose-50');
+          badge.className = 'w-9 h-9 rounded-xl bg-rose-500 text-white font-display font-bold flex items-center justify-center shrink-0';
+          badge.textContent = '✕';
+        } else {
+          btn.classList.add('opacity-60');
+        }
+      });
+    }
+
+    function showFeedback(isCorrect, explanation) {
+      const fb = document.getElementById('feedback-box');
+      fb.classList.remove('hidden');
+      if (isCorrect) {
+        fb.className = 'rounded-2xl p-4 mb-5 border-2 border-emerald-400 bg-emerald-50 text-emerald-900 animate-pop';
+        document.getElementById('feedback-icon').textContent = '🌟';
+        document.getElementById('feedback-title').textContent = 'Awesome! That is Correct!';
+      } else {
+        fb.className = 'rounded-2xl p-4 mb-5 border-2 border-rose-300 bg-rose-50 text-rose-900 animate-pop';
+        document.getElementById('feedback-icon').textContent = '💡';
+        document.getElementById('feedback-title').textContent = 'Nice Try! Check the Green Highlighted Answer:';
+      }
+      document.getElementById('feedback-explanation').textContent = explanation;
+    }
+
+    function revealNextButton() {
+      const nextBtn = document.getElementById('next-btn');
+      const nextText = document.getElementById('next-btn-text');
+      nextText.textContent = currentQIndex === quizQuestions.length - 1 ? 'Start Part 3: Line Matching' : 'Next Question';
+      nextBtn.classList.remove('hidden');
+    }
+
+    function addScore(points, topic) {
+      totalScore += points;
+      if (topicStats[topic]) topicStats[topic].earned += points;
+      document.getElementById('live-score').textContent = totalScore;
+    }
+
+    function nextQuestion() {
+      playSound('click');
+      if (currentQIndex < quizQuestions.length - 1) {
+        currentQIndex++;
+        renderQuestion();
+      } else {
+        // Move to Part 3: Line-Drawing Matching
+        document.getElementById('quiz-screen').classList.add('hidden');
+        document.getElementById('matching-screen').classList.remove('hidden');
+        initMatchingGame();
+      }
+    }
+
+    // =========================================================================
+    // 5. PART 3: INTERACTIVE LINE-DRAWING MATCHING (Based on Q8 in Doc)
+    // =========================================================================
+    const leftCurrencyItems = [
+      { id: 'L1', value: 12000, notes: [10000, 2000], label: 'Rp 10.000 + Rp 2.000' },
+      { id: 'L2', value: 22000, notes: [20000, 2000], label: 'Rp 20.000 + Rp 2.000' },
+      { id: 'L3', value: 4000,  notes: [2000, 2000],  label: 'Rp 2.000 + Rp 2.000' },
+      { id: 'L4', value: 10000, notes: [5000, 5000],  label: 'Rp 5.000 + Rp 5.000' },
+      { id: 'L5', value: 15000, notes: [10000, 5000], label: 'Rp 10.000 + Rp 5.000' }
+    ];
+
+    // Right column items ordered just like the assessment worksheet!
+    const rightObjectItems = [
+      {
+        id: 'R1', value: 15000, name: 'Two Sandwiches', priceTag: 'Rp. 15.000',
+        svg: `<svg viewBox="0 0 80 56" class="w-16 h-12 shrink-0">
+          <polygon points="8,44 36,12 46,44" fill="#fde68a" stroke="#d97706" stroke-width="2"/>
+          <line x1="12" y1="38" x2="43" y2="38" stroke="#16a34a" stroke-width="3"/>
+          <line x1="15" y1="34" x2="41" y2="34" stroke="#ef4444" stroke-width="2.5"/>
+          <polygon points="34,44 62,12 72,44" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+          <line x1="38" y1="38" x2="69" y2="38" stroke="#16a34a" stroke-width="3"/>
+        </svg>`
+      },
+      {
+        id: 'R2', value: 12000, name: 'Two Iced Drinks', priceTag: 'Rp. 12.000',
+        svg: `<svg viewBox="0 0 80 56" class="w-16 h-12 shrink-0">
+          <polygon points="14,18 34,18 31,50 17,50" fill="#92400e" stroke="#451a03" stroke-width="1.5"/>
+          <line x1="24" y1="6" x2="24" y2="18" stroke="#16a34a" stroke-width="2.5"/>
+          <polygon points="46,18 66,18 63,50 49,50" fill="#86efac" stroke="#15803d" stroke-width="1.5"/>
+          <line x1="56" y1="6" x2="56" y2="18" stroke="#ec4899" stroke-width="2.5"/>
+        </svg>`
+      },
+      {
+        id: 'R3', value: 4000, name: 'Sweet Candies', priceTag: 'Rp. 4.000',
+        svg: `<svg viewBox="0 0 80 56" class="w-16 h-12 shrink-0">
+          <circle cx="26" cy="24" r="9" fill="#facc15" stroke="#ca8a04" stroke-width="1.5"/>
+          <polygon points="12,18 18,24 12,30" fill="#facc15"/>
+          <circle cx="52" cy="22" r="9" fill="#38bdf8" stroke="#0284c7" stroke-width="1.5"/>
+          <polygon points="66,16 60,22 66,28" fill="#38bdf8"/>
+          <circle cx="40" cy="38" r="9" fill="#f472b6" stroke="#db2777" stroke-width="1.5"/>
+        </svg>`
+      },
+      {
+        id: 'R4', value: 22000, name: 'Green Sun T-Shirt', priceTag: 'Rp. 22.000',
+        svg: `<svg viewBox="0 0 80 56" class="w-16 h-12 shrink-0">
+          <path d="M24,10 L10,20 L18,30 L24,25 L24,50 L56,50 L56,25 L62,30 L70,20 L56,10 Q40,18 24,10 Z" fill="#22c55e" stroke="#15803d" stroke-width="2"/>
+          <circle cx="40" cy="31" r="8" fill="#facc15"/>
+        </svg>`
+      },
+      {
+        id: 'R5', value: 10000, name: 'Two Glazed Donuts', priceTag: 'Rp. 10.000',
+        svg: `<svg viewBox="0 0 80 56" class="w-16 h-12 shrink-0">
+          <circle cx="28" cy="32" r="15" fill="#78350f" stroke="#451a03" stroke-width="2"/>
+          <circle cx="28" cy="32" r="5" fill="#ffffff"/>
+          <circle cx="52" cy="26" r="15" fill="#f43f5e" stroke="#be123c" stroke-width="2"/>
+          <circle cx="52" cy="26" r="5" fill="#ffffff"/>
+        </svg>`
+      }
+    ];
+
+    const linePalette = ['#0284c7', '#9333ea', '#d97706', '#059669', '#e11d48'];
+    let drawnConnections = []; // { leftId, rightId, color, status: 'pending'|'correct'|'wrong' }
+    let activeStartLeftId = null;
+    let isDraggingLine = false;
+    let dragCurrentPoint = null;
+    let matchingEvaluated = false;
+
+    function initMatchingGame() {
+      drawnConnections = [];
+      activeStartLeftId = null;
+      isDraggingLine = false;
+      matchingEvaluated = false;
+
+      const leftCol = document.getElementById('left-items-col');
+      const rightCol = document.getElementById('right-items-col');
+      leftCol.innerHTML = '';
+      rightCol.innerHTML = '';
+
+      // Render Left Currency Cards
+      leftCurrencyItems.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.id = `card-${item.id}`;
+        card.dataset.leftId = item.id;
+        card.className = 'relative bg-slate-50 hover:bg-sky-50 border-2 border-slate-300 rounded-2xl p-2 sm:p-3 flex items-center justify-between gap-2 cursor-pointer transition shadow-sm';
+        card.innerHTML = `
+          <div class="flex flex-wrap items-center gap-1.5 pointer-events-none">
+            ${item.notes.map(n => getBanknoteSVG(n)).join('')}
+          </div>
+          <!-- Connection Anchor Dot on Right Edge -->
+          <div id="dot-${item.id}" class="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white border-4 border-sky-500 shadow shrink-0 flex items-center justify-center transition-transform">
+            <div class="w-2 h-2 rounded-full bg-sky-500"></div>
+          </div>
+        `;
+
+        // Pointer Down starts drag or click-to-select
+        card.addEventListener('pointerdown', (e) => {
+          if (matchingEvaluated) return;
+          e.preventDefault();
+          startLineFromLeft(item.id, e);
+        });
+
+        leftCol.appendChild(card);
+      });
+
+      // Render Right Priced Object Cards
+      rightObjectItems.forEach((item) => {
+        const card = document.createElement('div');
+        card.id = `card-${item.id}`;
+        card.dataset.rightId = item.id;
+        card.className = 'relative bg-slate-50 hover:bg-amber-50 border-2 border-slate-300 rounded-2xl p-2 sm:p-3 flex items-center justify-between gap-2 cursor-pointer transition shadow-sm';
+        card.innerHTML = `
+          <!-- Connection Anchor Dot on Left Edge -->
+          <div id="dot-${item.id}" class="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white border-4 border-amber-500 shadow shrink-0 flex items-center justify-center transition-transform">
+            <div class="w-2 h-2 rounded-full bg-amber-500"></div>
+          </div>
+          <div class="flex items-center gap-2 sm:gap-3 flex-1 justify-end pointer-events-none">
+            <div class="text-right">
+              <div class="font-bold text-xs sm:text-sm text-slate-700 leading-tight">${item.name}</div>
+              <span class="inline-block mt-1 bg-rose-600 text-white font-display font-bold text-xs sm:text-sm px-2.5 py-0.5 rounded-lg shadow-sm">${item.priceTag}</span>
+            </div>
+            ${item.svg}
+          </div>
+        `;
+
+        // Clicking right card completes a click-to-connect pair
+        card.addEventListener('pointerup', (e) => {
+          if (matchingEvaluated) return;
+          if (activeStartLeftId) {
+            completeLineToRight(item.id);
+          }
+        });
+
+        rightCol.appendChild(card);
+      });
+
+      // Global pointer move & up listeners for live elastic line dragging
+      window.addEventListener('pointermove', onArenaPointerMove);
+      window.addEventListener('pointerup', onArenaPointerUp);
+      window.addEventListener('resize', renderMatchingLines);
+      renderMatchingLines();
+    }
+
+    function startLineFromLeft(leftId, e) {
+      playSound('click');
+      // Remove any existing line attached to this leftId so user can redraw cleanly
+      drawnConnections = drawnConnections.filter(c => c.leftId !== leftId);
+      activeStartLeftId = leftId;
+      isDraggingLine = true;
+
+      // Highlight active left card
+      leftCurrencyItems.forEach(it => {
+        const el = document.getElementById(`card-${it.id}`);
+        if (el) el.classList.toggle('ring-4', it.id === leftId);
+        if (el) el.classList.toggle('ring-sky-300', it.id === leftId);
+      });
+
+      const arenaRect = document.getElementById('matching-arena').getBoundingClientRect();
+      dragCurrentPoint = {
+        x: e.clientX - arenaRect.left,
+        y: e.clientY - arenaRect.top
+      };
+      renderMatchingLines();
+    }
+
+    function onArenaPointerMove(e) {
+      if (!isDraggingLine || !activeStartLeftId) return;
+      const arena = document.getElementById('matching-arena');
+      if (!arena) return;
+      const rect = arena.getBoundingClientRect();
+      dragCurrentPoint = {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      };
+      renderMatchingLines();
+    }
+
+    function onArenaPointerUp(e) {
+      if (!isDraggingLine) return;
+      isDraggingLine = false;
+
+      // Check if pointer was released over a right card
+      const elemBelow = document.elementFromPoint(e.clientX, e.clientY);
+      const rightCard = elemBelow ? elemBelow.closest('[data-right-id]') : null;
+      if (rightCard && activeStartLeftId) {
+        completeLineToRight(rightCard.dataset.rightId);
+      } else {
+        // Keep activeStartLeftId selected in case user is doing tap-left then tap-right
+        dragCurrentPoint = null;
+        renderMatchingLines();
+      }
+    }
+
+    function completeLineToRight(rightId) {
+      if (!activeStartLeftId) return;
+      playSound('connect');
+
+      // Remove existing connections to this leftId or rightId (1-to-1 matching)
+      drawnConnections = drawnConnections.filter(c => c.leftId !== activeStartLeftId && c.rightId !== rightId);
+
+      const leftIdx = leftCurrencyItems.findIndex(i => i.id === activeStartLeftId);
+      drawnConnections.push({
+        leftId: activeStartLeftId,
+        rightId: rightId,
+        color: linePalette[leftIdx % linePalette.length],
+        status: 'pending'
+      });
+
+      // Clear active selection ring
+      const leftEl = document.getElementById(`card-${activeStartLeftId}`);
+      if (leftEl) leftEl.classList.remove('ring-4', 'ring-sky-300');
+
+      activeStartLeftId = null;
+      isDraggingLine = false;
+      dragCurrentPoint = null;
+      renderMatchingLines();
+    }
+
+    function getDotCenter(dotId) {
+      const arena = document.getElementById('matching-arena');
+      const dot = document.getElementById(dotId);
+      if (!arena || !dot) return { x: 0, y: 0 };
+      const aRect = arena.getBoundingClientRect();
+      const dRect = dot.getBoundingClientRect();
+      return {
+        x: dRect.left - aRect.left + dRect.width / 2,
+        y: dRect.top - aRect.top + dRect.height / 2
+      };
+    }
+
+    function renderMatchingLines() {
+      const svg = document.getElementById('matching-svg');
+      if (!svg) return;
+      svg.innerHTML = '';
+
+      // Draw finalized connections
+      drawnConnections.forEach(conn => {
+        const p1 = getDotCenter(`dot-${conn.leftId}`);
+        const p2 = getDotCenter(`dot-${conn.rightId}`);
+        let strokeColor = conn.color;
+        if (conn.status === 'correct') strokeColor = '#16a34a';
+        if (conn.status === 'wrong') strokeColor = '#e11d48';
+
+        const midX = (p1.x + p2.x) / 2;
+        const pathD = `M ${p1.x} ${p1.y} C ${midX} ${p1.y}, ${midX} ${p2.y}, ${p2.x} ${p2.y}`;
+
+        // Outer white halo for crisp readability
+        const halo = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        halo.setAttribute('d', pathD);
+        halo.setAttribute('fill', 'none');
+        halo.setAttribute('stroke', '#ffffff');
+        halo.setAttribute('stroke-width', '8');
+        halo.setAttribute('stroke-linecap', 'round');
+        svg.appendChild(halo);
+
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', pathD);
+        path.setAttribute('fill', 'none');
+        path.setAttribute('stroke', strokeColor);
+        path.setAttribute('stroke-width', '4.5');
+        path.setAttribute('stroke-linecap', 'round');
+        if (conn.status === 'wrong') path.setAttribute('stroke-dasharray', '8 6');
+        svg.appendChild(path);
+
+        // Endpoint circles
+        [p1, p2].forEach(pt => {
+          const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          c.setAttribute('cx', pt.x);
+          c.setAttribute('cy', pt.y);
+          c.setAttribute('r', '6');
+          c.setAttribute('fill', strokeColor);
+          svg.appendChild(c);
+        });
+      });
+
+      // Draw live elastic dragging line
+      if (isDraggingLine && activeStartLeftId && dragCurrentPoint) {
+        const p1 = getDotCenter(`dot-${activeStartLeftId}`);
+        const p2 = dragCurrentPoint;
+        const midX = (p1.x + p2.x) / 2;
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        line.setAttribute('d', `M ${p1.x} ${p1.y} C ${midX} ${p1.y}, ${midX} ${p2.y}, ${p2.x} ${p2.y}`);
+        line.setAttribute('fill', 'none');
+        line.setAttribute('stroke', '#0ea5e9');
+        line.setAttribute('stroke-width', '4');
+        line.setAttribute('stroke-dasharray', '6 6');
+        line.setAttribute('stroke-linecap', 'round');
+        svg.appendChild(line);
+      }
+
+      document.getElementById('match-count-label').textContent = `${drawnConnections.length} / 5 lines drawn`;
+    }
+
+    function clearAllLines() {
+      if (matchingEvaluated) return;
+      playSound('click');
+      drawnConnections = [];
+      activeStartLeftId = null;
+      document.getElementById('matching-feedback').classList.add('hidden');
+      renderMatchingLines();
+    }
+
+    function checkMatchingAnswers() {
+      if (matchingEvaluated) return;
+      const fb = document.getElementById('matching-feedback');
+
+      if (drawnConnections.length < 5) {
+        playSound('wrong');
+        fb.className = 'rounded-2xl p-4 my-4 border-2 border-amber-300 bg-amber-50 text-amber-800 font-bold text-sm animate-pop';
+        fb.textContent = `☝️ Please draw all 5 lines first! You have drawn ${drawnConnections.length} out of 5 lines.`;
+        fb.classList.remove('hidden');
+        return;
+      }
+
+      matchingEvaluated = true;
+      let correctPairs = 0;
+
+      drawnConnections.forEach(conn => {
+        const leftObj = leftCurrencyItems.find(l => l.id === conn.leftId);
+        const rightObj = rightObjectItems.find(r => r.id === conn.rightId);
+        const leftCard = document.getElementById(`card-${conn.leftId}`);
+
+        if (leftObj && rightObj && leftObj.value === rightObj.value) {
+          conn.status = 'correct';
+          correctPairs++;
+          leftCard.classList.add('border-emerald-500', 'bg-emerald-50');
+        } else {
+          conn.status = 'wrong';
+          leftCard.classList.add('border-rose-500', 'bg-rose-50');
+        }
+      });
+
+      addScore(correctPairs, 'Measurement');
+      renderMatchingLines();
+
+      if (correctPairs === 5) {
+        playSound('correct');
+        fb.className = 'rounded-2xl p-4 my-4 border-2 border-emerald-400 bg-emerald-50 text-emerald-900 font-bold text-sm sm:text-base animate-pop';
+        fb.innerHTML = `🎉 <strong>Superb! 5 out of 5 matches are right!</strong><br>
+          • Rp 10.000 + Rp 2.000 = Rp 12.000 (Two Iced Drinks)<br>
+          • Rp 20.000 + Rp 2.000 = Rp 22.000 (Green Sun T-Shirt)<br>
+          • Rp 2.000 + Rp 2.000 = Rp 4.000 (Sweet Candies)<br>
+          • Rp 5.000 + Rp 5.000 = Rp 10.000 (Two Glazed Donuts)<br>
+          • Rp 10.000 + Rp 5.000 = Rp 15.000 (Two Sandwiches)`;
+      } else {
+        playSound('wrong');
+        fb.className = 'rounded-2xl p-4 my-4 border-2 border-amber-400 bg-amber-50 text-amber-900 font-bold text-sm animate-pop';
+        fb.innerHTML = `✨ You matched <strong>${correctPairs} out of 5</strong> correctly! (Green solid lines = correct, Red dashed lines = incorrect).`;
+      }
+      fb.classList.remove('hidden');
+
+      document.getElementById('clear-lines-btn').classList.add('hidden');
+      document.getElementById('check-matches-btn').classList.add('hidden');
+      document.getElementById('finish-quiz-btn').classList.remove('hidden');
+    }
+
+    // =========================================================================
+    // 6. FINAL CERTIFICATE & CONFETTI CELEBRATION
+    // =========================================================================
+    function showResults() {
+      playSound('fanfare');
+      document.getElementById('matching-screen').classList.add('hidden');
+      document.getElementById('result-screen').classList.remove('hidden');
+
+      const rawName = document.getElementById('student-name').value.trim();
+      document.getElementById('cert-student-name').textContent = rawName || 'Grade 1 Math Champion';
+
+      const pct = Math.round((totalScore / 15) * 100);
+      document.getElementById('final-score-num').textContent = pct;
+      document.getElementById('final-correct-count').textContent = `${totalScore} / 15 Correct`;
+
+      if (pct >= 85) {
+        document.getElementById('cert-subtitle').textContent = 'Outstanding Mastery! You are a Grade 1 Math Superstar!';
+      } else if (pct >= 60) {
+        document.getElementById('cert-subtitle').textContent = 'Well done! Keep practicing to get all 15 stars!';
+      } else {
+        document.getElementById('cert-subtitle').textContent = 'Good effort! Try again to boost your Math score!';
+      }
+
+      // Render Topic Mastery Cards
+      const breakdownEl = document.getElementById('topic-breakdown');
+      const badgeStyles = {
+        'Numbering': { icon: '🔢', bg: 'bg-blue-50 border-blue-200 text-blue-800' },
+        'Measurement': { icon: '⚖️', bg: 'bg-emerald-50 border-emerald-200 text-emerald-800' },
+        'Geometry': { icon: '📐', bg: 'bg-purple-50 border-purple-200 text-purple-800' },
+        'Making Sentences': { icon: '💬', bg: 'bg-rose-50 border-rose-200 text-rose-800' }
+      };
+
+      breakdownEl.innerHTML = Object.entries(topicStats).map(([topic, data]) => {
+        const st = badgeStyles[topic];
+        return `
+          <div class="p-4 rounded-2xl border-2 ${st.bg} flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <span class="text-2xl">${st.icon}</span>
+              <span class="font-display font-bold">${topic}</span>
+            </div>
+            <span class="font-display font-bold text-lg">${data.earned} / ${data.total} ⭐</span>
+          </div>
+        `;
+      }).join('');
+
+      launchConfetti();
+    }
+
+    function restartQuiz() {
+      playSound('click');
+      totalScore = 0;
+      document.getElementById('live-score').textContent = '0';
+      topicStats = {
+        'Numbering': { earned: 0, total: 2 },
+        'Measurement': { earned: 0, total: 9 },
+        'Geometry': { earned: 0, total: 2 },
+        'Making Sentences': { earned: 0, total: 2 }
+      };
+      document.getElementById('result-screen').classList.add('hidden');
+      document.getElementById('clear-lines-btn').classList.remove('hidden');
+      document.getElementById('check-matches-btn').classList.remove('hidden');
+      document.getElementById('finish-quiz-btn').classList.add('hidden');
+      document.getElementById('matching-feedback').classList.add('hidden');
+      document.getElementById('welcome-screen').classList.remove('hidden');
+    }
+
+    // Simple Lightweight Canvas Confetti
+    function launchConfetti() {
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const colors = ['#facc15', '#38bdf8', '#4ade80', '#f472b6', '#a78bfa', '#fb923c'];
+      const pieces = Array.from({ length: 110 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height - canvas.height,
+        w: Math.random() * 10 + 6,
+        h: Math.random() * 6 + 4,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        vy: Math.random() * 3 + 2,
+        vx: (Math.random() - 0.5) * 2,
+        rot: Math.random() * 360,
+        vRot: (Math.random() - 0.5) * 6
+      }));
+
+      let frames = 0;
+      function animateConfetti() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        pieces.forEach(p => {
+          p.y += p.vy;
+          p.x += p.vx;
+          p.rot += p.vRot;
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate((p.rot * Math.PI) / 180);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+          ctx.restore();
+        });
+        frames++;
+        if (frames < 210) {
+          requestAnimationFrame(animateConfetti);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+      animateConfetti();
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,2305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grade 1 ICP Interactive English Quiz — MI Muslimat NU Pucang Sidoarjo</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Fredoka & Nunito for a playful, super-legible Cambridge Primary aesthetic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Fredoka', 'sans-serif'],
+            sans: ['Nunito', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              green: '#16a34a',
+              lime: '#a3e635',
+              amber: '#f59e0b',
+              sky: '#0ea5e9',
+              indigo: '#4f46e5',
+              rose: '#f43f5e',
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: linear-gradient(135deg, #f0fdf4 0%, #eff6ff 50%, #fefce8 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    h1, h2, h3, .font-display {
+      font-family: 'Fredoka', sans-serif;
+    }
+
+    /* Interactive SVG animations */
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+    }
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-6deg); }
+      75% { transform: rotate(6deg); }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { filter: drop-shadow(0 0 4px rgba(14, 165, 233, 0.5)); }
+      50% { filter: drop-shadow(0 0 12px rgba(14, 165, 233, 0.9)); }
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.85); opacity: 0; }
+      70% { transform: scale(1.03); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes sparkleSpin {
+      0% { transform: scale(0.5) rotate(0deg); opacity: 0.4; }
+      50% { transform: scale(1.2) rotate(180deg); opacity: 1; }
+      100% { transform: scale(0.5) rotate(360deg); opacity: 0.4; }
+    }
+
+    .animate-float { animation: floatSlow 3.5s ease-in-out infinite; }
+    .animate-wiggle { animation: wiggle 0.5s ease-in-out; }
+    .animate-pop { animation: popIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+    .sparkle-anim { animation: sparkleSpin 2s linear infinite; transform-origin: center; }
+
+    /* Custom 3D-like tactile buttons */
+    .btn-tactile {
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.15s ease;
+    }
+    .btn-tactile:active {
+      transform: translateY(3px);
+    }
+
+    /* Matching Canvas Layer */
+    .matching-wrapper {
+      position: relative;
+      touch-action: none; /* Smooth finger line drawing without scrolling page */
+    }
+    .matching-svg-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 20;
+    }
+    .connector-dot {
+      transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.18s ease;
+      cursor: pointer;
+      z-index: 30;
+    }
+    .connector-dot:hover, .connector-dot.active-dot {
+      transform: scale(1.3);
+      box-shadow: 0 0 0 6px rgba(14, 165, 233, 0.25);
+    }
+
+    /* Confetti canvas */
+    #confetti-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="text-slate-800 antialiased selection:bg-amber-200 selection:text-slate-900">
+
+  <!-- Confetti Canvas for Celebration -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Toast Notification Box (Replaces alert) -->
+  <div id="toast-box" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 transition-all duration-300 transform translate-y-4">
+    <div id="toast-content" class="bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-xl font-semibold text-sm sm:text-base flex items-center gap-2 border border-slate-700">
+      <span id="toast-icon">✨</span>
+      <span id="toast-text">Notification</span>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       SCREEN 1: WELCOME / START SCREEN
+       ========================================================= -->
+  <div id="welcome-screen" class="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6">
+    <div class="w-full max-w-3xl bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border-4 border-lime-400 overflow-hidden animate-pop">
+      <!-- School Header Banner -->
+      <div class="bg-gradient-to-r from-emerald-600 via-green-600 to-lime-600 p-5 sm:p-7 text-white relative overflow-hidden">
+        <div class="absolute -right-8 -top-8 w-40 h-40 bg-white/10 rounded-full blur-xl"></div>
+        <div class="absolute -left-8 -bottom-8 w-32 h-32 bg-yellow-300/20 rounded-full blur-lg"></div>
+
+        <div class="flex flex-col sm:flex-row items-center gap-4 relative z-10 text-center sm:text-left">
+          <!-- Custom School Emblem SVG -->
+          <div class="w-20 h-20 sm:w-24 sm:h-24 shrink-0 bg-lime-300 rounded-2xl p-2 shadow-lg border-2 border-yellow-200 flex items-center justify-center animate-float">
+            <svg viewBox="0 0 100 100" class="w-full h-full">
+              <polygon points="50,3 93,27 93,73 50,97 7,73 7,27" fill="#a3e635" stroke="#fef08a" stroke-width="5"/>
+              <path d="M22,42 Q36,36 50,43 Q64,36 78,42 L78,66 Q64,60 50,67 Q36,60 22,66 Z" fill="#ffffff" stroke="#15803d" stroke-width="3"/>
+              <line x1="50" y1="43" x2="50" y2="67" stroke="#15803d" stroke-width="2.5"/>
+              <circle cx="50" cy="30" r="7" fill="#15803d"/>
+              <text x="50" y="33" text-anchor="middle" fill="#fef08a" font-size="8" font-weight="bold">NU</text>
+              <rect x="20" y="72" width="60" height="12" rx="4" fill="#15803d"/>
+              <text x="50" y="80.5" text-anchor="middle" fill="#ffffff" font-size="6.8" font-weight="bold">CAMBRIDGE ICP</text>
+            </svg>
+          </div>
+
+          <div>
+            <span class="inline-block bg-yellow-300 text-emerald-950 font-extrabold text-xs px-3 py-1 rounded-full uppercase tracking-wider mb-1.5 shadow-sm">
+              Cambridge Assessment International Education • Centre ID 276
+            </span>
+            <h1 class="text-2xl sm:text-3xl font-bold tracking-tight drop-shadow-sm">
+              MI Muslimat NU Pucang Sidoarjo
+            </h1>
+            <p class="text-lime-100 font-semibold text-sm sm:text-base mt-0.5">
+              First Semester Final Assessment • Grade 1 ICP • Subject: ENGLISH
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quiz Overview & Setup -->
+      <div class="p-6 sm:p-8 space-y-6">
+        <!-- 3 Sections Preview Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+          <div class="bg-sky-50 border-2 border-sky-200 rounded-2xl p-4 flex flex-col items-center text-center">
+            <span class="w-10 h-10 rounded-xl bg-sky-500 text-white font-display font-bold text-lg flex items-center justify-center shadow mb-2">7</span>
+            <h3 class="font-display font-bold text-sky-900 text-base">Part A: Multiple Choice</h3>
+            <p class="text-xs text-sky-700 mt-1">Questions 1–7 • Pick 1 best answer with interactive stories</p>
+          </div>
+
+          <div class="bg-amber-50 border-2 border-amber-200 rounded-2xl p-4 flex flex-col items-center text-center">
+            <span class="w-10 h-10 rounded-xl bg-amber-500 text-white font-display font-bold text-lg flex items-center justify-center shadow mb-2">7</span>
+            <h3 class="font-display font-bold text-amber-900 text-base">Part B: Complex MC</h3>
+            <p class="text-xs text-amber-700 mt-1">Questions 8–14 • Choose TWO correct answers</p>
+          </div>
+
+          <div class="bg-rose-50 border-2 border-rose-200 rounded-2xl p-4 flex flex-col items-center text-center">
+            <span class="w-10 h-10 rounded-xl bg-rose-500 text-white font-display font-bold text-lg flex items-center justify-center shadow mb-2">6</span>
+            <h3 class="font-display font-bold text-rose-900 text-base">Part C: Draw-a-Line</h3>
+            <p class="text-xs text-rose-700 mt-1">Questions 15–20 • Drag & connect matching pairs</p>
+          </div>
+        </div>
+
+        <!-- Student Info & Mode Selection -->
+        <div class="bg-slate-50 border-2 border-slate-200/80 rounded-2xl p-5 space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="student-name" class="block text-sm font-extrabold text-slate-700 mb-1.5">
+                Student's Full Name <span class="text-rose-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="student-name"
+                placeholder="e.g., Aisyah Putri / Rafi Ahmad"
+                class="w-full px-4 py-3 rounded-xl border-2 border-slate-300 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 outline-none font-bold text-slate-800 bg-white transition"
+              />
+            </div>
+
+            <div>
+              <label for="student-class" class="block text-sm font-extrabold text-slate-700 mb-1.5">
+                Class (Grade 1 ICP)
+              </label>
+              <select
+                id="student-class"
+                class="w-full px-4 py-3 rounded-xl border-2 border-slate-300 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 outline-none font-bold text-slate-800 bg-white transition"
+              >
+                <option value="1 ICP 1">Grade 1 ICP 1</option>
+                <option value="1 ICP 2">Grade 1 ICP 2</option>
+                <option value="1 ICP 3">Grade 1 ICP 3</option>
+                <option value="1 ICP 4">Grade 1 ICP 4</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Quiz Mode Selector -->
+          <div>
+            <span class="block text-sm font-extrabold text-slate-700 mb-2">Choose Learning Mode:</span>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <button
+                type="button"
+                id="mode-practice-btn"
+                onclick="selectQuizMode('practice')"
+                class="p-3.5 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-left flex items-start gap-3 transition shadow-sm"
+              >
+                <span class="text-2xl">🌟</span>
+                <div>
+                  <div class="font-display font-bold text-emerald-900 text-sm sm:text-base">Practice Mode (Instant Check)</div>
+                  <div class="text-xs text-emerald-700">Check each answer immediately with fun stars & explanations!</div>
+                </div>
+              </button>
+
+              <button
+                type="button"
+                id="mode-exam-btn"
+                onclick="selectQuizMode('exam')"
+                class="p-3.5 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 text-left flex items-start gap-3 transition"
+              >
+                <span class="text-2xl">📝</span>
+                <div>
+                  <div class="font-display font-bold text-slate-800 text-sm sm:text-base">Exam Mode (Final Score)</div>
+                  <div class="text-xs text-slate-500">Complete all 20 questions first, then view your full report card!</div>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Start Button -->
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-1">
+          <div class="flex items-center gap-2 text-xs sm:text-sm text-slate-500 font-semibold">
+            <span>💡 Tip: Click on the pictures inside questions for fun animations!</span>
+          </div>
+          <button
+            type="button"
+            onclick="startQuiz()"
+            class="w-full sm:w-auto btn-tactile bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-display font-bold text-lg px-8 py-4 rounded-2xl shadow-lg shadow-emerald-600/30 border-b-4 border-emerald-800 flex items-center justify-center gap-2.5 cursor-pointer"
+          >
+            <span>Start English Quiz</span>
+            <span class="text-xl">🚀</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       SCREEN 2: ACTIVE QUIZ INTERFACE
+       ========================================================= -->
+  <div id="quiz-screen" class="hidden min-h-screen flex flex-col">
+    <!-- Top Sticky Header & Progress Bar -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b-2 border-slate-200 shadow-sm">
+      <div class="max-w-5xl mx-auto px-3 sm:px-6 py-3">
+        <div class="flex items-center justify-between gap-2">
+          <!-- Student & Section Badge -->
+          <div class="flex items-center gap-2.5 min-w-0">
+            <div id="section-badge" class="px-3 py-1 rounded-xl font-display font-bold text-xs sm:text-sm bg-sky-100 text-sky-800 border border-sky-300 shrink-0">
+              Part A: Multiple Choice
+            </div>
+            <div class="hidden md:block truncate text-sm font-bold text-slate-600">
+              👤 <span id="header-student-name">Student</span> (<span id="header-student-class">1 ICP</span>)
+            </div>
+          </div>
+
+          <!-- Center Question Counter -->
+          <div class="flex items-center gap-2">
+            <button
+              type="button"
+              onclick="toggleNavDrawer()"
+              class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-display font-bold text-xs sm:text-sm flex items-center gap-1.5 border border-slate-300 transition cursor-pointer"
+              title="Open Question Map"
+            >
+              <span>Question <span id="current-q-num" class="text-emerald-600">1</span> / 20</span>
+              <span class="text-xs">▼</span>
+            </button>
+          </div>
+
+          <!-- Right Controls: Sound Toggle & Score Pill -->
+          <div class="flex items-center gap-2">
+            <div id="live-score-pill" class="px-3 py-1 rounded-xl bg-amber-100 border border-amber-300 text-amber-900 font-display font-bold text-xs sm:text-sm flex items-center gap-1">
+              <span>⭐</span>
+              <span id="live-stars">0</span>
+            </div>
+
+            <button
+              type="button"
+              id="sound-toggle-btn"
+              onclick="toggleSound()"
+              class="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 transition cursor-pointer"
+              title="Toggle Sound Effects"
+            >
+              🔊
+            </button>
+          </div>
+        </div>
+
+        <!-- Visual Progress Bar -->
+        <div class="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden mt-2.5">
+          <div
+            id="progress-bar-fill"
+            class="h-full bg-gradient-to-r from-emerald-500 via-lime-500 to-amber-400 rounded-full transition-all duration-500"
+            style="width: 5%"
+          ></div>
+        </div>
+      </div>
+
+      <!-- Collapsible Question Map Drawer -->
+      <div id="question-nav-drawer" class="hidden bg-slate-50 border-t border-slate-200 px-4 py-3 shadow-inner">
+        <div class="max-w-5xl mx-auto">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-extrabold uppercase tracking-wider text-slate-500">Jump to Question (1–20):</span>
+            <button type="button" onclick="toggleNavDrawer()" class="text-xs font-bold text-slate-500 hover:text-slate-800">Close ✕</button>
+          </div>
+          <div id="question-map-grid" class="grid grid-cols-10 sm:grid-cols-20 gap-1.5">
+            <!-- Buttons 1-20 injected dynamically -->
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Question Container -->
+    <main class="flex-1 max-w-5xl w-full mx-auto px-3 sm:px-6 py-5 sm:py-7 flex flex-col justify-between">
+      <div id="question-card" class="bg-white rounded-3xl shadow-xl border-2 border-slate-200/90 p-5 sm:p-8 animate-pop">
+        <!-- Dynamic Question Content Rendered Here -->
+      </div>
+
+      <!-- Bottom Navigation Controls -->
+      <div class="mt-5 flex flex-wrap items-center justify-between gap-3 bg-white/90 backdrop-blur-sm p-3.5 sm:p-4 rounded-2xl border-2 border-slate-200 shadow-md">
+        <button
+          type="button"
+          id="prev-btn"
+          onclick="prevQuestion()"
+          class="btn-tactile px-5 py-3 rounded-xl font-display font-bold text-sm sm:text-base bg-slate-100 hover:bg-slate-200 text-slate-700 border-b-4 border-slate-300 disabled:opacity-40 disabled:pointer-events-none flex items-center gap-2 cursor-pointer"
+        >
+          <span>⬅️</span>
+          <span>Previous</span>
+        </button>
+
+        <div class="flex items-center gap-2.5">
+          <!-- Check Answer Button (Visible in Practice Mode) -->
+          <button
+            type="button"
+            id="check-answer-btn"
+            onclick="checkCurrentAnswer()"
+            class="btn-tactile px-5 py-3 rounded-xl font-display font-bold text-sm sm:text-base bg-amber-400 hover:bg-amber-500 text-amber-950 border-b-4 border-amber-600 flex items-center gap-2 cursor-pointer"
+          >
+            <span>✨ Check Answer</span>
+          </button>
+
+          <!-- Next Question Button -->
+          <button
+            type="button"
+            id="next-btn"
+            onclick="nextQuestion()"
+            class="btn-tactile px-6 py-3 rounded-xl font-display font-bold text-sm sm:text-base bg-sky-500 hover:bg-sky-600 text-white border-b-4 border-sky-700 flex items-center gap-2 cursor-pointer"
+          >
+            <span>Next</span>
+            <span>➡️</span>
+          </button>
+
+          <!-- Finish Quiz Button (Shown on Q20 or anytime all answered) -->
+          <button
+            type="button"
+            id="finish-btn"
+            onclick="submitQuiz()"
+            class="hidden btn-tactile px-6 py-3 rounded-xl font-display font-bold text-sm sm:text-base bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white border-b-4 border-emerald-800 flex items-center gap-2 cursor-pointer shadow-lg shadow-emerald-500/25"
+          >
+            <span>Finish & See Score</span>
+            <span>🏆</span>
+          </button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- =========================================================
+       SCREEN 3: FINAL RESULTS & REPORT CARD
+       ========================================================= -->
+  <div id="results-screen" class="hidden min-h-screen py-6 px-3 sm:px-6">
+    <div class="max-w-4xl mx-auto space-y-6">
+      <!-- Report Card Hero -->
+      <div class="bg-white rounded-3xl shadow-2xl border-4 border-amber-300 overflow-hidden animate-pop">
+        <div class="bg-gradient-to-r from-indigo-600 via-sky-600 to-emerald-500 p-6 sm:p-8 text-white text-center relative">
+          <div class="inline-block bg-white/20 backdrop-blur-sm px-4 py-1 rounded-full text-xs sm:text-sm font-extrabold tracking-wider uppercase mb-2">
+            MI Muslimat NU Pucang Sidoarjo • Grade 1 ICP English Assessment
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-display font-bold drop-shadow">
+            Congratulations, <span id="result-student-name">Student</span>! 🎉
+          </h2>
+          <p class="text-sky-100 font-semibold mt-1" id="result-student-class">Grade 1 ICP</p>
+
+          <!-- Big Score Circle -->
+          <div class="mt-6 flex flex-col sm:flex-row items-center justify-center gap-6">
+            <div class="w-36 h-36 rounded-full bg-white text-slate-900 flex flex-col items-center justify-center shadow-xl border-8 border-amber-300">
+              <span class="text-xs font-extrabold uppercase text-slate-400">Final Score</span>
+              <span id="final-score-number" class="text-5xl font-display font-bold text-emerald-600">100</span>
+              <span class="text-xs font-bold text-slate-500">out of 100</span>
+            </div>
+
+            <div class="text-center sm:text-left space-y-2">
+              <div id="star-rating-display" class="text-3xl sm:text-4xl tracking-widest">⭐⭐⭐⭐⭐</div>
+              <div id="grade-predicate" class="text-xl sm:text-2xl font-display font-bold text-yellow-200">
+                Outstanding Cambridge Learner!
+              </div>
+              <p id="result-summary-text" class="text-sm text-white/90 max-w-md">
+                You answered 20 out of 20 questions accurately!
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section Breakdown -->
+        <div class="p-6 sm:p-8 bg-slate-50">
+          <h3 class="font-display font-bold text-lg text-slate-800 mb-4">📊 Performance Breakdown by Section</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="bg-white p-4 rounded-2xl border-2 border-sky-200 shadow-sm">
+              <div class="text-xs font-extrabold uppercase text-sky-600">Part A • Multiple Choice</div>
+              <div class="text-2xl font-display font-bold text-slate-800 mt-1">
+                <span id="score-part-a">0</span> / 7 <span class="text-sm font-normal text-slate-500">Correct</span>
+              </div>
+              <div class="w-full h-2 bg-sky-100 rounded-full mt-2 overflow-hidden">
+                <div id="bar-part-a" class="h-full bg-sky-500 rounded-full" style="width: 0%"></div>
+              </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-2xl border-2 border-amber-200 shadow-sm">
+              <div class="text-xs font-extrabold uppercase text-amber-600">Part B • Complex MC</div>
+              <div class="text-2xl font-display font-bold text-slate-800 mt-1">
+                <span id="score-part-b">0</span> / 7 <span class="text-sm font-normal text-slate-500">Correct</span>
+              </div>
+              <div class="w-full h-2 bg-amber-100 rounded-full mt-2 overflow-hidden">
+                <div id="bar-part-b" class="h-full bg-amber-500 rounded-full" style="width: 0%"></div>
+              </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-2xl border-2 border-rose-200 shadow-sm">
+              <div class="text-xs font-extrabold uppercase text-rose-600">Part C • Line Matching</div>
+              <div class="text-2xl font-display font-bold text-slate-800 mt-1">
+                <span id="score-part-c">0</span> / 6 <span class="text-sm font-normal text-slate-500">Correct</span>
+              </div>
+              <div class="w-full h-2 bg-rose-100 rounded-full mt-2 overflow-hidden">
+                <div id="bar-part-c" class="h-full bg-rose-500 rounded-full" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <button
+              type="button"
+              onclick="restartQuiz()"
+              class="btn-tactile px-6 py-3.5 rounded-2xl font-display font-bold bg-emerald-600 hover:bg-emerald-700 text-white border-b-4 border-emerald-800 shadow-md flex items-center gap-2 cursor-pointer"
+            >
+              <span>🔄 Try Quiz Again</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detailed Answer Review -->
+      <div class="bg-white rounded-3xl shadow-xl border-2 border-slate-200 p-6 sm:p-8">
+        <h3 class="font-display font-bold text-xl text-slate-800 mb-4 flex items-center gap-2">
+          <span>🔍</span>
+          <span>Answer Key & Learning Review (All 20 Questions)</span>
+        </h3>
+        <div id="review-list" class="space-y-4">
+          <!-- Review cards injected here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       JAVASCRIPT APPLICATION LOGIC
+       ========================================================= -->
+  <script>
+    /* =========================================================
+       1. SYNTHESIZED SOUND EFFECTS (Web Audio API - No External URLs)
+       ========================================================= */
+    let soundEnabled = true;
+    let audioCtx = null;
+
+    function getAudioCtx() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) audioCtx = new AudioContext();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function playTone(freq, type = 'sine', duration = 0.15, delay = 0, gainVal = 0.12) {
+      if (!soundEnabled) return;
+      try {
+        const ctx = getAudioCtx();
+        if (!ctx) return;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, ctx.currentTime + delay);
+        gain.gain.setValueAtTime(gainVal, ctx.currentTime + delay);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(ctx.currentTime + delay);
+        osc.stop(ctx.currentTime + delay + duration);
+      } catch (e) {
+        // Ignore audio errors on restricted browsers
+      }
+    }
+
+    function playClickSound() {
+      playTone(520, 'triangle', 0.08, 0, 0.08);
+    }
+
+    function playConnectSound() {
+      playTone(587.33, 'sine', 0.12, 0, 0.12);
+      playTone(880, 'sine', 0.18, 0.08, 0.12);
+    }
+
+    function playCorrectSound() {
+      playTone(523.25, 'triangle', 0.14, 0, 0.14);
+      playTone(659.25, 'triangle', 0.14, 0.1, 0.14);
+      playTone(783.99, 'triangle', 0.25, 0.2, 0.16);
+    }
+
+    function playWrongSound() {
+      playTone(300, 'sawtooth', 0.18, 0, 0.09);
+      playTone(240, 'sawtooth', 0.25, 0.14, 0.09);
+    }
+
+    function playFanfareSound() {
+      const notes = [523.25, 659.25, 783.99, 1046.5];
+      notes.forEach((n, i) => playTone(n, 'triangle', 0.22, i * 0.12, 0.15));
+    }
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      const btn = document.getElementById('sound-toggle-btn');
+      btn.textContent = soundEnabled ? '🔊' : '🔇';
+      showToast(soundEnabled ? 'Sound effects ON' : 'Sound effects OFF', soundEnabled ? '🔊' : '🔇');
+    }
+
+    /* Speech Synthesis for Audio Clue (Q16) */
+    function speakAudioClue(text) {
+      playClickSound();
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-US';
+        utterance.rate = 0.88;
+        utterance.pitch = 1.1;
+        window.speechSynthesis.speak(utterance);
+        showToast('Playing English listening audio...', '🎧');
+      } else {
+        showToast('Audio text: ' + text, '🎧');
+      }
+    }
+
+    /* =========================================================
+       2. INTERACTIVE CUSTOM SVG ILLUSTRATIONS
+       ========================================================= */
+    const ILLUSTRATIONS = {
+      painting: `
+        <div onclick="animateIllustration(this, 'paint')" class="group cursor-pointer bg-gradient-to-b from-sky-100 to-amber-50 rounded-2xl p-3 border-2 border-sky-200 hover:border-sky-400 transition relative overflow-hidden select-none" title="Click me to splash paint colors!">
+          <span class="absolute top-2 right-2 bg-white/90 text-sky-700 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full shadow-sm group-hover:scale-105 transition">
+            🎨 Tap to Paint!
+          </span>
+          <svg viewBox="0 0 260 190" class="w-full h-44 sm:h-48 mx-auto">
+            <!-- Soft Sun & Clouds -->
+            <circle cx="35" cy="32" r="16" fill="#fde047" />
+            <ellipse cx="215" cy="28" rx="22" ry="10" fill="#ffffff" opacity="0.85"/>
+            <!-- Wooden Easel -->
+            <line x1="175" y1="32" x2="148" y2="178" stroke="#92400e" stroke-width="6" stroke-linecap="round"/>
+            <line x1="205" y1="32" x2="232" y2="178" stroke="#92400e" stroke-width="6" stroke-linecap="round"/>
+            <line x1="190" y1="30" x2="190" y2="175" stroke="#78350f" stroke-width="5" stroke-linecap="round"/>
+            <!-- Canvas Board -->
+            <rect x="145" y="42" width="88" height="82" rx="6" fill="#fffbeb" stroke="#b45309" stroke-width="4"/>
+            <!-- Painting on Canvas (Dynamic colorable elements) -->
+            <path class="paint-sky" d="M148,45 H230 V92 H148 Z" fill="#bae6fd"/>
+            <circle class="paint-sun" cx="212" cy="60" r="10" fill="#facc15"/>
+            <path class="paint-hill" d="M148,121 L148,92 Q175,76 196,95 Q214,82 230,94 L230,121 Z" fill="#4ade80"/>
+            <!-- Cute Flower on Canvas -->
+            <line x1="175" y1="112" x2="175" y2="92" stroke="#15803d" stroke-width="2.5"/>
+            <circle class="paint-flower" cx="175" cy="89" r="7" fill="#f43f5e"/>
+            <circle cx="175" cy="89" r="3" fill="#fef08a"/>
+            <!-- Easel Ledge -->
+            <rect x="138" y="122" width="102" height="7" rx="3" fill="#b45309"/>
+
+            <!-- Artist Girl -->
+            <!-- Hair Back -->
+            <path d="M56,66 Q50,115 62,126 L108,126 Q118,115 112,66 Z" fill="#1e293b"/>
+            <!-- Dress -->
+            <path d="M68,108 L100,108 L108,154 L60,154 Z" fill="#f43f5e"/>
+            <!-- White Collar -->
+            <path d="M74,108 L84,116 L94,108 Z" fill="#ffffff"/>
+            <!-- Legs & Shoes -->
+            <rect x="72" y="154" width="8" height="20" fill="#fed7aa"/>
+            <rect x="88" y="154" width="8" height="20" fill="#fed7aa"/>
+            <ellipse cx="74" cy="176" rx="9" ry="5" fill="#1e3a8a"/>
+            <ellipse cx="92" cy="176" rx="9" ry="5" fill="#1e3a8a"/>
+            <!-- Head -->
+            <circle cx="84" cy="78" r="24" fill="#fed7aa"/>
+            <!-- Beret Hat -->
+            <ellipse cx="82" cy="54" rx="25" ry="11" transform="rotate(-10 82 54)" fill="#38bdf8" stroke="#0284c7" stroke-width="2"/>
+            <circle cx="80" cy="42" r="4" fill="#facc15"/>
+            <!-- Cute Eyes & Smile -->
+            <circle cx="76" cy="78" r="3.2" fill="#0f172a"/>
+            <circle cx="92" cy="78" r="3.2" fill="#0f172a"/>
+            <circle cx="77" cy="77" r="1" fill="#ffffff"/>
+            <circle cx="93" cy="77" r="1" fill="#ffffff"/>
+            <circle cx="70" cy="84" r="3.5" fill="#fda4af" opacity="0.7"/>
+            <circle cx="98" cy="84" r="3.5" fill="#fda4af" opacity="0.7"/>
+            <path d="M79,86 Q84,92 89,86" fill="none" stroke="#0f172a" stroke-width="2.2" stroke-linecap="round"/>
+            <!-- Arm Holding Brush -->
+            <path d="M98,114 Q122,112 142,98" fill="none" stroke="#fed7aa" stroke-width="8" stroke-linecap="round"/>
+            <!-- Paintbrush -->
+            <line x1="136" y1="103" x2="162" y2="88" stroke="#eab308" stroke-width="4" stroke-linecap="round"/>
+            <polygon class="brush-tip" points="162,88 170,83 166,91" fill="#f43f5e"/>
+          </svg>
+        </div>
+      `,
+
+      gardening: `
+        <div onclick="animateIllustration(this, 'garden')" class="group cursor-pointer bg-gradient-to-b from-emerald-50 to-lime-100 rounded-2xl p-3 border-2 border-emerald-200 hover:border-emerald-400 transition relative overflow-hidden select-none" title="Click to water the plant!">
+          <span class="absolute top-2 right-2 bg-white/90 text-emerald-700 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full shadow-sm group-hover:scale-105 transition">
+            🌱 Tap to Water!
+          </span>
+          <svg viewBox="0 0 260 185" class="w-full h-44 sm:h-48 mx-auto">
+            <!-- Ground Mound -->
+            <ellipse cx="130" cy="166" rx="105" ry="14" fill="#854d0e"/>
+            <!-- Tree Trunk & Lush Leaves -->
+            <rect x="124" y="88" width="12" height="76" rx="4" fill="#78350f"/>
+            <circle class="tree-crown" cx="130" cy="64" r="42" fill="#22c55e"/>
+            <circle cx="108" cy="70" r="26" fill="#4ade80"/>
+            <circle cx="152" cy="70" r="26" fill="#16a34a"/>
+            <!-- Blooming Flowers (Hidden until clicked or subtle) -->
+            <g class="garden-blooms" opacity="0.85">
+              <circle cx="115" cy="52" r="5" fill="#f43f5e"/>
+              <circle cx="145" cy="58" r="5" fill="#facc15"/>
+              <circle cx="130" cy="40" r="5" fill="#fb7185"/>
+            </g>
+            <!-- Water Drops -->
+            <g class="water-drops" opacity="0">
+              <circle cx="95" cy="122" r="3" fill="#0ea5e9"/>
+              <circle cx="102" cy="132" r="3" fill="#0ea5e9"/>
+              <circle cx="90" cy="138" r="3" fill="#0ea5e9"/>
+            </g>
+
+            <!-- Left Girl (Tina) -->
+            <circle cx="62" cy="106" r="18" fill="#fed7aa"/>
+            <path d="M44,104 Q44,82 62,82 Q80,82 80,104" fill="#451a03"/>
+            <circle cx="56" cy="107" r="2.5" fill="#0f172a"/>
+            <circle cx="68" cy="107" r="2.5" fill="#0f172a"/>
+            <path d="M58,113 Q62,117 66,113" fill="none" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+            <rect x="48" y="124" width="28" height="32" rx="8" fill="#f472b6"/>
+            <!-- Watering Can -->
+            <rect x="82" y="132" width="20" height="16" rx="4" fill="#38bdf8"/>
+            <line x1="102" y1="138" x2="114" y2="128" stroke="#0284c7" stroke-width="4" stroke-linecap="round"/>
+
+            <!-- Right Girl (Rani) -->
+            <circle cx="198" cy="106" r="18" fill="#fed7aa"/>
+            <path d="M180,104 Q180,82 198,82 Q216,82 216,104" fill="#92400e"/>
+            <circle cx="192" cy="107" r="2.5" fill="#0f172a"/>
+            <circle cx="204" cy="107" r="2.5" fill="#0f172a"/>
+            <path d="M194,113 Q198,117 202,113" fill="none" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+            <rect x="184" y="124" width="28" height="32" rx="8" fill="#3b82f6"/>
+            <!-- Small Shovel -->
+            <line x1="176" y1="118" x2="162" y2="156" stroke="#d97706" stroke-width="4" stroke-linecap="round"/>
+            <path d="M156,154 L168,154 L164,166 L160,166 Z" fill="#94a3b8"/>
+          </svg>
+        </div>
+      `,
+
+      saraMorning: `
+        <div onclick="animateIllustration(this, 'sara')" class="group cursor-pointer bg-gradient-to-b from-amber-50 to-sky-100 rounded-2xl p-3 border-2 border-amber-200 hover:border-amber-400 transition relative overflow-hidden select-none" title="Click to see Sara's morning sparkle!">
+          <span class="absolute top-2 right-2 bg-white/90 text-amber-800 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full shadow-sm group-hover:scale-105 transition">
+            ⏰ 6:00 AM • Tap!
+          </span>
+          <svg viewBox="0 0 260 185" class="w-full h-44 sm:h-48 mx-auto">
+            <!-- Wall Clock showing 6:00 -->
+            <circle cx="46" cy="42" r="22" fill="#ffffff" stroke="#0284c7" stroke-width="4"/>
+            <line x1="46" y1="42" x2="46" y2="26" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="46" y1="42" x2="46" y2="56" stroke="#f43f5e" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="46" cy="42" r="2.5" fill="#0f172a"/>
+
+            <!-- Bathroom Sink -->
+            <path d="M55,112 H112 L104,132 H63 Z" fill="#bae6fd" stroke="#0284c7" stroke-width="2.5"/>
+            <rect x="78" y="132" width="12" height="44" fill="#7dd3fc"/>
+            <path d="M68,112 V98 Q68,92 75,92 H80" fill="none" stroke="#64748b" stroke-width="4" stroke-linecap="round"/>
+
+            <!-- Sara Brushing Teeth -->
+            <circle cx="145" cy="72" r="22" fill="#fed7aa"/>
+            <!-- Pigtails -->
+            <circle cx="120" cy="64" r="9" fill="#78350f"/>
+            <circle cx="170" cy="64" r="9" fill="#78350f"/>
+            <path d="M124,68 Q145,44 166,68" fill="#78350f"/>
+            <circle cx="138" cy="72" r="2.8" fill="#0f172a"/>
+            <circle cx="152" cy="72" r="2.8" fill="#0f172a"/>
+            <!-- Bright Smile -->
+            <rect x="138" y="80" width="14" height="6" rx="3" fill="#ffffff" stroke="#0f172a" stroke-width="1.5"/>
+            <!-- Pink Dress -->
+            <path d="M130,96 H160 L168,148 H122 Z" fill="#f472b6"/>
+            <!-- Toothbrush -->
+            <line x1="112" y1="83" x2="145" y2="83" stroke="#f43f5e" stroke-width="4" stroke-linecap="round"/>
+            <rect x="137" y="79" width="8" height="4" fill="#ffffff"/>
+
+            <!-- School Bag & Toast Breakfast on Right -->
+            <rect x="195" y="114" width="42" height="48" rx="10" fill="#f59e0b" stroke="#b45309" stroke-width="3"/>
+            <rect x="203" y="132" width="26" height="20" rx="5" fill="#fef3c7"/>
+            <path d="M207,114 V104 Q216,98 225,104 V114" fill="none" stroke="#b45309" stroke-width="4"/>
+
+            <!-- Sparkles -->
+            <text class="sara-sparkle" x="168" y="50" font-size="18">✨</text>
+            <text class="sara-sparkle" x="108" y="62" font-size="15">🫧</text>
+          </svg>
+        </div>
+      `,
+
+      antGrasshopper: `
+        <div onclick="animateIllustration(this, 'fable')" class="group cursor-pointer bg-gradient-to-b from-yellow-50 to-green-100 rounded-2xl p-3 border-2 border-amber-300 hover:border-amber-500 transition relative overflow-hidden select-none" title="Click to animate The Ant & The Grasshopper!">
+          <span class="absolute top-2 right-2 bg-white/90 text-amber-800 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full shadow-sm group-hover:scale-105 transition">
+            🐜 Tap Story!
+          </span>
+          <svg viewBox="0 0 260 185" class="w-full h-44 sm:h-48 mx-auto">
+            <!-- Meadow Grass -->
+            <rect x="0" y="150" width="260" height="35" rx="8" fill="#86efac"/>
+            <!-- Hardworking Brown Ant on Left -->
+            <g class="ant-group">
+              <!-- Leaf Basket with Golden Grain -->
+              <path d="M28,74 Q68,52 108,74 Q68,94 28,74 Z" fill="#22c55e" stroke="#15803d" stroke-width="2.5"/>
+              <circle cx="55" cy="68" r="6" fill="#facc15"/>
+              <circle cx="68" cy="65" r="7" fill="#eab308"/>
+              <circle cx="82" cy="68" r="6" fill="#facc15"/>
+              <!-- Ant Body -->
+              <ellipse cx="48" cy="126" rx="16" ry="13" fill="#92400e"/>
+              <ellipse cx="72" cy="122" rx="11" ry="9" fill="#b45309"/>
+              <circle cx="90" cy="112" r="12" fill="#92400e"/>
+              <circle cx="94" cy="110" r="2.5" fill="#ffffff"/>
+              <circle cx="95" cy="110" r="1.2" fill="#0f172a"/>
+              <!-- Antennae -->
+              <path d="M92,100 Q98,90 105,92" fill="none" stroke="#451a03" stroke-width="2"/>
+              <!-- Arms lifting leaf -->
+              <path d="M72,114 L62,82" stroke="#451a03" stroke-width="3.5" stroke-linecap="round"/>
+              <path d="M80,114 L84,82" stroke="#451a03" stroke-width="3.5" stroke-linecap="round"/>
+              <!-- Legs -->
+              <path d="M44,138 L36,156 M56,138 L58,156 M72,131 L76,156" stroke="#451a03" stroke-width="3.5" stroke-linecap="round"/>
+            </g>
+
+            <!-- Cheerful Green Grasshopper with Lute on Right -->
+            <g class="hopper-group">
+              <!-- Rock -->
+              <ellipse cx="195" cy="148" rx="32" ry="14" fill="#94a3b8"/>
+              <!-- Body -->
+              <ellipse cx="196" cy="116" rx="12" ry="22" transform="rotate(15 196 116)" fill="#65a30d"/>
+              <circle cx="204" cy="88" r="12" fill="#84cc16"/>
+              <circle cx="200" cy="86" r="2.5" fill="#0f172a"/>
+              <path d="M198,93 Q202,97 206,93" fill="none" stroke="#0f172a" stroke-width="2"/>
+              <!-- Antennae -->
+              <path d="M204,76 Q212,62 222,64" fill="none" stroke="#3f6212" stroke-width="2"/>
+              <!-- Musical Lute -->
+              <ellipse cx="176" cy="114" rx="14" ry="10" transform="rotate(-20 176 114)" fill="#d97706" stroke="#78350f" stroke-width="2"/>
+              <line x1="164" y1="118" x2="142" y2="126" stroke="#78350f" stroke-width="4" stroke-linecap="round"/>
+              <!-- Music Notes -->
+              <text class="music-note" x="152" y="72" font-size="18" fill="#0284c7">🎵</text>
+              <text class="music-note" x="174" y="58" font-size="16" fill="#e11d48">🎶</text>
+            </g>
+          </svg>
+        </div>
+      `,
+
+      rabbit: `
+        <div onclick="animateIllustration(this, 'rabbit')" class="group cursor-pointer bg-gradient-to-b from-pink-50 to-emerald-50 rounded-2xl p-2 border-2 border-pink-200 hover:border-pink-400 transition relative select-none" title="Click the bunny!">
+          <svg viewBox="0 0 140 120" class="w-28 h-24 mx-auto">
+            <!-- Ears -->
+            <ellipse cx="56" cy="28" rx="8" ry="22" transform="rotate(-12 56 28)" fill="#ffffff" stroke="#cbd5e1" stroke-width="2.5"/>
+            <ellipse cx="56" cy="28" rx="4" ry="15" transform="rotate(-12 56 28)" fill="#fbcfe8"/>
+            <ellipse cx="78" cy="28" rx="8" ry="22" transform="rotate(12 78 28)" fill="#ffffff" stroke="#cbd5e1" stroke-width="2.5"/>
+            <ellipse cx="78" cy="28" rx="4" ry="15" transform="rotate(12 78 28)" fill="#fbcfe8"/>
+            <!-- Body & Head -->
+            <ellipse cx="67" cy="86" rx="22" ry="24" fill="#ffffff" stroke="#cbd5e1" stroke-width="2.5"/>
+            <circle cx="67" cy="54" r="20" fill="#ffffff" stroke="#cbd5e1" stroke-width="2.5"/>
+            <circle cx="60" cy="52" r="2.5" fill="#0f172a"/>
+            <circle cx="74" cy="52" r="2.5" fill="#0f172a"/>
+            <polygon points="64,58 70,58 67,62" fill="#f472b6"/>
+            <!-- Orange Carrot -->
+            <polygon points="62,68 74,68 68,98" fill="#f97316"/>
+            <path d="M68,68 L63,60 M68,68 L73,60" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round"/>
+            <!-- Flower -->
+            <line x1="108" y1="108" x2="108" y2="86" stroke="#16a34a" stroke-width="2.5"/>
+            <circle cx="108" cy="83" r="7" fill="#facc15"/>
+            <circle cx="108" cy="83" r="3" fill="#f97316"/>
+          </svg>
+        </div>
+      `
+    };
+
+    const paintPalettes = [
+      { sky: '#bae6fd', sun: '#facc15', hill: '#4ade80', flower: '#f43f5e' },
+      { sky: '#fde68a', sun: '#fb923c', hill: '#34d399', flower: '#8b5cf6' },
+      { sky: '#ddd6fe', sun: '#fde047', hill: '#2dd4bf', flower: '#ec4899' },
+      { sky: '#fed7aa', sun: '#ef4444', hill: '#84cc16', flower: '#0ea5e9' }
+    ];
+    let paintIdx = 0;
+
+    function animateIllustration(el, kind) {
+      playClickSound();
+      el.classList.remove('animate-wiggle');
+      void el.offsetWidth;
+      el.classList.add('animate-wiggle');
+
+      if (kind === 'paint') {
+        paintIdx = (paintIdx + 1) % paintPalettes.length;
+        const p = paintPalettes[paintIdx];
+        el.querySelector('.paint-sky')?.setAttribute('fill', p.sky);
+        el.querySelector('.paint-sun')?.setAttribute('fill', p.sun);
+        el.querySelector('.paint-hill')?.setAttribute('fill', p.hill);
+        el.querySelector('.paint-flower')?.setAttribute('fill', p.flower);
+        el.querySelector('.brush-tip')?.setAttribute('fill', p.flower);
+        showToast('Splash! You painted new colors on the canvas!', '🎨');
+      } else if (kind === 'garden') {
+        const drops = el.querySelector('.water-drops');
+        const crown = el.querySelector('.tree-crown');
+        if (drops) {
+          drops.setAttribute('opacity', '1');
+          setTimeout(() => drops.setAttribute('opacity', '0'), 900);
+        }
+        if (crown) {
+          crown.setAttribute('r', '46');
+          setTimeout(() => crown.setAttribute('r', '42'), 700);
+        }
+        showToast('Splash! You watered Rani’s plant!', '💧');
+      } else if (kind === 'sara') {
+        showToast('Sparkle! Sara brushes her teeth at 6:00 a.m.!', '✨');
+      } else if (kind === 'fable') {
+        showToast('The ant works hard while the grasshopper plays music!', '🐜');
+      } else if (kind === 'rabbit') {
+        showToast('Hop hop! The cute white rabbit loves carrots!', '🐰');
+      }
+    }
+
+    /* =========================================================
+       3. COMPLETE 20-QUESTION DATA BANK (Strictly from SOAL PAS ENGLISH.docx)
+       ========================================================= */
+    const QUESTIONS = [
+      /* ---------------- SECTION 1: 7 MULTIPLE CHOICE (Q1 - Q7) ---------------- */
+      {
+        id: 1,
+        section: 'A',
+        type: 'single',
+        passageTitle: 'Read the text below (Questions 1–4):',
+        passageText: 'My favorite hobby is painting. I love using colors to express my feelings and ideas on paper or canvas. Painting helps me relax and forget my problems for a while. I usually paint landscapes, flowers, and sometimes people. When I paint, I feel happy and free because I can create anything I imagine. For me, painting is not just a hobby but also a way to show my creativity.',
+        illustration: 'painting',
+        prompt: '1. From the text above, the writer’s favorite hobby is .....',
+        options: [
+          { key: 'A', text: 'Reading books' },
+          { key: 'B', text: 'Singing songs' },
+          { key: 'C', text: 'Painting' },
+          { key: 'D', text: 'Playing football' }
+        ],
+        correct: 'C',
+        explanation: 'The very first sentence states: "My favorite hobby is painting."'
+      },
+      {
+        id: 2,
+        section: 'A',
+        type: 'single',
+        passageTitle: 'Read the text below (Questions 1–4):',
+        passageText: 'My favorite hobby is painting. I love using colors to express my feelings and ideas on paper or canvas. Painting helps me relax and forget my problems for a while. I usually paint landscapes, flowers, and sometimes people. When I paint, I feel happy and free because I can create anything I imagine.',
+        illustration: 'painting',
+        prompt: '2. Examine the things the writer usually paints!',
+        options: [
+          { key: 'A', text: 'Cars and buildings' },
+          { key: 'B', text: 'Landscapes, flowers, and people' },
+          { key: 'C', text: 'Animals and food' },
+          { key: 'D', text: 'Houses and roads' }
+        ],
+        correct: 'B',
+        explanation: 'In the text, the writer says: "I usually paint landscapes, flowers, and sometimes people."'
+      },
+      {
+        id: 3,
+        section: 'A',
+        type: 'single',
+        passageTitle: 'Read the text below (Questions 1–4):',
+        passageText: 'My favorite hobby is painting. I love using colors to express my feelings and ideas on paper or canvas. Painting helps me relax and forget my problems for a while. I usually paint landscapes, flowers, and sometimes people. When I paint, I feel happy and free because I can create anything I imagine.',
+        illustration: 'painting',
+        prompt: '3. How does the writer feel when painting?',
+        options: [
+          { key: 'A', text: 'Angry and tired' },
+          { key: 'B', text: 'Sleepy and lazy' },
+          { key: 'C', text: 'Happy and free' },
+          { key: 'D', text: 'Bored and sad' }
+        ],
+        correct: 'C',
+        explanation: 'The text states: "When I paint, I feel happy and free because I can create anything I imagine."'
+      },
+      {
+        id: 4,
+        section: 'A',
+        type: 'single',
+        passageTitle: 'Read the text below (Questions 1–4):',
+        passageText: 'When I paint, I feel happy and free because I can create anything I imagine. For me, painting is not just a hobby but also a way to show my creativity.',
+        illustration: 'painting',
+        prompt: '4. Why is painting special for the writer?',
+        options: [
+          { key: 'A', text: 'It is just for fun' },
+          { key: 'B', text: 'It helps the writer earn money' },
+          { key: 'C', text: 'It is part of the writer’s job' },
+          { key: 'D', text: 'It shows the writer’s creativity' }
+        ],
+        correct: 'D',
+        explanation: 'The last sentence explains: "For me, painting is not just a hobby but also a way to show my creativity."'
+      },
+      {
+        id: 5,
+        section: 'A',
+        type: 'single',
+        passageTitle: 'Read Sara’s Morning Routine:',
+        passageText: 'Every morning, Sara wakes up at 6 a.m. She brushes her teeth and washes her face. Then she eats breakfast. For breakfast, Sara likes to eat toast with jam. After breakfast, she packs her school bag. She makes sure she does not forget to bring her books and lunch. At 7:30 a.m, Sara is ready to go to school.',
+        illustration: 'saraMorning',
+        prompt: '5. What does Sara like to eat for breakfast?',
+        options: [
+          { key: 'A', text: 'Rice and fried chicken' },
+          { key: 'B', text: 'Toast with jam' },
+          { key: 'C', text: 'Noodle soup' },
+          { key: 'D', text: 'Pancakes and milk' }
+        ],
+        correct: 'B',
+        explanation: 'According to the story: "For breakfast, Sara likes to eat toast with jam."'
+      },
+      {
+        id: 6,
+        section: 'A',
+        type: 'single',
+        passageTitle: 'Read Sara’s Morning Routine:',
+        passageText: 'For breakfast, Sara likes to eat toast with jam. After breakfast, she packs her school bag. She makes sure she does not forget to bring her books and lunch. At 7:30 a.m, Sara is ready to go to school. She loves learning new things.',
+        illustration: 'saraMorning',
+        prompt: '6. Examine Sara’s activities after breakfast!',
+        options: [
+          { key: 'A', text: 'She watches TV in the living room' },
+          { key: 'B', text: 'She goes back to sleep' },
+          { key: 'C', text: 'She packs her school bag' },
+          { key: 'D', text: 'She plays football outside' }
+        ],
+        correct: 'C',
+        explanation: 'The text directly says: "After breakfast, she packs her school bag."'
+      },
+      {
+        id: 7,
+        section: 'A',
+        type: 'single',
+        passageTitle: 'Read the Fable: The Ant and the Grasshopper',
+        passageText: 'One day, an ant worked hard to gather food for the winter. A grasshopper laughed at the ant and said, "Why are you working so hard? We have plenty of food now." The ant replied, "I\'m preparing for the winter, when food will be scarce." When winter came, the ant had plenty of food, but the grasshopper had none.',
+        illustration: 'antGrasshopper',
+        prompt: '7. Why did the ant work hard to gather food?',
+        options: [
+          { key: 'A', text: 'To sell it at the market' },
+          { key: 'B', text: 'To prepare for winter when food is scarce' },
+          { key: 'C', text: 'To have a big summer party' },
+          { key: 'D', text: 'To throw it away' }
+        ],
+        correct: 'B',
+        explanation: 'The ant answered: "I\'m preparing for the winter, when food will be scarce."'
+      },
+
+      /* ---------------- SECTION 2: 7 COMPLEX MULTIPLE CHOICE (Q8 - Q14) ---------------- */
+      {
+        id: 8,
+        section: 'B',
+        type: 'complex',
+        passageTitle: 'Grammar Check: "There is" vs "There are"',
+        passageText: 'Pay attention to singular ("There is a/an...") and plural ("There are...") grammar rules!',
+        illustration: null,
+        prompt: '8. Based on the grammar rules, choose TWO correct sentences!',
+        options: [
+          { key: 'A', text: 'There is a book on the table.' },
+          { key: 'B', text: 'There are a cat under the chair.' },
+          { key: 'C', text: 'There is a computer on the desk.' },
+          { key: 'D', text: 'There is two pencils in my bag.' }
+        ],
+        correct: ['A', 'C'],
+        explanation: '"There is" is used for singular nouns ("a book", "a computer"). "There are" should be used for plural nouns like "two pencils".'
+      },
+      {
+        id: 9,
+        section: 'B',
+        type: 'complex',
+        passageTitle: 'Grammar Check: Articles "a" and "an"',
+        passageText: 'Use "an" before vowel sounds (a, e, i, o, u) and "a" before consonant sounds!',
+        illustration: null,
+        prompt: '9. Pay attention to the statements below and choose TWO correct sentences!',
+        options: [
+          { key: 'A', text: 'I want an orange.' },
+          { key: 'B', text: 'She is an teacher.' },
+          { key: 'C', text: 'I need a pen.' },
+          { key: 'D', text: 'He is an police.' }
+        ],
+        correct: ['A', 'C'],
+        explanation: '"An orange" (starts with vowel "o") and "a pen" (starts with consonant "p") are grammatically correct!'
+      },
+      {
+        id: 10,
+        section: 'B',
+        type: 'complex',
+        passageTitle: 'Read the Dialogue between Tina and Rani:',
+        passageText: 'Tina: "Hi, Rani! Your plant looks nice. How do you take care of it?"\nRani: "Hi, Tina! I water it every day and give it sunlight."\nTina: "Do you use fertilizer?"\nRani: "Yes, sometimes. It helps the plant grow."\nTina: "Should I cut old leaves?"\nRani: "Yes, it makes the plant healthy."',
+        illustration: 'gardening',
+        prompt: '10. Based on the dialogue above, choose TWO correct statements!',
+        options: [
+          { key: 'A', text: 'Rani never uses fertilizer' },
+          { key: 'B', text: 'Rani waters her plant every day' },
+          { key: 'C', text: 'Cutting old leaves makes the plant healthy' },
+          { key: 'D', text: 'Tina says the plant does not look nice' }
+        ],
+        correct: ['B', 'C'],
+        explanation: 'Rani says "I water it every day" (B) and "Yes, it makes the plant healthy" when asked about cutting old leaves (C).'
+      },
+      {
+        id: 11,
+        section: 'B',
+        type: 'complex',
+        passageTitle: 'Read the Daily Routine Text:',
+        passageText: 'Every day, I wake up at 6 a.m. I brush my teeth, wash my face, and eat breakfast. Then, I go to school and study until noon. After school, I play with my friends or do my homework. In the evening, I have dinner with my family and read a book before going to bed.',
+        illustration: null,
+        prompt: '11. What are the true contents of the reading above? (Choose TWO correct answers)',
+        options: [
+          { key: 'A', text: 'The writer wakes up early at 6 a.m. to start the day' },
+          { key: 'B', text: 'The writer goes to bed immediately after lunch' },
+          { key: 'C', text: 'The writer reads a book before sleeping in the evening' },
+          { key: 'D', text: 'The writer never plays with friends after school' }
+        ],
+        correct: ['A', 'C'],
+        explanation: 'The text mentions waking up at 6 a.m. (A) and reading a book before going to bed in the evening (C).'
+      },
+      {
+        id: 12,
+        section: 'B',
+        type: 'complex',
+        passageTitle: 'Grammar Correction Challenge:',
+        passageText: 'Remember: Singular subjects (My mom / She) use "is", while plural subjects (Rafi and Fahri / They) use "are"!',
+        illustration: null,
+        prompt: '12. Examine the sentences below and select the TWO grammatically correct sentences!',
+        options: [
+          { key: 'A', text: 'My mom are cooking in the kitchen.' },
+          { key: 'B', text: 'My mom is cooking in the kitchen.' },
+          { key: 'C', text: 'Rafi and Fahri is friends.' },
+          { key: 'D', text: 'Rafi and Fahri are friends.' }
+        ],
+        correct: ['B', 'D'],
+        explanation: '"My mom" is singular → "is cooking". "Rafi and Fahri" are two people (plural) → "are friends".'
+      },
+      {
+        id: 13,
+        section: 'B',
+        type: 'complex',
+        passageTitle: 'Word Order & Sentence Arrangement:',
+        passageText: 'Arrange scrambled words into proper Subject + To Be + Verb-ing + Object/Place sentences!',
+        illustration: null,
+        prompt: '13. Which TWO sentences are arranged in the CORRECT English word order?',
+        options: [
+          { key: 'A', text: 'My father is reading a newspaper.' },
+          { key: 'B', text: 'Reading my father a newspaper is.' },
+          { key: 'C', text: 'They are going to the movies.' },
+          { key: 'D', text: 'The movies are they going to.' }
+        ],
+        correct: ['A', 'C'],
+        explanation: '"My father is reading a newspaper." (A) and "They are going to the movies." (C) follow standard English word order.'
+      },
+      {
+        id: 14,
+        section: 'B',
+        type: 'complex',
+        passageTitle: 'Moral Message of "The Ant and the Grasshopper":',
+        passageText: 'When winter came, the ant had plenty of food, but the grasshopper had none. The grasshopper realized his mistake and asked the ant for help. The ant forgave him and shared his food, teaching the grasshopper the value of hard work and preparation.',
+        illustration: 'antGrasshopper',
+        prompt: '14. Conclude the story! Choose TWO true statements about the Ant and the Grasshopper!',
+        options: [
+          { key: 'A', text: 'The ant was hardworking and prepared food for winter' },
+          { key: 'B', text: 'The grasshopper worked hard all summer' },
+          { key: 'C', text: 'The ant forgave the grasshopper and kindly shared his food' },
+          { key: 'D', text: 'We should be lazy and never prepare for the future' }
+        ],
+        correct: ['A', 'C'],
+        explanation: 'The ant showed hard work and preparation (A), and also showed kindness by forgiving and sharing food (C).'
+      },
+
+      /* ---------------- SECTION 3: 6 DRAW-A-LINE MATCHING (Q15 - Q20) ---------------- */
+      {
+        id: 15,
+        section: 'C',
+        type: 'matching',
+        manyToOne: true,
+        prompt: '15. Match each sentence on the left with "Singular noun" or "Plural noun" by drawing a line!',
+        helperText: 'Drag from a dot on the left to a dot on the right (multiple sentences can connect to the same category!).',
+        leftItems: [
+          { id: 'L1', text: 'I have five oranges.' },
+          { id: 'L2', text: 'There is an owl in the tree.' },
+          { id: 'L3', text: 'There are ten tables.' },
+          { id: 'L4', text: 'My sister has an umbrella.' },
+          { id: 'L5', text: 'I have a drawing book.' }
+        ],
+        rightItems: [
+          { id: 'R1', text: 'Singular noun (1 item)' },
+          { id: 'R2', text: 'Plural noun (More than 1)' }
+        ],
+        correctPairs: {
+          L1: 'R2',
+          L2: 'R1',
+          L3: 'R2',
+          L4: 'R1',
+          L5: 'R1'
+        },
+        explanation: '"Five oranges" and "ten tables" are Plural nouns. "An owl", "an umbrella", and "a drawing book" are Singular nouns.'
+      },
+      {
+        id: 16,
+        section: 'C',
+        type: 'matching',
+        manyToOne: false,
+        audioClue: 'Listen carefully! First, reading books. Second, watching TV. Third, playing the guitar. Fourth, cooking. Fifth, drawing.',
+        prompt: '16. Match the order of hobbies (First to Fifth) based on the audio clue by drawing a line!',
+        helperText: 'Click "Play Listening Audio" above, then draw lines from left to right!',
+        leftItems: [
+          { id: 'L1', text: '1st • First' },
+          { id: 'L2', text: '2nd • Second' },
+          { id: 'L3', text: '3rd • Third' },
+          { id: 'L4', text: '4th • Fourth' },
+          { id: 'L5', text: '5th • Fifth' }
+        ],
+        rightItems: [
+          { id: 'R3', text: 'Playing the guitar' },
+          { id: 'R1', text: 'Reading books' },
+          { id: 'R5', text: 'Drawing' },
+          { id: 'R2', text: 'Watching TV' },
+          { id: 'R4', text: 'Cooking' }
+        ],
+        correctPairs: {
+          L1: 'R1',
+          L2: 'R2',
+          L3: 'R3',
+          L4: 'R4',
+          L5: 'R5'
+        },
+        explanation: 'First = Reading books, Second = Watching TV, Third = Playing the guitar, Fourth = Cooking, Fifth = Drawing.'
+      },
+      {
+        id: 17,
+        section: 'C',
+        type: 'matching',
+        manyToOne: false,
+        prompt: '17. Match the hobby statements on the left with their matching places/times on the right!',
+        helperText: 'Drag a line from each hobby phrase on the left to complete the sentence on the right.',
+        leftItems: [
+          { id: 'L1', text: 'I like playing the guitar …' },
+          { id: 'L2', text: 'I like reading books …' },
+          { id: 'L3', text: 'I love drawing …' },
+          { id: 'L4', text: 'I like watching TV …' },
+          { id: 'L5', text: 'I love cooking …' }
+        ],
+        rightItems: [
+          { id: 'R3', text: 'on the weekend' },
+          { id: 'R1', text: 'in the music class' },
+          { id: 'R5', text: 'for my parents' },
+          { id: 'R4', text: 'with friends' },
+          { id: 'R2', text: 'in the library' }
+        ],
+        correctPairs: {
+          L1: 'R1',
+          L2: 'R2',
+          L3: 'R3',
+          L4: 'R4',
+          L5: 'R5'
+        },
+        explanation: 'Playing the guitar → in the music class; Reading books → in the library; Drawing → on the weekend; Watching TV → with friends; Cooking → for my parents.'
+      },
+      {
+        id: 18,
+        section: 'C',
+        type: 'matching',
+        manyToOne: false,
+        prompt: '18. Match each cute picture on the left with its English description on the right!',
+        helperText: 'Look at the pictures (Rabbit, Painting Girl, Ant, Sara) and connect each to its sentence.',
+        leftItems: [
+          { id: 'L1', text: '🐰 White Rabbit & Carrot', badge: 'Picture 1' },
+          { id: 'L2', text: '🎨 Girl Painting on Canvas', badge: 'Picture 2' },
+          { id: 'L3', text: '🐜 Ant Carrying Food', badge: 'Picture 3' },
+          { id: 'L4', text: '🪥 Sara at the Sink', badge: 'Picture 4' }
+        ],
+        rightItems: [
+          { id: 'R3', text: 'The ant works hard to gather food for winter.' },
+          { id: 'R1', text: 'A cute white rabbit holds an orange carrot.' },
+          { id: 'R4', text: 'Sara brushes her teeth at 6 o’clock in the morning.' },
+          { id: 'R2', text: 'She uses bright colors to paint flowers on canvas.' }
+        ],
+        correctPairs: {
+          L1: 'R1',
+          L2: 'R2',
+          L3: 'R3',
+          L4: 'R4'
+        },
+        showRabbitCard: true,
+        explanation: 'Each illustration matches its corresponding English descriptive sentence!'
+      },
+      {
+        id: 19,
+        section: 'C',
+        type: 'matching',
+        manyToOne: false,
+        prompt: '19. Match the Subject Pronouns & Nouns on the left with the correct sentence endings!',
+        helperText: 'Pay attention to subject-verb agreement ("She is...", "They are...", "I wake...").',
+        leftItems: [
+          { id: 'L1', text: 'She' },
+          { id: 'L2', text: 'They' },
+          { id: 'L3', text: 'My mom' },
+          { id: 'L4', text: 'Rafi and Fahri' },
+          { id: 'L5', text: 'I' }
+        ],
+        rightItems: [
+          { id: 'R2', text: 'are going to the movies.' },
+          { id: 'R4', text: 'are good friends at school.' },
+          { id: 'R1', text: 'is painting a beautiful flower.' },
+          { id: 'R5', text: 'wake up at 6 a.m. every day.' },
+          { id: 'R3', text: 'is cooking dinner in the kitchen.' }
+        ],
+        correctPairs: {
+          L1: 'R1',
+          L2: 'R2',
+          L3: 'R3',
+          L4: 'R4',
+          L5: 'R5'
+        },
+        explanation: 'She → is painting; They → are going; My mom → is cooking; Rafi and Fahri → are good friends; I → wake up.'
+      },
+      {
+        id: 20,
+        section: 'C',
+        type: 'matching',
+        manyToOne: false,
+        prompt: '20. Final Challenge! Match each story character on the left with their attitude or action!',
+        helperText: 'Connect all 4 characters to complete your Grade 1 ICP English Assessment!',
+        leftItems: [
+          { id: 'L1', text: '🐜 The Ant' },
+          { id: 'L2', text: '🦗 The Grasshopper' },
+          { id: 'L3', text: '🌱 Rani' },
+          { id: 'L4', text: '🎒 Sara' }
+        ],
+        rightItems: [
+          { id: 'R3', text: 'Waters her plant every day and gives it sunlight.' },
+          { id: 'R1', text: 'Hardworking, prepared, and generous to friends.' },
+          { id: 'R4', text: 'Eats toast with jam and packs her school bag.' },
+          { id: 'R2', text: 'Played music instead of gathering food for winter.' }
+        ],
+        correctPairs: {
+          L1: 'R1',
+          L2: 'R2',
+          L3: 'R3',
+          L4: 'R4'
+        },
+        explanation: 'The Ant was hardworking and generous; The Grasshopper played music instead of preparing; Rani cares for her plant daily; Sara eats toast with jam and packs her bag.'
+      }
+    ];
+
+    /* =========================================================
+       4. APPLICATION STATE
+       ========================================================= */
+    const state = {
+      studentName: '',
+      studentClass: '1 ICP 1',
+      mode: 'practice', // 'practice' | 'exam'
+      currentIndex: 0,
+      answers: {}, // { qId: 'C' | ['A','C'] | { L1: 'R1', ... } }
+      checked: {}, // { qId: true } in practice mode
+      activeLeftNode: null, // For click-to-connect matching
+      draggingLine: null // { leftId, startX, startY, curX, curY }
+    };
+
+    const LINE_COLORS = ['#0ea5e9', '#10b981', '#f59e0b', '#f43f5e', '#8b5cf6'];
+
+    /* =========================================================
+       5. NAVIGATION & SETUP FUNCTIONS
+       ========================================================= */
+    function selectQuizMode(mode) {
+      playClickSound();
+      state.mode = mode;
+      const pBtn = document.getElementById('mode-practice-btn');
+      const eBtn = document.getElementById('mode-exam-btn');
+
+      if (mode === 'practice') {
+        pBtn.className = 'p-3.5 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-left flex items-start gap-3 transition shadow-sm cursor-pointer';
+        eBtn.className = 'p-3.5 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 text-left flex items-start gap-3 transition cursor-pointer';
+      } else {
+        eBtn.className = 'p-3.5 rounded-xl border-2 border-indigo-500 bg-indigo-50 text-left flex items-start gap-3 transition shadow-sm cursor-pointer';
+        pBtn.className = 'p-3.5 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 text-left flex items-start gap-3 transition cursor-pointer';
+      }
+    }
+
+    function startQuiz() {
+      const nameInput = document.getElementById('student-name').value.trim();
+      const classInput = document.getElementById('student-class').value;
+
+      if (!nameInput) {
+        playWrongSound();
+        showToast('Please enter your name before starting!', '✏️');
+        document.getElementById('student-name').focus();
+        return;
+      }
+
+      playCorrectSound();
+      state.studentName = nameInput;
+      state.studentClass = classInput;
+      state.currentIndex = 0;
+
+      document.getElementById('header-student-name').textContent = state.studentName;
+      document.getElementById('header-student-class').textContent = state.studentClass;
+
+      document.getElementById('welcome-screen').classList.add('hidden');
+      document.getElementById('quiz-screen').classList.remove('hidden');
+
+      buildQuestionMap();
+      renderQuestion();
+    }
+
+    function toggleNavDrawer() {
+      playClickSound();
+      const drawer = document.getElementById('question-nav-drawer');
+      drawer.classList.toggle('hidden');
+      updateQuestionMapStyles();
+    }
+
+    function buildQuestionMap() {
+      const grid = document.getElementById('question-map-grid');
+      grid.innerHTML = '';
+      QUESTIONS.forEach((q, idx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.id = `map-btn-${idx}`;
+        btn.textContent = q.id;
+        btn.onclick = () => {
+          playClickSound();
+          state.currentIndex = idx;
+          renderQuestion();
+          document.getElementById('question-nav-drawer').classList.add('hidden');
+        };
+        btn.className = 'h-8 rounded-lg font-display font-bold text-xs border transition cursor-pointer';
+        grid.appendChild(btn);
+      });
+      updateQuestionMapStyles();
+    }
+
+    function isQuestionAnswered(q) {
+      const ans = state.answers[q.id];
+      if (!ans) return false;
+      if (q.type === 'single') return typeof ans === 'string' && ans.length > 0;
+      if (q.type === 'complex') return Array.isArray(ans) && ans.length > 0;
+      if (q.type === 'matching') return Object.keys(ans).length > 0;
+      return false;
+    }
+
+    function evaluateQuestion(q) {
+      const ans = state.answers[q.id];
+      if (!ans) return false;
+
+      if (q.type === 'single') {
+        return ans === q.correct;
+      }
+      if (q.type === 'complex') {
+        if (!Array.isArray(ans) || ans.length !== q.correct.length) return false;
+        const sortedA = [...ans].sort();
+        const sortedC = [...q.correct].sort();
+        return sortedA.every((v, i) => v === sortedC[i]);
+      }
+      if (q.type === 'matching') {
+        const leftKeys = Object.keys(q.correctPairs);
+        if (Object.keys(ans).length !== leftKeys.length) return false;
+        return leftKeys.every(k => ans[k] === q.correctPairs[k]);
+      }
+      return false;
+    }
+
+    function updateQuestionMapStyles() {
+      QUESTIONS.forEach((q, idx) => {
+        const btn = document.getElementById(`map-btn-${idx}`);
+        if (!btn) return;
+        const isCurrent = idx === state.currentIndex;
+        const answered = isQuestionAnswered(q);
+        const isChecked = state.checked[q.id];
+
+        let cls = 'h-8 rounded-lg font-display font-bold text-xs border transition cursor-pointer ';
+        if (isCurrent) {
+          cls += 'ring-2 ring-slate-900 bg-sky-500 text-white border-sky-600 ';
+        } else if (state.mode === 'practice' && isChecked) {
+          cls += evaluateQuestion(q)
+            ? 'bg-emerald-500 text-white border-emerald-600 '
+            : 'bg-rose-500 text-white border-rose-600 ';
+        } else if (answered) {
+          cls += 'bg-amber-200 text-amber-950 border-amber-400 ';
+        } else {
+          cls += 'bg-white text-slate-600 border-slate-300 hover:bg-slate-100 ';
+        }
+        btn.className = cls;
+      });
+    }
+
+    function updateHeaderStatus() {
+      const q = QUESTIONS[state.currentIndex];
+      document.getElementById('current-q-num').textContent = q.id;
+      document.getElementById('progress-bar-fill').style.width = `${((state.currentIndex + 1) / QUESTIONS.length) * 100}%`;
+
+      const badge = document.getElementById('section-badge');
+      if (q.section === 'A') {
+        badge.textContent = 'Part A: Multiple Choice (1–7)';
+        badge.className = 'px-3 py-1 rounded-xl font-display font-bold text-xs sm:text-sm bg-sky-100 text-sky-800 border border-sky-300 shrink-0';
+      } else if (q.section === 'B') {
+        badge.textContent = 'Part B: Complex MC • Pick 2 (8–14)';
+        badge.className = 'px-3 py-1 rounded-xl font-display font-bold text-xs sm:text-sm bg-amber-100 text-amber-900 border border-amber-300 shrink-0';
+      } else {
+        badge.textContent = 'Part C: Draw-a-Line Matching (15–20)';
+        badge.className = 'px-3 py-1 rounded-xl font-display font-bold text-xs sm:text-sm bg-rose-100 text-rose-900 border border-rose-300 shrink-0';
+      }
+
+      // Live stars count in practice mode
+      const scorePill = document.getElementById('live-score-pill');
+      if (state.mode === 'practice') {
+        scorePill.classList.remove('hidden');
+        let correctCount = 0;
+        QUESTIONS.forEach(item => {
+          if (state.checked[item.id] && evaluateQuestion(item)) correctCount++;
+        });
+        document.getElementById('live-stars').textContent = `${correctCount * 5} pts`;
+      } else {
+        scorePill.classList.add('hidden');
+      }
+
+      // Bottom buttons state
+      document.getElementById('prev-btn').disabled = state.currentIndex === 0;
+      const checkBtn = document.getElementById('check-answer-btn');
+      const nextBtn = document.getElementById('next-btn');
+      const finishBtn = document.getElementById('finish-btn');
+
+      if (state.mode === 'practice') {
+        checkBtn.classList.remove('hidden');
+      } else {
+        checkBtn.classList.add('hidden');
+      }
+
+      if (state.currentIndex === QUESTIONS.length - 1) {
+        nextBtn.classList.add('hidden');
+        finishBtn.classList.remove('hidden');
+      } else {
+        nextBtn.classList.remove('hidden');
+        finishBtn.classList.add('hidden');
+      }
+
+      updateQuestionMapStyles();
+    }
+
+    /* =========================================================
+       6. RENDER QUESTION ENGINE
+       ========================================================= */
+    function renderQuestion() {
+      const q = QUESTIONS[state.currentIndex];
+      const container = document.getElementById('question-card');
+      state.activeLeftNode = null;
+
+      // Re-trigger pop animation
+      container.classList.remove('animate-pop');
+      void container.offsetWidth;
+      container.classList.add('animate-pop');
+
+      let html = '';
+
+      // 1. Passage / Context + Interactive Illustration Card (if present)
+      if (q.passageText || q.illustration) {
+        html += `
+          <div class="mb-6 bg-gradient-to-br from-slate-50 to-sky-50/60 border-2 border-slate-200 rounded-2xl p-4 sm:p-5">
+            <div class="grid grid-cols-1 ${q.illustration ? 'md:grid-cols-12' : ''} gap-4 items-center">
+              ${q.illustration ? `<div class="md:col-span-5">${ILLUSTRATIONS[q.illustration]}</div>` : ''}
+              <div class="${q.illustration ? 'md:col-span-7' : ''} space-y-2">
+                <div class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-sky-700 bg-sky-100 px-2.5 py-1 rounded-lg">
+                  <span>📖</span>
+                  <span>${q.passageTitle || 'Read Carefully'}</span>
+                </div>
+                <p class="text-slate-700 text-sm sm:text-base leading-relaxed font-semibold whitespace-pre-line">${q.passageText}</p>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // 2. Question Prompt Header
+      html += `
+        <div class="mb-5">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+            <span class="text-xs font-extrabold uppercase tracking-wider text-slate-400">Question ${q.id} of 20</span>
+            ${q.type === 'complex' ? `
+              <span class="bg-amber-100 text-amber-900 border border-amber-300 text-xs font-extrabold px-3 py-1 rounded-full animate-pulse">
+                ☑️ Choose TWO (2) Correct Answers
+              </span>
+            ` : ''}
+            ${q.type === 'matching' ? `
+              <span class="bg-rose-100 text-rose-900 border border-rose-300 text-xs font-extrabold px-3 py-1 rounded-full">
+                ✏️ Draw a Line (Tarik Garis)
+              </span>
+            ` : ''}
+          </div>
+          <h2 class="text-xl sm:text-2xl font-display font-bold text-slate-900 leading-snug">
+            ${q.prompt}
+          </h2>
+        </div>
+      `;
+
+      // 3. Render Input UI based on Question Type
+      if (q.type === 'single') {
+        html += renderSingleChoiceHTML(q);
+      } else if (q.type === 'complex') {
+        html += renderComplexChoiceHTML(q);
+      } else if (q.type === 'matching') {
+        html += renderMatchingHTML(q);
+      }
+
+      // 4. Practice Mode Instant Feedback Box
+      if (state.mode === 'practice' && state.checked[q.id]) {
+        const isCorrect = evaluateQuestion(q);
+        html += `
+          <div class="mt-6 p-4 sm:p-5 rounded-2xl border-2 ${isCorrect ? 'bg-emerald-50 border-emerald-400 text-emerald-950' : 'bg-rose-50 border-rose-400 text-rose-950'} animate-pop">
+            <div class="flex items-start gap-3">
+              <span class="text-3xl">${isCorrect ? '🎉' : '💡'}</span>
+              <div>
+                <h4 class="font-display font-bold text-lg">
+                  ${isCorrect ? 'Awesome Job! +5 Points ⭐' : 'Nice Try! Let’s Learn Together:'}
+                </h4>
+                <p class="text-sm sm:text-base mt-1 font-semibold opacity-90">${q.explanation}</p>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      container.innerHTML = html;
+
+      if (q.type === 'matching') {
+        initMatchingInteractions(q);
+      }
+
+      updateHeaderStatus();
+    }
+
+    /* ---------------- PART A: SINGLE CHOICE RENDER ---------------- */
+    function renderSingleChoiceHTML(q) {
+      const selected = state.answers[q.id];
+      const isChecked = state.mode === 'practice' && state.checked[q.id];
+
+      return `
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          ${q.options.map(opt => {
+            const isSelected = selected === opt.key;
+            let cardClass = 'border-slate-200 bg-white hover:border-sky-400 hover:bg-sky-50/50 text-slate-800';
+            let badgeClass = 'bg-slate-100 text-slate-700 border-slate-300';
+
+            if (isChecked) {
+              if (opt.key === q.correct) {
+                cardClass = 'border-emerald-500 bg-emerald-50 text-emerald-950 ring-2 ring-emerald-400';
+                badgeClass = 'bg-emerald-500 text-white border-emerald-600';
+              } else if (isSelected && opt.key !== q.correct) {
+                cardClass = 'border-rose-500 bg-rose-50 text-rose-950';
+                badgeClass = 'bg-rose-500 text-white border-rose-600';
+              }
+            } else if (isSelected) {
+              cardClass = 'border-sky-500 bg-sky-50 text-sky-950 ring-2 ring-sky-400 shadow-md';
+              badgeClass = 'bg-sky-500 text-white border-sky-600';
+            }
+
+            return `
+              <button
+                type="button"
+                onclick="handleSingleSelect(${q.id}, '${opt.key}')"
+                class="btn-tactile w-full p-4 rounded-2xl border-2 text-left flex items-center gap-3.5 transition cursor-pointer ${cardClass}"
+              >
+                <span class="w-10 h-10 rounded-xl border-2 font-display font-bold text-base flex items-center justify-center shrink-0 ${badgeClass}">
+                  ${opt.key}
+                </span>
+                <span class="font-bold text-base sm:text-lg leading-snug">${opt.text}</span>
+              </button>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    function handleSingleSelect(qId, optionKey) {
+      playClickSound();
+      state.answers[qId] = optionKey;
+      if (state.mode === 'practice') {
+        delete state.checked[qId];
+      }
+      renderQuestion();
+    }
+
+    /* ---------------- PART B: COMPLEX MULTIPLE CHOICE (CHOOSE 2) ---------------- */
+    function renderComplexChoiceHTML(q) {
+      const selectedArr = Array.isArray(state.answers[q.id]) ? state.answers[q.id] : [];
+      const isChecked = state.mode === 'practice' && state.checked[q.id];
+
+      return `
+        <div class="mb-3 flex items-center justify-between text-xs sm:text-sm font-bold text-slate-500">
+          <span>Selected: <strong class="text-amber-700">${selectedArr.length} / 2</strong> options</span>
+          ${selectedArr.length > 0 ? `<button type="button" onclick="clearComplexSelection(${q.id})" class="text-rose-600 hover:underline cursor-pointer">Clear Selection</button>` : ''}
+        </div>
+        <div class="grid grid-cols-1 gap-3">
+          ${q.options.map(opt => {
+            const isSelected = selectedArr.includes(opt.key);
+            const isCorrectOpt = q.correct.includes(opt.key);
+
+            let cardClass = 'border-slate-200 bg-white hover:border-amber-400 hover:bg-amber-50/40 text-slate-800';
+            let checkIcon = isSelected ? '☑️' : '⬜';
+
+            if (isChecked) {
+              if (isCorrectOpt) {
+                cardClass = 'border-emerald-500 bg-emerald-50 text-emerald-950 ring-2 ring-emerald-400';
+                checkIcon = '✅';
+              } else if (isSelected && !isCorrectOpt) {
+                cardClass = 'border-rose-500 bg-rose-50 text-rose-950';
+                checkIcon = '❌';
+              }
+            } else if (isSelected) {
+              cardClass = 'border-amber-500 bg-amber-50 text-amber-950 ring-2 ring-amber-400 shadow-md';
+            }
+
+            return `
+              <button
+                type="button"
+                onclick="handleComplexToggle(${q.id}, '${opt.key}')"
+                class="btn-tactile w-full p-4 rounded-2xl border-2 text-left flex items-center gap-3.5 transition cursor-pointer ${cardClass}"
+              >
+                <span class="text-2xl shrink-0">${checkIcon}</span>
+                <span class="w-8 h-8 rounded-lg bg-slate-100 border border-slate-300 font-display font-bold text-sm flex items-center justify-center shrink-0 text-slate-700">
+                  ${opt.key}
+                </span>
+                <span class="font-bold text-base sm:text-lg leading-snug">${opt.text}</span>
+              </button>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    function handleComplexToggle(qId, optionKey) {
+      playClickSound();
+      let current = Array.isArray(state.answers[qId]) ? [...state.answers[qId]] : [];
+      if (current.includes(optionKey)) {
+        current = current.filter(k => k !== optionKey);
+      } else {
+        if (current.length >= 2) {
+          showToast('You already picked 2 answers! Uncheck one first to change.', '☑️');
+          return;
+        }
+        current.push(optionKey);
+      }
+      state.answers[qId] = current;
+      if (state.mode === 'practice') {
+        delete state.checked[qId];
+      }
+      renderQuestion();
+    }
+
+    function clearComplexSelection(qId) {
+      playClickSound();
+      state.answers[qId] = [];
+      delete state.checked[qId];
+      renderQuestion();
+    }
+
+    /* ---------------- PART C: INTERACTIVE DRAW-A-LINE MATCHING ---------------- */
+    function renderMatchingHTML(q) {
+      const connections = state.answers[q.id] || {};
+      const connectedCount = Object.keys(connections).length;
+      const totalRequired = q.leftItems.length;
+
+      return `
+        <div class="space-y-4">
+          <!-- Helper Bar + Optional Audio Clue + Clear Lines Button -->
+          <div class="flex flex-wrap items-center justify-between gap-2 bg-rose-50/80 border border-rose-200 px-4 py-2.5 rounded-2xl">
+            <div class="text-xs sm:text-sm font-bold text-rose-900 flex items-center gap-2">
+              <span>🎯</span>
+              <span>${q.helperText}</span>
+            </div>
+
+            <div class="flex items-center gap-2">
+              ${q.audioClue ? `
+                <button
+                  type="button"
+                  onclick="speakAudioClue('${q.audioClue.replace(/'/g, "\\'")}')"
+                  class="btn-tactile px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-display font-bold text-xs sm:text-sm shadow flex items-center gap-1.5 cursor-pointer"
+                >
+                  <span>🎧</span>
+                  <span>Play Listening Audio</span>
+                </button>
+              ` : ''}
+
+              <button
+                type="button"
+                onclick="clearMatchingLines(${q.id})"
+                class="btn-tactile px-3 py-1.5 rounded-xl bg-white hover:bg-rose-100 text-rose-700 border border-rose-300 font-display font-bold text-xs sm:text-sm transition cursor-pointer"
+              >
+                🧹 Clear Lines (${connectedCount}/${totalRequired})
+              </button>
+            </div>
+          </div>
+
+          ${q.showRabbitCard ? `
+            <div class="flex items-center gap-4 bg-emerald-50/70 border border-emerald-200 rounded-2xl p-3">
+              ${ILLUSTRATIONS.rabbit}
+              <div class="text-xs sm:text-sm font-bold text-emerald-900">
+                Look closely at Picture 1: A cute white rabbit holding an orange carrot next to a yellow flower!
+              </div>
+            </div>
+          ` : ''}
+
+          <!-- Interactive Draw-a-Line Board -->
+          <div id="matching-board-${q.id}" class="matching-wrapper bg-slate-50/90 border-2 border-slate-200 rounded-3xl p-3 sm:p-6 relative">
+            <!-- SVG Overlay for Drawing Lines -->
+            <svg id="matching-svg-${q.id}" class="matching-svg-layer"></svg>
+
+            <div class="grid grid-cols-2 gap-6 sm:gap-16 relative z-10 items-center">
+              <!-- Left Column Items -->
+              <div class="space-y-3">
+                ${q.leftItems.map((item, idx) => {
+                  const isConnected = Boolean(connections[item.id]);
+                  const color = LINE_COLORS[idx % LINE_COLORS.length];
+                  return `
+                    <div
+                      id="left-card-${q.id}-${item.id}"
+                      data-left-id="${item.id}"
+                      class="left-match-card relative bg-white border-2 ${isConnected ? 'border-slate-400 shadow-md' : 'border-slate-200'} rounded-2xl p-3 sm:p-4 pr-7 sm:pr-8 flex items-center justify-between transition"
+                    >
+                      <span class="font-bold text-xs sm:text-base text-slate-800 leading-snug">${item.text}</span>
+                      <!-- Right-edge Connector Node -->
+                      <button
+                        type="button"
+                        id="dot-left-${q.id}-${item.id}"
+                        data-side="left"
+                        data-id="${item.id}"
+                        data-color="${color}"
+                        aria-label="Connect ${item.text}"
+                        class="connector-dot absolute -right-3.5 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full border-4 border-white shadow-md flex items-center justify-center"
+                        style="background-color: ${color};"
+                      >
+                        <span class="w-2 h-2 rounded-full bg-white"></span>
+                      </button>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+
+              <!-- Right Column Targets -->
+              <div class="space-y-3">
+                ${q.rightItems.map((item) => {
+                  const connectedLeftIds = Object.keys(connections).filter(k => connections[k] === item.id);
+                  const isConnected = connectedLeftIds.length > 0;
+                  return `
+                    <div
+                      id="right-card-${q.id}-${item.id}"
+                      data-right-id="${item.id}"
+                      class="right-match-card relative bg-white border-2 ${isConnected ? 'border-emerald-400 bg-emerald-50/40 shadow-md' : 'border-slate-200'} rounded-2xl p-3 sm:p-4 pl-7 sm:pl-8 flex items-center transition min-h-[54px]"
+                    >
+                      <!-- Left-edge Connector Node -->
+                      <button
+                        type="button"
+                        id="dot-right-${q.id}-${item.id}"
+                        data-side="right"
+                        data-id="${item.id}"
+                        aria-label="Target ${item.text}"
+                        class="connector-dot absolute -left-3.5 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full border-4 border-white shadow-md bg-slate-700 flex items-center justify-center"
+                      >
+                        <span class="w-2 h-2 rounded-full bg-white"></span>
+                      </button>
+                      <span class="font-bold text-xs sm:text-base text-slate-800 leading-snug">${item.text}</span>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function initMatchingInteractions(q) {
+      const board = document.getElementById(`matching-board-${q.id}`);
+      if (!board) return;
+
+      // Draw existing saved lines after layout settles
+      requestAnimationFrame(() => drawMatchingLines(q));
+
+      // Pointer Down on Left Dots (Start Drag or Click-to-Select)
+      q.leftItems.forEach((item, idx) => {
+        const leftDot = document.getElementById(`dot-left-${q.id}-${item.id}`);
+        const leftCard = document.getElementById(`left-card-${q.id}-${item.id}`);
+        const color = LINE_COLORS[idx % LINE_COLORS.length];
+
+        const startConnect = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          playClickSound();
+          state.activeLeftNode = item.id;
+
+          // Highlight active dot
+          board.querySelectorAll('.connector-dot').forEach(d => d.classList.remove('active-dot'));
+          leftDot.classList.add('active-dot');
+
+          const boardRect = board.getBoundingClientRect();
+          const dotRect = leftDot.getBoundingClientRect();
+          const startX = dotRect.left + dotRect.width / 2 - boardRect.left;
+          const startY = dotRect.top + dotRect.height / 2 - boardRect.top;
+
+          state.draggingLine = {
+            qId: q.id,
+            leftId: item.id,
+            color,
+            startX,
+            startY,
+            curX: startX,
+            curY: startY
+          };
+        };
+
+        leftDot.addEventListener('pointerdown', startConnect);
+        leftCard.addEventListener('pointerdown', startConnect);
+      });
+
+      // Click/Tap on Right Dots or Right Cards to Complete Connection
+      q.rightItems.forEach((item) => {
+        const rightDot = document.getElementById(`dot-right-${q.id}-${item.id}`);
+        const rightCard = document.getElementById(`right-card-${q.id}-${item.id}`);
+
+        const finishConnect = (e) => {
+          if (state.activeLeftNode) {
+            e.preventDefault();
+            e.stopPropagation();
+            completeMatchConnection(q, state.activeLeftNode, item.id);
+          }
+        };
+
+        rightDot.addEventListener('pointerup', finishConnect);
+        rightCard.addEventListener('pointerup', finishConnect);
+        rightDot.addEventListener('click', finishConnect);
+        rightCard.addEventListener('click', finishConnect);
+      });
+
+      // Board-wide Pointer Move & Pointer Up for Drag-to-Connect
+      board.onpointermove = (e) => {
+        if (!state.draggingLine || state.draggingLine.qId !== q.id) return;
+        const boardRect = board.getBoundingClientRect();
+        state.draggingLine.curX = e.clientX - boardRect.left;
+        state.draggingLine.curY = e.clientY - boardRect.top;
+        drawMatchingLines(q);
+      };
+
+      board.onpointerup = (e) => {
+        if (!state.draggingLine || state.draggingLine.qId !== q.id) return;
+
+        // Check if released over a right card or right dot
+        const targetEl = document.elementFromPoint(e.clientX, e.clientY);
+        const rightCard = targetEl?.closest('.right-match-card');
+        if (rightCard) {
+          const rightId = rightCard.getAttribute('data-right-id');
+          if (rightId) {
+            completeMatchConnection(q, state.draggingLine.leftId, rightId);
+            return;
+          }
+        }
+
+        // Cancel drag preview line (keep activeLeftNode selected for tap-tap accessibility)
+        state.draggingLine = null;
+        drawMatchingLines(q);
+      };
+    }
+
+    function completeMatchConnection(q, leftId, rightId) {
+      if (!state.answers[q.id]) state.answers[q.id] = {};
+
+      // If 1-to-1 matching, remove any previous left item pointing to this rightId
+      if (!q.manyToOne) {
+        Object.keys(state.answers[q.id]).forEach(existingLeft => {
+          if (state.answers[q.id][existingLeft] === rightId) {
+            delete state.answers[q.id][existingLeft];
+          }
+        });
+      }
+
+      state.answers[q.id][leftId] = rightId;
+      state.activeLeftNode = null;
+      state.draggingLine = null;
+
+      if (state.mode === 'practice') {
+        delete state.checked[q.id];
+      }
+
+      playConnectSound();
+      renderQuestion();
+    }
+
+    function clearMatchingLines(qId) {
+      playClickSound();
+      state.answers[qId] = {};
+      state.activeLeftNode = null;
+      state.draggingLine = null;
+      delete state.checked[qId];
+      renderQuestion();
+    }
+
+    function drawMatchingLines(q) {
+      const board = document.getElementById(`matching-board-${q.id}`);
+      const svg = document.getElementById(`matching-svg-${q.id}`);
+      if (!board || !svg) return;
+
+      const boardRect = board.getBoundingClientRect();
+      svg.setAttribute('viewBox', `0 0 ${boardRect.width} ${boardRect.height}`);
+
+      const connections = state.answers[q.id] || {};
+      const isChecked = state.mode === 'practice' && state.checked[q.id];
+      let pathsHTML = '';
+
+      // Draw saved connections
+      q.leftItems.forEach((item, idx) => {
+        const rightId = connections[item.id];
+        if (!rightId) return;
+
+        const leftDot = document.getElementById(`dot-left-${q.id}-${item.id}`);
+        const rightDot = document.getElementById(`dot-right-${q.id}-${rightId}`);
+        if (!leftDot || !rightDot) return;
+
+        const lRect = leftDot.getBoundingClientRect();
+        const rRect = rightDot.getBoundingClientRect();
+
+        const x1 = lRect.left + lRect.width / 2 - boardRect.left;
+        const y1 = lRect.top + lRect.height / 2 - boardRect.top;
+        const x2 = rRect.left + rRect.width / 2 - boardRect.left;
+        const y2 = rRect.top + rRect.height / 2 - boardRect.top;
+
+        const dx = Math.abs(x2 - x1) * 0.45;
+        let strokeColor = LINE_COLORS[idx % LINE_COLORS.length];
+
+        if (isChecked) {
+          strokeColor = q.correctPairs[item.id] === rightId ? '#10b981' : '#f43f5e';
+        }
+
+        pathsHTML += `
+          <path
+            d="M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}"
+            fill="none"
+            stroke="${strokeColor}"
+            stroke-width="4.5"
+            stroke-linecap="round"
+          />
+          <circle cx="${x2}" cy="${y2}" r="5" fill="${strokeColor}" />
+        `;
+      });
+
+      // Draw active dragging line
+      if (state.draggingLine && state.draggingLine.qId === q.id) {
+        const { startX, startY, curX, curY, color } = state.draggingLine;
+        const dx = Math.abs(curX - startX) * 0.4;
+        pathsHTML += `
+          <path
+            d="M ${startX} ${startY} C ${startX + dx} ${startY}, ${curX - dx} ${curY}, ${curX} ${curY}"
+            fill="none"
+            stroke="${color}"
+            stroke-width="4"
+            stroke-dasharray="7 5"
+            stroke-linecap="round"
+          />
+          <circle cx="${curX}" cy="${curY}" r="6" fill="${color}" />
+        `;
+      }
+
+      svg.innerHTML = pathsHTML;
+    }
+
+    // Re-draw SVG matching lines smoothly when window resizes
+    window.addEventListener('resize', () => {
+      const q = QUESTIONS[state.currentIndex];
+      if (q && q.type === 'matching' && !document.getElementById('quiz-screen').classList.contains('hidden')) {
+        drawMatchingLines(q);
+      }
+    });
+
+    /* =========================================================
+       7. NAVIGATION & ANSWER CHECKING
+       ========================================================= */
+    function checkCurrentAnswer() {
+      const q = QUESTIONS[state.currentIndex];
+
+      if (!isQuestionAnswered(q)) {
+        playWrongSound();
+        showToast('Please select or connect an answer first!', '👆');
+        return;
+      }
+
+      if (q.type === 'complex' && state.answers[q.id].length < 2) {
+        playWrongSound();
+        showToast('Please select TWO (2) answers for this question!', '☑️');
+        return;
+      }
+
+      if (q.type === 'matching' && Object.keys(state.answers[q.id]).length < q.leftItems.length) {
+        playWrongSound();
+        showToast(`Please connect all ${q.leftItems.length} lines first!`, '✏️');
+        return;
+      }
+
+      state.checked[q.id] = true;
+      if (evaluateQuestion(q)) {
+        playCorrectSound();
+      } else {
+        playWrongSound();
+      }
+      renderQuestion();
+    }
+
+    function prevQuestion() {
+      if (state.currentIndex > 0) {
+        playClickSound();
+        state.currentIndex--;
+        renderQuestion();
+      }
+    }
+
+    function nextQuestion() {
+      if (state.currentIndex < QUESTIONS.length - 1) {
+        playClickSound();
+        state.currentIndex++;
+        renderQuestion();
+      }
+    }
+
+    /* =========================================================
+       8. SUBMIT QUIZ & REPORT CARD GENERATION
+       ========================================================= */
+    function submitQuiz() {
+      // Check if any questions are completely unanswered
+      const unansweredCount = QUESTIONS.filter(q => !isQuestionAnswered(q)).length;
+      if (unansweredCount > 0) {
+        showToast(`You still have ${unansweredCount} unanswered question(s). Submitting your work!`, '📋');
+      }
+
+      let partACorrect = 0;
+      let partBCorrect = 0;
+      let partCCorrect = 0;
+
+      QUESTIONS.forEach(q => {
+        const ok = evaluateQuestion(q);
+        if (ok) {
+          if (q.section === 'A') partACorrect++;
+          else if (q.section === 'B') partBCorrect++;
+          else if (q.section === 'C') partCCorrect++;
+        }
+      });
+
+      const totalCorrect = partACorrect + partBCorrect + partCCorrect;
+      const finalScore = totalCorrect * 5; // 20 questions * 5 points = 100
+
+      // Populate Results Screen
+      document.getElementById('result-student-name').textContent = state.studentName;
+      document.getElementById('result-student-class').textContent = `${state.studentClass} • MI Muslimat NU Pucang Sidoarjo`;
+      document.getElementById('final-score-number').textContent = finalScore;
+      document.getElementById('result-summary-text').textContent = `You solved ${totalCorrect} out of 20 English questions accurately!`;
+
+      // Stars & Predicate
+      let stars = '⭐⭐';
+      let predicate = 'Good Effort! Keep Practicing!';
+      if (finalScore >= 90) {
+        stars = '⭐⭐⭐⭐⭐';
+        predicate = 'Outstanding Cambridge Star!';
+      } else if (finalScore >= 75) {
+        stars = '⭐⭐⭐⭐';
+        predicate = 'Great Job! Well Done!';
+      } else if (finalScore >= 60) {
+        stars = '⭐⭐⭐';
+        predicate = 'Nice Work! You Can Do Even Better!';
+      }
+      document.getElementById('star-rating-display').textContent = stars;
+      document.getElementById('grade-predicate').textContent = predicate;
+
+      // Section Bars
+      document.getElementById('score-part-a').textContent = partACorrect;
+      document.getElementById('bar-part-a').style.width = `${(partACorrect / 7) * 100}%`;
+
+      document.getElementById('score-part-b').textContent = partBCorrect;
+      document.getElementById('bar-part-b').style.width = `${(partBCorrect / 7) * 100}%`;
+
+      document.getElementById('score-part-c').textContent = partCCorrect;
+      document.getElementById('bar-part-c').style.width = `${(partCCorrect / 6) * 100}%`;
+
+      // Render Detailed Review List
+      renderReviewList();
+
+      // Switch Screen & Trigger Celebration
+      document.getElementById('quiz-screen').classList.add('hidden');
+      document.getElementById('results-screen').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      playFanfareSound();
+      launchConfetti();
+    }
+
+    function renderReviewList() {
+      const list = document.getElementById('review-list');
+      list.innerHTML = QUESTIONS.map(q => {
+        const isCorrect = evaluateQuestion(q);
+        const userAns = state.answers[q.id];
+
+        let userSummary = 'No answer submitted';
+        let correctSummary = '';
+
+        if (q.type === 'single') {
+          const uOpt = q.options.find(o => o.key === userAns);
+          const cOpt = q.options.find(o => o.key === q.correct);
+          userSummary = uOpt ? `${uOpt.key}. ${uOpt.text}` : 'Not answered';
+          correctSummary = `${cOpt.key}. ${cOpt.text}`;
+        } else if (q.type === 'complex') {
+          if (Array.isArray(userAns) && userAns.length > 0) {
+            userSummary = userAns.map(k => {
+              const o = q.options.find(opt => opt.key === k);
+              return o ? `${o.key}. ${o.text}` : k;
+            }).join('  |  ');
+          }
+          correctSummary = q.correct.map(k => {
+            const o = q.options.find(opt => opt.key === k);
+            return `${o.key}. ${o.text}`;
+          }).join('  |  ');
+        } else if (q.type === 'matching') {
+          if (userAns && Object.keys(userAns).length > 0) {
+            userSummary = q.leftItems.map(l => {
+              const rId = userAns[l.id];
+              const rObj = q.rightItems.find(r => r.id === rId);
+              return `${l.text} → ${rObj ? rObj.text : '?'}`;
+            }).join(' ; ');
+          }
+          correctSummary = q.leftItems.map(l => {
+            const rObj = q.rightItems.find(r => r.id === q.correctPairs[l.id]);
+            return `${l.text} → ${rObj.text}`;
+          }).join(' ; ');
+        }
+
+        return `
+          <div class="p-4 sm:p-5 rounded-2xl border-2 ${isCorrect ? 'border-emerald-300 bg-emerald-50/40' : 'border-rose-300 bg-rose-50/40'}">
+            <div class="flex items-start justify-between gap-2">
+              <div class="font-display font-bold text-slate-900 text-base sm:text-lg">
+                ${q.prompt}
+              </div>
+              <span class="px-3 py-1 rounded-full text-xs font-extrabold shrink-0 ${isCorrect ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white'}">
+                ${isCorrect ? '✓ Correct (+5)' : '✗ Needs Review'}
+              </span>
+            </div>
+
+            <div class="mt-2.5 space-y-1 text-xs sm:text-sm">
+              <div class="font-bold ${isCorrect ? 'text-emerald-800' : 'text-rose-800'}">
+                Your Answer: <span class="font-semibold">${userSummary}</span>
+              </div>
+              ${!isCorrect ? `
+                <div class="font-bold text-emerald-800">
+                  Correct Answer: <span class="font-semibold">${correctSummary}</span>
+                </div>
+              ` : ''}
+              <div class="text-slate-600 pt-1 italic">
+                💡 ${q.explanation}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function restartQuiz() {
+      playClickSound();
+      state.answers = {};
+      state.checked = {};
+      state.currentIndex = 0;
+      state.activeLeftNode = null;
+      state.draggingLine = null;
+
+      document.getElementById('results-screen').classList.add('hidden');
+      document.getElementById('quiz-screen').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      renderQuestion();
+    }
+
+    /* =========================================================
+       9. TOAST NOTIFICATION & CONFETTI CELEBRATION
+       ========================================================= */
+    let toastTimer = null;
+    function showToast(message, icon = '✨') {
+      const box = document.getElementById('toast-box');
+      document.getElementById('toast-text').textContent = message;
+      document.getElementById('toast-icon').textContent = icon;
+
+      box.classList.remove('opacity-0', 'translate-y-4');
+      box.classList.add('opacity-100', 'translate-y-0');
+
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        box.classList.add('opacity-0', 'translate-y-4');
+        box.classList.remove('opacity-100', 'translate-y-0');
+      }, 2800);
+    }
+
+    function launchConfetti() {
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const colors = ['#10b981', '#0ea5e9', '#f59e0b', '#f43f5e', '#8b5cf6', '#facc15'];
+      const pieces = Array.from({ length: 110 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height - canvas.height,
+        w: Math.random() * 10 + 6,
+        h: Math.random() * 6 + 4,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        vy: Math.random() * 3 + 2.2,
+        vx: (Math.random() - 0.5) * 2.5,
+        rot: Math.random() * 360,
+        vRot: (Math.random() - 0.5) * 8
+      }));
+
+      let frames = 0;
+      function animateConfetti() {
+        frames++;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        pieces.forEach(p => {
+          p.y += p.vy;
+          p.x += p.vx;
+          p.rot += p.vRot;
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate((p.rot * Math.PI) / 180);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+          ctx.restore();
+        });
+
+        if (frames < 190) {
+          requestAnimationFrame(animateConfetti);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+      animateConfetti();
+    }
+  </script>
+</body>
+</html>
